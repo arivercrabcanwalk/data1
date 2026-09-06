@@ -1,0 +1,143 @@
+{
+  "date_range": [
+    "2026-07-01",
+    "2026-07-16"
+  ],
+  "days": [
+    {
+      "MB": 18.48,
+      "bytes": 18475289,
+      "date": "2026-07-01",
+      "estimated_stocks_from_240_bars": 4952,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-01/minute1.parquet",
+      "rows": 1188480,
+      "source_files": 34
+    },
+    {
+      "MB": 18.43,
+      "bytes": 18433999,
+      "date": "2026-07-02",
+      "estimated_stocks_from_240_bars": 4953,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-02/minute1.parquet",
+      "rows": 1188720,
+      "source_files": 34
+    },
+    {
+      "MB": 18.11,
+      "bytes": 18109426,
+      "date": "2026-07-03",
+      "estimated_stocks_from_240_bars": 4953,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-03/minute1.parquet",
+      "rows": 1188720,
+      "source_files": 34
+    },
+    {
+      "MB": 18.13,
+      "bytes": 18129968,
+      "date": "2026-07-06",
+      "estimated_stocks_from_240_bars": 4954,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-06/minute1.parquet",
+      "rows": 1188960,
+      "source_files": 34
+    },
+    {
+      "MB": 17.97,
+      "bytes": 17965325,
+      "date": "2026-07-07",
+      "estimated_stocks_from_240_bars": 4961,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-07/minute1.parquet",
+      "rows": 1190640,
+      "source_files": 34
+    },
+    {
+      "MB": 18.03,
+      "bytes": 18026827,
+      "date": "2026-07-08",
+      "estimated_stocks_from_240_bars": 4954,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-08/minute1.parquet",
+      "rows": 1188960,
+      "source_files": 50
+    },
+    {
+      "MB": 18.45,
+      "bytes": 18445330,
+      "date": "2026-07-09",
+      "estimated_stocks_from_240_bars": 4961,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-09/minute1.parquet",
+      "rows": 1190640,
+      "source_files": 50
+    },
+    {
+      "MB": 18.51,
+      "bytes": 18510894,
+      "date": "2026-07-10",
+      "estimated_stocks_from_240_bars": 4953,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-10/minute1.parquet",
+      "rows": 1188720,
+      "source_files": 50
+    },
+    {
+      "MB": 18.29,
+      "bytes": 18292433,
+      "date": "2026-07-13",
+      "estimated_stocks_from_240_bars": 4957,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-13/minute1.parquet",
+      "rows": 1189680,
+      "source_files": 50
+    },
+    {
+      "MB": 18.25,
+      "bytes": 18251264,
+      "date": "2026-07-14",
+      "estimated_stocks_from_240_bars": 4957,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-14/minute1.parquet",
+      "rows": 1189680,
+      "source_files": 50
+    },
+    {
+      "MB": 18.0,
+      "bytes": 18000559,
+      "date": "2026-07-15",
+      "estimated_stocks_from_240_bars": 4958,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-15/minute1.parquet",
+      "rows": 1189920,
+      "source_files": 50
+    },
+    {
+      "MB": 18.12,
+      "bytes": 18121312,
+      "date": "2026-07-16",
+      "estimated_stocks_from_240_bars": 4957,
+      "fields": "code,datetime,open,high,low,close,volume,amount",
+      "file": "2026-07/part-01_12trading_days/date=2026-07-16/minute1.parquet",
+      "rows": 1189680,
+      "source_files": 50
+    }
+  ],
+  "duplicate_volume_mirror_omitted": true,
+  "fields": [
+    "code",
+    "datetime",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "amount"
+  ],
+  "month": "2026-07",
+  "one_file_per_day": true,
+  "part": 1,
+  "trading_day_count": 12
+}

@@ -1,0 +1,10 @@
+﻿date,file,source_files,rows,estimated_stocks_from_240_bars,bytes,MB,fields
+2026-06-17,2026-06/part-02_9trading_days/date=2026-06-17/minute1.parquet,49,1172640,4886,17643387,17.64,"code,datetime,open,high,low,close,volume,amount"
+2026-06-18,2026-06/part-02_9trading_days/date=2026-06-18/minute1.parquet,50,1188480,4952,18113530,18.11,"code,datetime,open,high,low,close,volume,amount"
+2026-06-22,2026-06/part-02_9trading_days/date=2026-06-22/minute1.parquet,1,1188240,4951,18017422,18.02,"code,datetime,open,high,low,close,volume,amount"
+2026-06-23,2026-06/part-02_9trading_days/date=2026-06-23/minute1.parquet,50,1189200,4955,18410432,18.41,"code,datetime,open,high,low,close,volume,amount"
+2026-06-24,2026-06/part-02_9trading_days/date=2026-06-24/minute1.parquet,50,1190640,4961,18341461,18.34,"code,datetime,open,high,low,close,volume,amount"
+2026-06-25,2026-06/part-02_9trading_days/date=2026-06-25/minute1.parquet,25,1188960,4954,17956289,17.96,"code,datetime,open,high,low,close,volume,amount"
+2026-06-26,2026-06/part-02_9trading_days/date=2026-06-26/minute1.parquet,25,1188720,4953,18137299,18.14,"code,datetime,open,high,low,close,volume,amount"
+2026-06-29,2026-06/part-02_9trading_days/date=2026-06-29/minute1.parquet,34,1187520,4948,18360631,18.36,"code,datetime,open,high,low,close,volume,amount"
+2026-06-30,2026-06/part-02_9trading_days/date=2026-06-30/minute1.parquet,34,1188000,4950,17893349,17.89,"code,datetime,open,high,low,close,volume,amount"
