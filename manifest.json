@@ -1,4 +1,43 @@
 {
+  "daily_stock_status": {
+    "fields": [
+      "code",
+      "ts_code",
+      "date",
+      "name",
+      "market_board",
+      "market_exchange",
+      "security_status",
+      "st_label",
+      "is_st",
+      "is_star_st",
+      "is_new_listing_initial",
+      "listing_phase_trading_days",
+      "initial_no_limit_trading_days",
+      "list_date",
+      "is_suspended",
+      "suspension_status",
+      "suspension_event_type",
+      "suspend_timing",
+      "has_minute_data",
+      "minute_row_count",
+      "price_limit_type",
+      "price_limit_up_pct",
+      "price_limit_down_pct",
+      "price_limit_rule",
+      "status_source",
+      "status_confidence",
+      "status_notes"
+    ],
+    "file_pattern": "{month}/part-{n}_{days}trading_days/date=YYYY-MM-DD/daily_stock_status.parquet",
+    "join_keys": [
+      "code",
+      "date"
+    ],
+    "manifest": "status_manifest.json",
+    "not_repeated_in_minute_rows": true,
+    "one_file_per_trading_day": true
+  },
   "daily_summary_file": "daily_summary.csv",
   "duplicate_volume_mirror_omitted": true,
   "fields": [

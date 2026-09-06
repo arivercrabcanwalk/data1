@@ -26,3 +26,11 @@
 ```
 
 每个 part 目录下有 `daily_summary.csv` 和 `manifest.json`。每个日期文件均低于 50 MB。
+
+## 每日股票状态与涨跌幅规则
+
+每个日期目录还包含 `daily_stock_status.parquet`，与同目录的 `minute1.parquet` 通过 `code + date` 关联。它记录：
+
+`market_board`、`security_status`、`is_st`、`is_star_st`、`is_new_listing_initial`、`is_suspended`、`suspension_status`、`price_limit_up_pct`、`price_limit_down_pct`、`price_limit_rule`。
+
+状态表按股票日存储，不重复写入每一分钟；完整字段说明见 [`STATUS_FIELDS.md`](STATUS_FIELDS.md)，逐日索引见 [`status_manifest.json`](status_manifest.json)。`is_suspended` 为 `null` 时表示本地证据不足，不能当作未停牌。

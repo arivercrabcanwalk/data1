@@ -1,0 +1,221 @@
+{
+  "date_range": [
+    "2026-08-19",
+    "2026-08-31"
+  ],
+  "days": [
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127280,
+      "date": "2026-08-19",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-19/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4955,
+      "unknown_suspension": 663
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127284,
+      "date": "2026-08-20",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-20/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4954,
+      "unknown_suspension": 664
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127283,
+      "date": "2026-08-21",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-21/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4955,
+      "unknown_suspension": 663
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127269,
+      "date": "2026-08-24",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-24/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4958,
+      "unknown_suspension": 660
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127251,
+      "date": "2026-08-25",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-25/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4961,
+      "unknown_suspension": 657
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127255,
+      "date": "2026-08-26",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-26/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4959,
+      "unknown_suspension": 659
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127249,
+      "date": "2026-08-27",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-27/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4960,
+      "unknown_suspension": 658
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127249,
+      "date": "2026-08-28",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-28/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4959,
+      "unknown_suspension": 659
+    },
+    {
+      "MB": 0.127,
+      "boards": {
+        "创业板": 1401,
+        "北交所": 333,
+        "沪市主板": 1740,
+        "深市主板": 1532,
+        "科创板": 612
+      },
+      "bytes": 127277,
+      "date": "2026-08-31",
+      "fields": "code,ts_code,date,name,market_board,market_exchange,security_status,st_label,is_st,is_star_st,is_new_listing_initial,listing_phase_trading_days,initial_no_limit_trading_days,list_date,is_suspended,suspension_status,suspension_event_type,suspend_timing,has_minute_data,minute_row_count,price_limit_type,price_limit_up_pct,price_limit_down_pct,price_limit_rule,status_source,status_confidence,status_notes",
+      "file": "2026-08/part-02_9trading_days/date=2026-08-31/daily_stock_status.parquet",
+      "known_suspended": 0,
+      "new_listing_initial": 0,
+      "rows": 5618,
+      "st_or_star_st": 211,
+      "stocks_with_minute_data": 4956,
+      "unknown_suspension": 662
+    }
+  ],
+  "fields": [
+    "code",
+    "ts_code",
+    "date",
+    "name",
+    "market_board",
+    "market_exchange",
+    "security_status",
+    "st_label",
+    "is_st",
+    "is_star_st",
+    "is_new_listing_initial",
+    "listing_phase_trading_days",
+    "initial_no_limit_trading_days",
+    "list_date",
+    "is_suspended",
+    "suspension_status",
+    "suspension_event_type",
+    "suspend_timing",
+    "has_minute_data",
+    "minute_row_count",
+    "price_limit_type",
+    "price_limit_up_pct",
+    "price_limit_down_pct",
+    "price_limit_rule",
+    "status_source",
+    "status_confidence",
+    "status_notes"
+  ],
+  "month": "2026-08",
+  "one_file_per_day": true,
+  "part": 2,
+  "trading_day_count": 9
+}
