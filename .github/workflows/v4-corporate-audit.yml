@@ -1,0 +1,56 @@
+name: V4 Corporate Action Audit
+on:
+  push:
+    branches: [research/system-v4-20260906]
+    paths: ['.github/workflows/v4-corporate-audit.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Fetch public reference records
+        run: |
+          mkdir -p corporate_audit
+          python -u - <<'PY'
+          from pathlib import Path
+          import urllib.request,urllib.parse,json,time,hashlib
+          out=Path('corporate_audit');audit=[]
+          def get(url,data=None):
+              req=urllib.request.Request(url,data=data,headers={'User-Agent':'Mozilla/5.0','Referer':'https://data.eastmoney.com/','Content-Type':'application/x-www-form-urlencoded'})
+              with urllib.request.urlopen(req,timeout=25) as r:return r.read()
+          url='https://datacenter-web.eastmoney.com/api/data/v1/get'
+          rows=[]
+          try:
+              for page in range(1,31):
+                  params={'reportName':'RPT_SHAREBONUS_DET','columns':'ALL','pageSize':500,'pageNumber':page,'filter':"(EX_DIVIDEND_DATE>='2026-03-01')(EX_DIVIDEND_DATE<='2026-08-31')",'sortColumns':'EX_DIVIDEND_DATE','sortTypes':'1','source':'WEB','client':'WEB'}
+                  u=url+'?'+urllib.parse.urlencode(params);raw=get(u);(out/f'eastmoney_page_{page}.json').write_bytes(raw);j=json.loads(raw)
+                  if not j.get('success') or not j.get('result'):raise ValueError(str(j)[:500])
+                  rows+=j['result']['data'];audit.append({'page':page,'url':u,'sha256':hashlib.sha256(raw).hexdigest(),'count':len(j['result']['data'])})
+                  print('PAGE',page,'ROWS',len(rows),flush=True)
+                  if page>=j['result']['pages']:break
+                  time.sleep(.2)
+              (out/'corporate_actions.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2))
+          except Exception as e:audit.append({'eastmoney_error':repr(e)})
+          try:
+              u='https://www.cninfo.com.cn/new/hisAnnouncement/query'
+              p={'pageNum':1,'pageSize':30,'column':'szse','tabName':'fulltext','stock':'','searchkey':'\u65b0\u6613\u76db','secid':'','plate':'','category':'category_fhpx_szsh','trade':'','seDate':'2026-06-01~2026-06-15','sortName':'time','sortType':'desc','isHLtitle':'true'}
+              raw=get(u,urllib.parse.urlencode(p).encode());(out/'cninfo_query.json').write_bytes(raw);j=json.loads(raw)
+              anns=j.get('announcements') or [];audit.append({'cninfo_count':len(anns),'query':p})
+              for ann in anns[:5]:
+                  rel=ann.get('adjunctUrl','')
+                  if not rel.endswith('.PDF') and not rel.endswith('.pdf'):continue
+                  u='https://static.cninfo.com.cn/'+rel;doc=get(u);fn=Path(rel).name;(out/fn).write_bytes(doc);audit.append({'document':ann,'url':u,'filename':fn,'sha256':hashlib.sha256(doc).hexdigest()})
+          except Exception as e:audit.append({'cninfo_error':repr(e)})
+          (out/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2));print('AUDIT',json.dumps(audit,ensure_ascii=False),flush=True)
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: v4-corporate-audit
+          path: corporate_audit/
+          retention-days: 30
