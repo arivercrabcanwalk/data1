@@ -1,0 +1,51 @@
+name: Research V2
+on:
+  push:
+    branches: [research/backtest-v2-20260906]
+    paths: ['.github/workflows/research-v2.yml', 'research_v2/**']
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dependencies
+        run: python -m pip install numpy==2.2.6 pandas==2.2.3 pyarrow==19.0.1 pytest==8.3.5
+      - name: Inspect actual data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pyarrow.parquet as pq
+          fs=sorted(Path('.').glob('2026-*/part-*/date=*/minute1.parquet'))
+          ss=sorted(Path('.').glob('2026-*/part-*/date=*/daily_stock_status.parquet'))
+          print('FILE_COUNTS',len(fs),len(ss),'BYTES',sum(p.stat().st_size for p in fs),flush=True)
+          for p in [fs[0],fs[-1],ss[0],ss[-1]]:
+              t=pq.read_table(p)
+              print('FILE',str(p),'ROWS',t.num_rows,'SCHEMA',str(t.schema),flush=True)
+              print('SAMPLE',t.slice(0,3).to_pandas().to_json(orient='records',force_ascii=False,date_format='iso'),flush=True)
+              if 'status_confidence' in t.column_names:
+                  df=t.to_pandas()
+                  for c in ['status_confidence','status_source','security_status','suspension_status','price_limit_rule']:
+                      print(c,df[c].value_counts(dropna=False).to_json(force_ascii=False),flush=True)
+          PY
+      - name: Tests and backtest
+        run: |
+          if [ -f research_v2/run.py ]; then
+            python -m pytest research_v2 -q
+            python research_v2/run.py --root . --out research_v2_results
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-v2-results
+          path: research_v2_results/
+          if-no-files-found: ignore
