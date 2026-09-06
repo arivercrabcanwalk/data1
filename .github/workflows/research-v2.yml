@@ -20,29 +20,36 @@ jobs:
           python-version: '3.11'
       - name: Dependencies
         run: python -m pip install -q numpy==2.2.6 pandas==2.2.3 pyarrow==19.0.1 pytest==8.3.5
-      - name: Inspect actual data
+      - name: Timestamp diagnostic
         run: |
           python - <<'PY'
+          import json
           from pathlib import Path
+          import pandas as pd
+          import pyarrow as pa
+          import pyarrow.compute as pc
           import pyarrow.parquet as pq
-          fs=sorted(Path('.').glob('2026-*/part-*/date=*/minute1.parquet'))
-          ss=sorted(Path('.').glob('2026-*/part-*/date=*/daily_stock_status.parquet'))
-          print('FILE_COUNTS',len(fs),len(ss),'BYTES',sum(p.stat().st_size for p in fs),flush=True)
-          for p in [fs[0],fs[-1],ss[0],ss[-1]]:
-              t=pq.ParquetFile(p).read()
-              print('FILE',str(p),'ROWS',t.num_rows,'SCHEMA',str(t.schema),flush=True)
-              print('SAMPLE',t.slice(0,3).to_pandas().to_json(orient='records',force_ascii=False,date_format='iso'),flush=True)
-              if 'status_confidence' in t.column_names:
-                  df=t.to_pandas()
-                  for c in ['status_confidence','status_source','security_status','suspension_status','price_limit_rule']:
-                      print(c,df[c].value_counts(dropna=False).to_json(force_ascii=False),flush=True)
+          out=Path('research_v2_results');out.mkdir(exist_ok=True)
+          reports=[]
+          for p in sorted(Path('.').glob('2026-*/part-*/date=*/minute1.parquet')):
+              tab=pq.ParquetFile(p).read(columns=['datetime'])
+              times=pc.unique(tab['datetime']).to_pylist()
+              d=pd.to_datetime(pd.Series(times),errors='raise')
+              m=d.dt.hour*60+d.dt.minute
+              valid=(((m>=571)&(m<=690))|((m>=781)&(m<=900)))&(d.dt.second==0)
+              bad=[s for s,v in zip(times,valid) if not v]
+              if bad:
+                  alltab=pq.ParquetFile(p).read()
+                  mask=pc.is_in(alltab['datetime'],value_set=pa.array(bad,type=pa.large_string()))
+                  broken=alltab.filter(mask).to_pandas()
+                  codes=sorted(broken.code.unique())
+                  sample=alltab.filter(pc.is_in(alltab['code'],value_set=pa.array(codes[:2],type=pa.large_string()))).to_pandas()
+                  r={'path':str(p),'rows':tab.num_rows,'unique_times':len(times),'bad_times':bad,'bad_rows':len(broken),'affected_codes':len(codes),'samples':broken.head(6).to_dict('records'),'first_code_times':sorted(sample[sample.code==codes[0]].datetime.unique())}
+                  reports.append(r)
+                  print('TIMESTAMP_ANOMALY',json.dumps(r,ensure_ascii=False),flush=True)
+          (out/'timestamp_diagnostic.json').write_text(json.dumps(reports,ensure_ascii=False,indent=2))
+          print('ANOMALOUS_FILES',len(reports),flush=True)
           PY
-      - name: Tests and backtest
-        run: |
-          if [ -f research_v2/run.py ]; then
-            python -m pytest research_v2 -q
-            python research_v2/run.py --root . --out research_v2_results
-          fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
