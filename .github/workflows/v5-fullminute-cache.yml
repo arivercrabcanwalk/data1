@@ -1,4 +1,4 @@
-name: V5 Full Session Minutes
+name: V5 Status Audit Run
 on:
   push:
     branches: [research/system-v5-fullminute-20260907]
@@ -6,74 +6,42 @@ on:
 permissions:
   contents: read
 jobs:
-  export:
+  audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 1
           persist-credentials: false
-          show-progress: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11'
-      - name: Dependencies
-        run: python -m pip install -q numpy==2.2.6 pandas==2.2.3 pyarrow==19.0.1
-      - name: Export all 240 regular-session minutes for all symbols
+      - run: python -m pip install -q pandas==2.2.3 pyarrow==19.0.1
+      - name: Export status audit
         run: |
-          python -u - <<'PY'
+          python - <<'PY'
           from pathlib import Path
-          import numpy as np, pandas as pd, pyarrow.parquet as pq
-          import hashlib,json,os
-          receipts={}
-          for p in sorted(Path('.').glob('2026-*/part-*/date=*/minute1.parquet')):
-              day=p.parent.name.split('=')[1];month=day[:7];out=Path('v5_fullminute')/month;out.mkdir(parents=True,exist_ok=True)
-              df=pq.ParquetFile(p).read().to_pandas()
-              codes,ix=np.unique(df.code.astype(str).to_numpy(),return_inverse=True)
-              tm=pd.to_datetime(df.datetime);m=(tm.dt.hour*60+tm.dt.minute).to_numpy()
-              assert (tm.dt.strftime('%Y-%m-%d')==day).all()
-              assert not df.duplicated(['code','datetime']).any()
-              morning=(m>=571)&(m<=690); afternoon=(m>=781)&(m<=900); keep=morning|afternoon
-              slot=np.full(len(df),-1,dtype=np.int16);slot[morning]=m[morning]-571;slot[afternoon]=120+(m[afternoon]-781)
-              vals=df[['open','high','low','close','volume','amount']].to_numpy(float)
-              assert np.isfinite(vals).all()
-              x=np.full((len(codes),240,6),np.nan,dtype='float64')
-              x[ix[keep],slot[keep],:]=vals[keep]
-              dst=out/(day+'.npz');np.savez_compressed(dst,codes=codes.astype('U6'),minute=x)
-              rec=dict(date=day,source=str(p),source_sha256=hashlib.file_digest(p.open('rb'),'sha256').hexdigest(),raw_rows=len(df),saved_rows=int(keep.sum()),quarantined_out_of_session=int((~keep).sum()),symbols=len(codes),cache_sha256=hashlib.file_digest(dst.open('rb'),'sha256').hexdigest(),cache_bytes=dst.stat().st_size)
-              receipts.setdefault(month,[]).append(rec)
-              print(day,rec['saved_rows'],rec['cache_bytes'],flush=True)
-          for month,recs in receipts.items():
-              (Path('v5_fullminute')/month/'manifest.json').write_text(json.dumps(dict(source_commit='4de6d9311a961e05661c6914d6972544a812caf2',run_commit=os.getenv('GITHUB_SHA'),run_id=os.getenv('GITHUB_RUN_ID'),time_range='09:31-11:30 and 13:01-15:00 end-labelled Asia/Shanghai',slots=240,dtype='float64',schema=['open','high','low','close','volume','amount'],all_symbols=True,receipts=recs),indent=2))
+          import pandas as pd
+          cols=['code','date','name','market_board','security_status','is_st','is_new_listing_initial','is_suspended','suspension_status','suspension_event_type','suspend_timing','has_minute_data','minute_row_count','price_limit_up_pct','price_limit_down_pct','status_source','status_confidence','status_notes']
+          target=[]; susp=[]
+          for p in sorted(Path('.').glob('2026-*/part-*/date=*/daily_stock_status.parquet')):
+              d=pd.read_parquet(p)
+              use=[c for c in cols if c in d.columns]
+              d=d[use].copy(); d['code']=d['code'].astype(str).str.zfill(6)
+              h=d[d['code'].eq('001331')]
+              if len(h): target.append(h)
+              if 'is_suspended' in d.columns:
+                  s=d[d['is_suspended'].eq(True)]
+                  if len(s): susp.append(s)
+          pd.concat(target,ignore_index=True).to_csv('001331_status.csv',index=False)
+          (pd.concat(susp,ignore_index=True) if susp else pd.DataFrame(columns=cols)).to_csv('all_suspended_status.csv',index=False)
+          print(pd.concat(target,ignore_index=True).to_string(index=False))
           PY
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: v5-fullminute-2026-03
-          path: v5_fullminute/2026-03/
-          compression-level: 0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: v5-fullminute-2026-04
-          path: v5_fullminute/2026-04/
-          compression-level: 0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: v5-fullminute-2026-05
-          path: v5_fullminute/2026-05/
-          compression-level: 0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: v5-fullminute-2026-06
-          path: v5_fullminute/2026-06/
-          compression-level: 0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: v5-fullminute-2026-07
-          path: v5_fullminute/2026-07/
-          compression-level: 0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: v5-fullminute-2026-08
-          path: v5_fullminute/2026-08/
+          name: v5-status-audit-run
+          path: |
+            001331_status.csv
+            all_suspended_status.csv
           compression-level: 0
