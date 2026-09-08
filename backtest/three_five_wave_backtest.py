@@ -253,10 +253,16 @@ class Position:
 
 
 def run_backtest(daily: pd.DataFrame, exec_px: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
-    daily = daily.groupby("code", group_keys=False).apply(detect_signals, include_groups=False).reset_index(drop=True)
-    # groupby apply may drop code in newer pandas; restore if needed by recomputing differently
-    if "code" not in daily.columns:
-        raise RuntimeError("code column lost after signal generation")
+    # Keep the grouping key explicitly.  Recent pandas versions exclude the
+    # grouping column from GroupBy.apply output, so relying on apply to carry
+    # `code` through silently drops the identifier and breaks the portfolio
+    # simulation.
+    signal_parts = []
+    for code, g in daily.groupby("code", sort=False):
+        out = detect_signals(g)
+        out["code"] = str(code)
+        signal_parts.append(out)
+    daily = pd.concat(signal_parts, ignore_index=True)
 
     daily = daily.sort_values(["date", "code"])
     exec_px = exec_px.sort_values(["date", "code"])
