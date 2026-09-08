@@ -1,0 +1,76 @@
+{
+  "version": "v2.0-causal-state-machine",
+  "start_cash": 1000000.0,
+  "max_positions": 3,
+  "commission": 0.0003,
+  "sell_stamp": 0.0005,
+  "slippage": 0.001,
+  "max_hold_days": 12,
+  "cooldown_days_after_stop": 5,
+  "wave": {
+    "min_history": 30,
+    "min_gap_days": 5,
+    "max_gap_days": 45,
+    "rebound_min": 0.055,
+    "price_new_low_pct": 0.005,
+    "dif_improvement_frac": 0.05,
+    "reversal_min_return": 0.03,
+    "reversal_close_pos": 0.7,
+    "reversal_amount_ratio_min": 0.8,
+    "arm_expiry_days": 3,
+    "five_wave_area_ratio_max": 0.9
+  },
+  "anchor": {
+    "big_bar_min_return": 0.07,
+    "big_bar_close_pos": 0.7,
+    "max_age_days": 60,
+    "min_age_days": 3,
+    "break_tolerance": 0.005,
+    "near_support_above": 0.03,
+    "near_support_below": 0.005,
+    "pullback_daily_ret_min": -0.015,
+    "pullback_daily_ret_max": 0.03,
+    "pullback_close_pos_min": 0.45,
+    "pullback_amount_vs_anchor_max": 0.85,
+    "pullback_amount_vs_ma10_max": 1.05,
+    "gap_vs_prev_high": 0.002,
+    "duplicate_setup_cooldown_days": 5
+  },
+  "pingbu": {
+    "min_age_days": 3,
+    "max_age_days": 25,
+    "midpoint_break_tolerance": 0.005,
+    "near_platform_above": 0.035,
+    "near_platform_below": 0.005
+  },
+  "intraday": {
+    "not_before": "09:45",
+    "not_after": "14:30",
+    "max_open_gap": 0.03,
+    "max_chase": 0.03,
+    "anchor_intraday_break_tolerance": 0.005,
+    "rebound_from_low_min": 0.01,
+    "stable_bars_after_low": 10,
+    "vwap_tolerance": 0.002,
+    "up_down_amount_ratio_min": 0.9,
+    "lookback_bars_for_flow": 10
+  },
+  "scoring": {
+    "min_score_no_sector": 70.0,
+    "min_score_with_sector": 75.0,
+    "sector_rank_min": 0.55,
+    "right_side_rs20_rank_min": 0.55,
+    "liquidity_rank_min": 0.2
+  },
+  "risk": {
+    "trail_drawdown": 0.08,
+    "trail_min_hold_days": 3,
+    "market_score_flat": 35.0,
+    "market_score_low": 45.0,
+    "market_score_mid": 60.0,
+    "exposure_flat": 0.0,
+    "exposure_low": 0.3,
+    "exposure_mid": 0.5,
+    "exposure_high": 0.8
+  }
+}
