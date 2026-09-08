@@ -212,6 +212,12 @@ def is_bad_status(r: pd.Series) -> bool:
     return False
 
 
+def pct_decimal(value: float) -> float:
+    """Normalize status percentages stored as either 10.0 or 0.10."""
+    value = float(value)
+    return value / 100.0 if abs(value) > 1.0 else value
+
+
 def tradable_buy(r: pd.Series, prev_close: float) -> bool:
     if is_bad_status(r):
         return False
@@ -219,7 +225,7 @@ def tradable_buy(r: pd.Series, prev_close: float) -> bool:
     if not np.isfinite(px) or px <= 0:
         return False
     lim = r.get("price_limit_up_pct", np.nan)
-    if pd.notna(lim) and prev_close > 0 and px >= prev_close * (1 + float(lim) - 0.001):
+    if pd.notna(lim) and prev_close > 0 and px >= prev_close * (1 + pct_decimal(lim) - 0.001):
         return False
     # Avoid chasing the article explicitly warns against: >3% intraday/open chase.
     if prev_close > 0 and px / prev_close - 1 > 0.03:
@@ -234,7 +240,7 @@ def tradable_sell(r: pd.Series, prev_close: float) -> bool:
     if not np.isfinite(px) or px <= 0:
         return False
     lim = r.get("price_limit_down_pct", np.nan)
-    if pd.notna(lim) and prev_close > 0 and px <= prev_close * (1 - float(lim) + 0.001):
+    if pd.notna(lim) and prev_close > 0 and px <= prev_close * (1 - abs(pct_decimal(lim)) + 0.001):
         return False
     return True
 
@@ -253,10 +259,16 @@ class Position:
 
 
 def run_backtest(daily: pd.DataFrame, exec_px: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
-    daily = daily.groupby("code", group_keys=False).apply(detect_signals, include_groups=False).reset_index(drop=True)
-    # groupby apply may drop code in newer pandas; restore if needed by recomputing differently
-    if "code" not in daily.columns:
-        raise RuntimeError("code column lost after signal generation")
+    # Keep the grouping key explicitly.  Recent pandas versions exclude the
+    # grouping column from GroupBy.apply output, so relying on apply to carry
+    # `code` through silently drops the identifier and breaks the portfolio
+    # simulation.
+    signal_parts = []
+    for code, g in daily.groupby("code", sort=False):
+        out = detect_signals(g)
+        out["code"] = str(code)
+        signal_parts.append(out)
+    daily = pd.concat(signal_parts, ignore_index=True)
 
     daily = daily.sort_values(["date", "code"])
     exec_px = exec_px.sort_values(["date", "code"])
