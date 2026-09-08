@@ -1,0 +1,48 @@
+name: backtest-three-five-wave-v3
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'backtest/three_five_wave_backtest.py'
+      - 'backtest/v3_backtest.py'
+      - 'backtest/v3_shared.py'
+      - 'backtest/v3_engine.py'
+      - 'backtest/v3_research.py'
+      - 'backtest/v3_config.json'
+      - 'backtest/v3_profiles.json'
+      - 'backtest/test_v3_backtest.py'
+      - 'backtest/sector_map_history.csv'
+      - '.github/workflows/backtest-three-five-wave-v3.yml'
+
+jobs:
+  run-v3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/three_five_wave_backtest.py
+          python -m py_compile backtest/v3_shared.py
+          python -m py_compile backtest/v3_engine.py
+          python -m py_compile backtest/v3_research.py
+          python -m py_compile backtest/v3_backtest.py
+      - name: V2 regression tests
+        run: python -m unittest backtest/test_three_five_wave_backtest.py -v
+      - name: V3 causality and risk tests
+        run: python -m unittest backtest/test_v3_backtest.py -v
+      - name: Run V3 full research and backtest
+        run: python backtest/v3_backtest.py
+      - name: Upload V3 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: three-five-wave-v3-results
+          path: backtest/results_v3/
