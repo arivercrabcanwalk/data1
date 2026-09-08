@@ -417,6 +417,7 @@ def detect_signals_one(g: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
             if i <= int(arm["divergence_i"]):
                 continue
             if float(row["low"]) < float(arm["divergence_low"]) * 0.99:
+                arms[kind] = None
                 continue
             if is_reversal_bar(row):
                 rev_anchor = compute_bigbar_anchor(row, prev)
@@ -553,8 +554,11 @@ def is_bad_status(r: pd.Series) -> bool:
     for c in ["is_st", "is_star_st", "is_new_listing_initial"]:
         if c in r and pd.notna(r[c]) and bool(r[c]):
             return True
-    if "is_suspended" in r and pd.notna(r["is_suspended"]) and bool(r["is_suspended"]):
-        return True
+    if "is_suspended" in r:
+        if pd.isna(r["is_suspended"]):
+            return True
+        if bool(r["is_suspended"]):
+            return True
     return False
 
 
@@ -729,6 +733,7 @@ def run_backtest(daily: pd.DataFrame, exec_px: pd.DataFrame, minute_map: dict[pd
             candidates = pending_entries.copy()
             candidates["priority"] = candidates["signal_type"].map(priority).fillna(9)
             candidates = candidates.sort_values(["candidate_score", "priority", "code"], ascending=[False, True, True], kind="mergesort")
+            candidates = candidates.drop_duplicates(subset=["code"], keep="first")
             filtered_codes = []
             filtered_rows = []
             for _, sig in candidates.iterrows():
@@ -760,6 +765,9 @@ def run_backtest(daily: pd.DataFrame, exec_px: pd.DataFrame, minute_map: dict[pd
                     rejects.append({"date": date, "code": str(sig["code"]), "signal_type": sig["signal_type"], "reason": "portfolio_exposure_limit", "score": float(sig["candidate_score"])})
                     continue
                 code = str(sig["code"])
+                if code in positions:
+                    rejects.append({"date": date, "code": code, "signal_type": sig["signal_type"], "reason": "duplicate_code_after_selection", "score": float(sig["candidate_score"])})
+                    continue
                 er = ex.loc[code]
                 pr = by_day[prev_date].loc[code]
                 confirm, reason = find_intraday_entry(intraday_groups.get(code, pd.DataFrame()), sig, float(pr["close"]), er)
@@ -772,9 +780,10 @@ def run_backtest(daily: pd.DataFrame, exec_px: pd.DataFrame, minute_map: dict[pd
                     rejects.append({"date": date, "code": code, "signal_type": sig["signal_type"], "reason": "allocation_too_small", "score": float(sig["candidate_score"])})
                     continue
                 px = float(confirm["raw_price"]) * (1 + SLIPPAGE)
-                shares = alloc / (px * (1 + COMMISSION))
+                shares = math.floor(alloc / (px * (1 + COMMISSION)) / 100.0) * 100.0
                 cost = shares * px * (1 + COMMISSION)
-                if shares <= 0 or cost > cash + 1e-6:
+                if shares < 100 or cost > cash + 1e-6:
+                    rejects.append({"date": date, "code": code, "signal_type": sig["signal_type"], "reason": "round_lot_allocation_too_small", "score": float(sig["candidate_score"])})
                     continue
                 cash -= cost
                 positions[code] = Position(
