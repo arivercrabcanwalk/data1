@@ -1,0 +1,61 @@
+{
+  "profiles": {
+    "strict": {
+      "wave": {
+        "min_history": 35,
+        "reversal_min_return": 0.05,
+        "reversal_close_pos": 0.75,
+        "reversal_amount_ratio_min": 0.95,
+        "arm_expiry_days": 3
+      },
+      "intraday": {
+        "rebound_from_low_min": 0.012,
+        "stable_bars_after_low": 12,
+        "up_down_amount_ratio_min": 1.05
+      },
+      "scoring": {
+        "min_score_no_sector": 74.0,
+        "min_score_with_sector": 78.0,
+        "right_side_rs20_rank_min": 0.60
+      }
+    },
+    "balanced": {
+      "wave": {
+        "min_history": 35,
+        "reversal_min_return": 0.04,
+        "reversal_close_pos": 0.72,
+        "reversal_amount_ratio_min": 0.85,
+        "arm_expiry_days": 3
+      },
+      "intraday": {
+        "rebound_from_low_min": 0.010,
+        "stable_bars_after_low": 10,
+        "up_down_amount_ratio_min": 1.00
+      },
+      "scoring": {
+        "min_score_no_sector": 72.0,
+        "min_score_with_sector": 76.0,
+        "right_side_rs20_rank_min": 0.58
+      }
+    },
+    "patient": {
+      "wave": {
+        "min_history": 35,
+        "reversal_min_return": 0.03,
+        "reversal_close_pos": 0.70,
+        "reversal_amount_ratio_min": 0.80,
+        "arm_expiry_days": 3
+      },
+      "intraday": {
+        "rebound_from_low_min": 0.012,
+        "stable_bars_after_low": 12,
+        "up_down_amount_ratio_min": 0.95
+      },
+      "scoring": {
+        "min_score_no_sector": 70.0,
+        "min_score_with_sector": 75.0,
+        "right_side_rs20_rank_min": 0.55
+      }
+    }
+  }
+}
