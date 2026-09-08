@@ -1,0 +1,22 @@
+{
+  "selected_profile": "strict",
+  "selected_modules": [
+    "wave5_exhaust_reversal",
+    "pingbu_qingyun"
+  ],
+  "profile_rank_from_development_only": [
+    "patient",
+    "strict",
+    "balanced"
+  ],
+  "profile_objective_development": {
+    "strict": 3.107931974318028,
+    "balanced": 3.0042994582720306,
+    "patient": 3.5805285634920248
+  },
+  "validation_fallback_used": false,
+  "algorithmic_test_not_read_until_after_selection_frozen": true,
+  "algorithmic_test_not_used_for_selection": true,
+  "human_seen_test_warning": true,
+  "note": "August is excluded from programmatic selection, but it has been seen by the human research process in earlier iterations, so it is not a pristine untouched out-of-sample test."
+}
