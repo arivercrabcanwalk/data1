@@ -1,0 +1,51 @@
+{
+  "version": "v3.0-causal-risk-walkforward",
+  "start_cash": 1000000.0,
+  "max_positions": 3,
+  "commission": 0.0003,
+  "sell_stamp": 0.0005,
+  "slippage": 0.001,
+  "max_hold_days": 12,
+  "cooldown_days_after_stop": 5,
+  "evaluation": {
+    "development_start": "2026-03-02",
+    "development_end": "2026-06-30",
+    "validation_start": "2026-07-01",
+    "validation_end": "2026-07-31",
+    "test_start": "2026-08-01",
+    "test_end": "2026-08-31",
+    "human_seen_test_warning": true,
+    "min_development_trades": 8,
+    "validation_max_drawdown": -0.18,
+    "validation_min_return": -0.03,
+    "module_min_development_trades": 3,
+    "module_min_development_profit_factor": 1.0,
+    "module_min_development_return": -0.02,
+    "module_min_validation_return": -0.03,
+    "min_validation_trades": 3,
+    "module_min_validation_trades": 1
+  },
+  "risk": {
+    "risk_per_trade": 0.01,
+    "max_position_fraction": 0.35,
+    "min_trade_value": 10000.0,
+    "trail_activate_gain": 0.08,
+    "trail_drawdown": 0.08,
+    "break_tolerance": 0.005,
+    "exposure_rebalance_tolerance": 0.01,
+    "market_score_flat": 35.0,
+    "market_score_low": 45.0,
+    "market_score_mid": 60.0,
+    "exposure_flat": 0.0,
+    "exposure_low": 0.3,
+    "exposure_mid": 0.5,
+    "exposure_high": 0.8
+  },
+  "integrity": {
+    "execute_on_next_minute_open": true,
+    "require_point_in_time_sector_map": true,
+    "allow_static_sector_map": false,
+    "wave_min_history": 35,
+    "save_intraday_equity": true
+  }
+}
