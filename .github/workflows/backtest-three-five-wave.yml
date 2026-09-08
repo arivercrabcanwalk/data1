@@ -1,16 +1,21 @@
-name: backtest-three-five-wave
+name: backtest-three-five-wave-v2
 
 on:
   workflow_dispatch:
   push:
     paths:
       - 'backtest/three_five_wave_backtest.py'
+      - 'backtest/test_three_five_wave_backtest.py'
+      - 'backtest/v2_config.json'
+      - 'backtest/sector_map.csv'
+      - 'backtest/sector_map.example.csv'
+      - 'backtest/README_V2.md'
       - '.github/workflows/backtest-three-five-wave.yml'
 
 jobs:
   run-backtest:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,10 +25,15 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install pandas numpy pyarrow
-      - name: Run backtest
+      - name: Syntax check
+        run: python -m py_compile backtest/three_five_wave_backtest.py
+      - name: Unit tests
+        run: python -m unittest backtest/test_three_five_wave_backtest.py -v
+      - name: Run V2 backtest
         run: python backtest/three_five_wave_backtest.py
-      - name: Upload results
+      - name: Upload V2 results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: three-five-wave-results
+          name: three-five-wave-v2-results
           path: backtest/results/
