@@ -25,6 +25,18 @@ def flat_stats(st: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def left_probe_research_market(market: pd.DataFrame) -> pd.DataFrame:
+    """Independent left-side risk book from the note: max 50% exposure even in a down-cycle.
+
+    This is intentionally separate from the right-side 0/30/50/80 market cap. Otherwise a
+    wave-3 left probe is structurally impossible in the exact risk-off regime where the note
+    describes using it. Production still requires point-in-time fundamental confirmation.
+    """
+    m = market.copy()
+    m["max_exposure"] = float(V4CFG["note_rules"]["left_probe_total_exposure_cap"])
+    return m
+
+
 def historical_ablation_suite(
     daily: pd.DataFrame,
     exec_px: pd.DataFrame,
@@ -57,8 +69,9 @@ def historical_ablation_suite(
         stats_cache[name] = st
 
     raw_only = v4_entries[v4_entries["signal_type"] == "wave3_probe_raw"].copy() if len(v4_entries) else pd.DataFrame()
+    left_market = left_probe_research_market(market)
     _, _, _, _, raw_stats = run_v4_simulation(
-        daily, exec_px, raw_only, market, start, end,
+        daily, exec_px, raw_only, left_market, start, end,
         allow_technical_raw_wave3=True, keep_fills=False
     )
     rows.append({"variant": "raw_wave3_technical_only_research", **flat_stats(raw_stats)})
@@ -71,6 +84,7 @@ def historical_ablation_suite(
         "fixed_policy": V4CFG["fixed_policy"],
         "policy_selected_from_this_ablation": False,
         "historical_best_variant_for_information_only": historical_best,
+        "left_probe_uses_independent_half_exposure_research_book": True,
         "warning": "March-August and the August examples in the note were already seen by the human research process. These ablations are explanatory historical replay only and must not be used to retune V4 after seeing their results.",
     }
     return df, audit
