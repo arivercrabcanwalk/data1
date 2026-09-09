@@ -1,0 +1,49 @@
+{
+  "version": "v4.0-mode-routed-note-integration",
+  "base_profile": "strict",
+  "historical_review_only": true,
+  "fixed_policy": "note_mode_routed_v1",
+  "note_rules": {
+    "big_rise_exit_daily_return": 0.07,
+    "pullback_min_days_from_20d_high": 3,
+    "pullback_max_days_from_20d_high": 15,
+    "pullback_down_days_in_last5_min": 3,
+    "technical_core_proxy_min": 0.62,
+    "wave5_core_proxy_min": 0.45,
+    "high_position_height60_min": 0.35,
+    "high_volatility_atr10_pct_min": 0.04,
+    "high_position_risk_multiplier": 0.50,
+    "left_probe_risk_multiplier": 0.50,
+    "left_probe_total_exposure_cap": 0.50,
+    "left_probe_market_score_max": 45.0,
+    "left_probe_rs20_rank_min": 0.55,
+    "left_probe_core_proxy_min": 0.62,
+    "left_probe_sharp_drop_from_prev_close": -0.025,
+    "left_probe_rebound_from_low_min": 0.008,
+    "left_probe_stable_bars_after_low": 8,
+    "left_probe_not_before": "09:45",
+    "left_probe_not_after": "14:30",
+    "fundamental_required_for_production_left_probe": true,
+    "speculative_ambush_enabled": false
+  },
+  "market_mode": {
+    "risk_off_score_max": 35.0,
+    "risk_off_ret5_max": -0.04,
+    "trend_up_score_min": 60.0,
+    "trend_up_ret5_min": 0.03,
+    "trend_up_pct_above_ma5_min": 0.60,
+    "range_abs_ret10_max": 0.04,
+    "range_score_min": 35.0,
+    "range_score_max": 70.0,
+    "range_pct_above_ma5_min": 0.35,
+    "range_pct_above_ma5_max": 0.65
+  },
+  "integrity": {
+    "execute_after_completed_minute_only": true,
+    "no_same_bar_fill": true,
+    "point_in_time_fundamentals_only": true,
+    "point_in_time_sector_only": true,
+    "do_not_select_policy_from_march_august_results": true,
+    "human_has_seen_march_august": true
+  }
+}

@@ -1,0 +1,44 @@
+name: backtest-note-v4
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'backtest/v4_*.py'
+      - 'backtest/v4_config.json'
+      - 'backtest/test_v4_backtest.py'
+      - 'backtest/NOTE_METHOD_V4.md'
+      - 'backtest/fundamental_history.csv'
+      - '.github/workflows/backtest-note-v4.yml'
+
+jobs:
+  run-v4:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/v4_shared.py
+          python -m py_compile backtest/v4_engine.py
+          python -m py_compile backtest/v4_research.py
+          python -m py_compile backtest/v4_backtest.py
+      - name: V3 regression tests
+        run: python -m unittest backtest/test_v3_backtest.py -v
+      - name: V4 note causality and mode tests
+        run: PYTHONPATH=backtest python -m unittest backtest/test_v4_backtest.py -v
+      - name: Run V4 frozen historical replay
+        run: python backtest/v4_backtest.py
+      - name: Upload V4 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: note-mode-v4-results
+          path: backtest/results_v4/
+          if-no-files-found: error
