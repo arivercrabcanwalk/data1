@@ -15,7 +15,10 @@ from v4_shared import (
     annotate_regular_signals, detect_raw_wave3_probes, precompute_v4_entries,
 )
 from v4_engine import run_v4_simulation
-from v4_research import historical_ablation_suite, monthly_fixed_policy_review, continuous_monthly_returns
+from v4_research import (
+    historical_ablation_suite, monthly_fixed_policy_review, continuous_monthly_returns,
+    left_probe_research_market,
+)
 
 
 def main() -> None:
@@ -73,8 +76,9 @@ def main() -> None:
     monthly_continuous = continuous_monthly_returns(curve, market)
 
     raw_only = v4_entries[v4_entries["signal_type"] == "wave3_probe_raw"].copy() if len(v4_entries) else pd.DataFrame()
+    left_market = left_probe_research_market(market)
     _, raw_trades, raw_open, _, raw_stats = run_v4_simulation(
-        daily, exec_px, raw_only, market, start, end,
+        daily, exec_px, raw_only, left_market, start, end,
         allow_technical_raw_wave3=True, keep_fills=False
     )
 
@@ -96,12 +100,14 @@ def main() -> None:
     stats["left_wave3_mode"] = {
         "production_enabled": bool(fundamental_available),
         "production_requires_point_in_time_fundamental_confirmation": bool(V4CFG["note_rules"]["fundamental_required_for_production_left_probe"]),
+        "separate_risk_book_exposure_cap": float(V4CFG["note_rules"]["left_probe_total_exposure_cap"]),
         "technical_only_research_stats": raw_stats,
     }
     stats["lookahead_controls_v4"] = {
         "daily_mode_and_signal_known_only_after_close": True,
         "entries_execute_on_next_day_after_completed_minute_confirmation": True,
         "left_probe_waits_for_observed_sharp_drop_then_stabilization": True,
+        "left_probe_uses_independent_half_exposure_book_in_down_cycle": True,
         "range_big_rise_exit_uses_prior_completed_daily_bar_then_next_open": True,
         "market_exposure_uses_previous_close": True,
         "static_sector_or_fundamental_snapshot_backfill_forbidden": True,
