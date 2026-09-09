@@ -39,6 +39,9 @@ def main() -> None:
 
     print("V4 detecting frozen strict V3 signals once")
     regular, signal_diag = v3.detect_profile_signals(daily, market, sector_available, BASE_PROFILE)
+    # V3 scoring already carries these ranks. Drop them before merging the richer V4 daily row
+    # so pandas does not create rs5_rank_x/rs5_rank_y style duplicate columns.
+    regular = regular.drop(columns=["rs5_rank", "rs20_rank", "liquidity_rank"], errors="ignore")
     regular = annotate_regular_signals(regular, daily, market, fundamental_available)
     raw_wave3 = detect_raw_wave3_probes(daily, market, fundamental_available)
     print("regular signals", len(regular), "raw wave3 probes", len(raw_wave3))
