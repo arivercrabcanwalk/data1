@@ -33,7 +33,7 @@ jobs:
       - name: V3 regression tests
         run: python -m unittest backtest/test_v3_backtest.py -v
       - name: V4 note causality and mode tests
-        run: python -m unittest backtest/test_v4_backtest.py -v
+        run: PYTHONPATH=backtest python -m unittest backtest/test_v4_backtest.py -v
       - name: Run V4 frozen historical replay
         run: python backtest/v4_backtest.py
       - name: Upload V4 results
