@@ -3,11 +3,36 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from run_theme_review_backtest import ThemeReviewBT, START, OUT, abs_pct
+from run_theme_review_backtest import ThemeReviewBT, START, OUT, abs_pct, norm_code
 
 
 class ProductionThemeReviewBT(ThemeReviewBT):
     """Production runner with audit fixes only; strategy rules remain frozen."""
+
+    def role_rows(self,date):
+        """Return point-in-time role universe with explicit data-coverage overrides.
+
+        Historical facts are never deleted: roles missing from the local minute
+        layer remain observation-only. Additional executable peers must have a
+        source published no later than the prior close and are stored separately.
+        """
+        x=super().role_rows(date).copy()
+        add_path=Path('july_theme_system/additional_core_roles.csv')
+        if add_path.exists():
+            add=pd.read_csv(add_path,dtype=str)
+            add=add[add.valid_from==date].copy()
+            if not add.empty:
+                add['stock_code']=norm_code(add.stock_code)
+                add['stock_name']=add.apply(lambda r:self.name_override.get(r.stock_code,r.stock_name),axis=1)
+                x=pd.concat([x,add[x.columns]],ignore_index=True)
+        ov_path=Path('july_theme_system/role_tradeability_overrides.csv')
+        if ov_path.exists() and not x.empty:
+            ov=pd.read_csv(ov_path,dtype=str)
+            ov=ov[ov.valid_from==date]
+            for r in ov.itertuples(index=False):
+                mask=x.stock_code.eq(str(r.stock_code).zfill(6))
+                x.loc[mask,'tradable_next_day']=str(r.tradable_next_day)
+        return x.drop_duplicates(['valid_from','theme','role','stock_code'],keep='last')
 
     def buy(self,date,obs_t,fill_t,row,raw_bar,st,daily,mark_map,cap,mode):
         # Candidate rows come from DataFrame.itertuples(), so use attribute access.
