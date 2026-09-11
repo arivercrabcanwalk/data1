@@ -1,6 +1,11 @@
 name: July Review Causal Backtest
 
 on:
+  push:
+    branches: [july-review-exec2]
+    paths:
+      - 'july_review/**'
+      - '.github/workflows/july_review_backtest.yml'
   workflow_dispatch:
 
 jobs:
