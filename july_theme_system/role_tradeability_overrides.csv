@@ -1,0 +1,4 @@
+valid_from,stock_code,tradable_next_day,reason,evidence_url
+2026-07-20,603580,0,local_minute_data_missing_observation_only_but_public_market_evidence_confirms_it_traded,https://www.cls.cn/detail/2430973
+2026-07-30,003032,0,local_minute_data_missing_observation_only_but_public_market_evidence_confirms_4_limit_up_run,https://www.cls.cn/detail/2440914
+2026-07-31,003032,0,local_minute_data_missing_observation_only_but_public_market_evidence_confirms_4_limit_up_run,https://www.cls.cn/detail/2440914
