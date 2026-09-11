@@ -1,0 +1,6 @@
+stock_code,canonical_name,identity_source_url,note
+300364,中文在线,https://www.col.com/cover-pk16j8k2/aboutus,官方公司介绍确认股票代码300364；覆盖daily_core_roles中的名称录入笔误
+600641,先导基电,https://www.600641.com.cn/index.php?a=lists&c=index&catid=66&m=content,用于历史简称身份确认
+600397,江钨装备,https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12575112&stockid=600397,用于历史简称身份确认
+688347,华虹宏力,https://vip.stock.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12372669,2026-06-08起简称变更但代码不变
+688825,长鑫科技,https://www.sse.com.cn/disclosure/announcement/listing/ipo/c/c_20260724_10826610.shtml,上交所上市公告确认2026-07-27上市及代码
