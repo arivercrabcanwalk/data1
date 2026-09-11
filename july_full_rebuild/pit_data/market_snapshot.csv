@@ -1,0 +1,4 @@
+date,limit_up_count,limit_down_count,broken_board_count,seal_rate,max_board,continuous_board_count,advance_count,decline_count,yesterday_limitup_premium,turnover_amount,emotion_phase
+2026-07-02,91,40,39,0.70,4,19,2109,2955,0.012,,ice
+2026-07-13,27,172,13,0.675,3,9,777,4377,-0.027,,ice
+2026-07-27,111,6,13,0.895,5,8,5195,285,0.034,2080000000000,climax
