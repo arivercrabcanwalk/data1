@@ -1,6 +1,5 @@
 from __future__ import annotations
 import json
-from collections import defaultdict
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -8,12 +7,35 @@ from run_theme_review_backtest import ThemeReviewBT, START, OUT, abs_pct
 
 
 class ProductionThemeReviewBT(ThemeReviewBT):
-    """Production runner.
+    """Production runner with audit fixes only; strategy rules remain frozen."""
 
-    Keeps the causal engine logic frozen, but fixes evaluation bookkeeping by
-    reusing the original July-31 daily frame (and therefore its true prior
-    close) instead of reloading July-31 after last_close has advanced.
-    """
+    def buy(self,date,obs_t,fill_t,row,raw_bar,st,daily,mark_map,cap,mode):
+        # Candidate rows come from DataFrame.itertuples(), so use attribute access.
+        code=row.code
+        if code in self.pos: return False,'already_held'
+        if len(self.pos)>=int(self.rules['execution']['max_positions']): return False,'max_positions'
+        same=sum(p['theme']==row.theme for p in self.pos.values())
+        if same>=int(self.rules['execution']['same_theme_max_positions']): return False,'same_theme_cap'
+        scale=self.mode_scale(mode)
+        if scale<=0: return False,'mode_paused'
+        if code not in daily.index: return False,'missing_daily_row'
+        prev=float(daily.loc[code].prev_close) if pd.notna(daily.loc[code].prev_close) else np.nan
+        ok,reason=self.can_trade_stock(st,code,'BUY',float(raw_bar.open),prev,raw_bar)
+        if not ok: return False,reason
+        eq=self.equity(mark_map); exp=self.exposure(mark_map,eq); remain=max(0.0,float(cap)-exp)
+        frac=min(float(self.rules['playbooks'][mode]['max_single_position'])*scale,remain)
+        if frac<.05: return False,'insufficient_exposure_budget'
+        slip=float(self.rules['execution']['slippage_each_side']); comm=float(self.rules['execution']['commission_each_side']); lot=int(self.rules['execution']['lot_size'])
+        px=float(raw_bar.open)*(1+slip); budget=min(self.cash/(1+comm),eq*frac); sh=int(budget/px/lot)*lot
+        if sh<lot: return False,'cash_or_lot_too_small'
+        gross=px*sh; fee=gross*comm
+        if gross+fee>self.cash: return False,'cash_shortfall'
+        self.cash-=gross+fee
+        self.pos[code]={'code':code,'name':row.name,'theme':row.theme,'role':row.role,'mode':mode,'entry_date':date,'obs_time':obs_t,'entry_time':fill_t,'entry_price':px,'shares':sh,'basis':gross+fee,'hold_days':0,'max_price':px,'min_price':px,'last_mark':px,'entry_phase':self.context_day(date).market_phase,'theme_state_entry':row.theme_state,'priority_entry':int(row.priority),'scale_entry':scale}
+        self.entered_on_day[date].add(code)
+        self.fills.append({'date':date,'observation_time':obs_t,'time':fill_t,'code':code,'name':row.name,'theme':row.theme,'role':row.role,'side':'BUY','raw_price':float(raw_bar.open),'fill_price':px,'shares':sh,'mode':mode,'reason':'all_playbook_gates_passed'})
+        if self.learn[mode]['half_slots']>0: self.learn[mode]['half_slots']-=1
+        return True,''
 
     def export_all(self, final, bench):
         t=pd.DataFrame(self.trades); f=pd.DataFrame(self.fills); d=pd.DataFrame(self.daily); e=pd.DataFrame(self.eq)
