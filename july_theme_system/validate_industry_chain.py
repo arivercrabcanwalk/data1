@@ -1,4 +1,4 @@
-import json
+import json, re
 from pathlib import Path
 import pandas as pd
 
@@ -20,8 +20,12 @@ missing_group=sorted(set(groups.canonical_group)-set(chains.canonical_group))
 assert not missing_group, f'Canonical groups missing chain reference: {missing_group}'
 assert chains.structural_source_url.str.startswith('https://').all()
 
-# The industry-chain table is structural only; stock membership remains in point-in-time daily_core_roles.
-assert chains.usage_boundary.str.contains('历史|结构|交易|归属|成员|个股').all()
+# Structural reference must never carry six-digit stock codes or historical stock membership.
+# Historical members live only in point-in-time daily_core_roles/additional_core_roles.
+text='\n'.join(chains.fillna('').astype(str).agg(' | '.join,axis=1).tolist())
+assert not re.search(r'(?<!\d)\d{6}(?!\d)', text), 'Static six-digit stock code found in industry-chain reference'
+for forbidden_col in ['stock_code','stock_name','member_code','constituent_code']:
+    assert forbidden_col not in chains.columns, f'Static stock-membership column forbidden: {forbidden_col}'
 
 print(json.dumps({
   'status':'PASS',
@@ -29,5 +33,5 @@ print(json.dumps({
   'mapped_theme_labels':int(groups.theme.nunique()),
   'canonical_industry_chains':int(chains.canonical_group.nunique()),
   'all_july_themes_mapped':True,
-  'no_static_stock_membership_in_chain_reference':True
+  'no_static_stock_codes_or_membership_columns_in_chain_reference':True
 },ensure_ascii=False,indent=2))
