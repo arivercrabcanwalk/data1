@@ -1,0 +1,24 @@
+name: July Review Causal Backtest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Run isolated July review backtest
+        run: python july_review/run_july_review.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-review-causal-results
+          path: july_review_results/
+          if-no-files-found: error
