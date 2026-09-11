@@ -17,6 +17,13 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            2026-07
+            july_full_rebuild
+            .github/workflows/july_full_rebuild.yml
+          sparse-checkout-cone-mode: false
+          filter: blob:none
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
