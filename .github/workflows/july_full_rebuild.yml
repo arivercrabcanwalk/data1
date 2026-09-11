@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: pip install pandas numpy pyarrow requests beautifulsoup4 lxml
       - name: Rebuild 23-day PIT web facts
-        run: python july_full_rebuild/rebuild_pit.py
+        run: python july_full_rebuild/rebuild_pit_v2.py
       - name: Enforce readiness gate
         run: python july_full_rebuild/readiness_gate.py
       - name: Run causal daily-review backtest
@@ -38,7 +38,7 @@ jobs:
       - name: Upload PIT and results
         uses: actions/upload-artifact@v4
         with:
-          name: july-full-rebuild-results
+          name: july-full-rebuild-results-v2
           path: |
             july_full_rebuild/pit_data/
             july_full_rebuild/results/
