@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-v2:
@@ -44,3 +44,14 @@ jobs:
             july_knowledge/generated_v2/
             july_knowledge/raw_web_v2/
           if-no-files-found: error
+      - name: Sync verified generated outputs to branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add july_knowledge/generated_v2/
+          if git diff --cached --quiet; then
+            echo "No generated changes"
+          else
+            git commit -m "Update verified July PIT knowledge outputs"
+            git push origin HEAD:july-knowledge-layer
+          fi
