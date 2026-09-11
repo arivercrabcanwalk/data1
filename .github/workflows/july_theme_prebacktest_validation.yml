@@ -24,11 +24,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python july_theme_system/validate_prebacktest.py | tee july_theme_system/PREBACKTEST_VALIDATION.json
+          {
+            python july_theme_system/validate_prebacktest.py
+            python july_theme_system/validate_phase_map.py
+          } | tee july_theme_system/PREBACKTEST_VALIDATION.txt
       - name: Upload validation evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: july-theme-prebacktest-validation
-          path: july_theme_system/PREBACKTEST_VALIDATION.json
+          path: july_theme_system/PREBACKTEST_VALIDATION.txt
           if-no-files-found: warn
