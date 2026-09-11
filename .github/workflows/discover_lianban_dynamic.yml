@@ -1,0 +1,22 @@
+name: Discover Lianban Dynamic Source
+on:
+  push:
+    branches: [july-full-rebuild]
+    paths:
+      - 'tools_tmp/discover_lianban_dynamic.py'
+      - '.github/workflows/discover_lianban_dynamic.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools_tmp/discover_lianban_dynamic.py
+            .github/workflows/discover_lianban_dynamic.yml
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python tools_tmp/discover_lianban_dynamic.py
