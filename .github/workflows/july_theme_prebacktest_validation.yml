@@ -19,14 +19,15 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install validation dependencies
-        run: pip install pandas pyarrow
-      - name: Validate point-in-time theme system
+        run: pip install pandas numpy pyarrow
+      - name: Validate complete point-in-time review system and engine contract
         shell: bash
         run: |
           set -euo pipefail
           {
             python july_theme_system/validate_prebacktest.py
             python july_theme_system/validate_phase_map.py
+            PYTHONPATH=july_theme_system python july_theme_system/validate_engine_contract.py
           } | tee july_theme_system/PREBACKTEST_VALIDATION.txt
       - name: Upload validation evidence
         if: always()
