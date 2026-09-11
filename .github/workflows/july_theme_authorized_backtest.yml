@@ -1,0 +1,47 @@
+name: July Theme Authorized Backtest
+
+on:
+  push:
+    branches:
+      - july-theme-context-v1
+    paths:
+      - 'july_theme_system/BACKTEST_AUTHORIZED.txt'
+  workflow_dispatch:
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Re-run all pre-backtest gates on the exact backtest commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile july_theme_system/run_theme_review_backtest.py july_theme_system/run_theme_review_production.py july_theme_system/build_review_reports.py
+          python july_theme_system/validate_prebacktest.py
+          python july_theme_system/validate_phase_map.py
+          PYTHONPATH=july_theme_system python july_theme_system/validate_engine_contract.py
+      - name: Require explicit authorization marker
+        run: grep -q '^AUTHORIZED_AFTER_TRUE_GATE_PASS$' july_theme_system/BACKTEST_AUTHORIZED.txt
+      - name: Run causal theme-core-review July backtest
+        run: PYTHONPATH=july_theme_system python july_theme_system/run_theme_review_production.py
+      - name: Build fixed daily weekly monthly review reports
+        run: PYTHONPATH=july_theme_system python july_theme_system/build_review_reports.py
+      - name: Package audit manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > july_theme_results/git_commit.txt
+          sha256sum july_theme_system/SYSTEM_SPEC.md july_theme_system/METHOD_EVIDENCE.md july_theme_system/playbook_rules_v1.json july_theme_system/july_2026_theme_timeline.csv july_theme_system/daily_theme_priority.csv july_theme_system/daily_core_roles.csv july_theme_system/run_theme_review_backtest.py july_theme_system/run_theme_review_production.py > july_theme_results/input_code_sha256.txt
+      - name: Upload complete results
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-theme-causal-results
+          path: july_theme_results/
+          if-no-files-found: error
