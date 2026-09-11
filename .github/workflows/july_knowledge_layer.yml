@@ -1,0 +1,36 @@
+name: July Point-in-Time Knowledge Layer
+
+on:
+  push:
+    branches: [july-knowledge-layer]
+    paths:
+      - 'july_knowledge/**'
+      - '.github/workflows/july_knowledge_layer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow requests beautifulsoup4 pytest
+      - name: Build July point-in-time knowledge layer
+        run: python july_knowledge/build_knowledge_layer.py
+      - name: Run anti-leakage tests
+        run: pytest -q july_knowledge/test_knowledge_layer.py
+      - name: Upload knowledge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-knowledge-layer
+          path: |
+            july_knowledge/generated/
+            july_knowledge/raw_web/
+          if-no-files-found: error
