@@ -26,6 +26,7 @@ jobs:
           python -m py_compile july_theme_system/run_theme_review_backtest.py july_theme_system/run_theme_review_production.py july_theme_system/build_review_reports.py
           python july_theme_system/validate_prebacktest.py
           python july_theme_system/validate_phase_map.py
+          python july_theme_system/validate_industry_chain.py
           PYTHONPATH=july_theme_system python july_theme_system/validate_engine_contract.py
       - name: Require explicit authorization marker
         run: grep -q '^AUTHORIZED_AFTER_TRUE_GATE_PASS$' july_theme_system/BACKTEST_AUTHORIZED.txt
@@ -38,7 +39,19 @@ jobs:
         run: |
           set -euo pipefail
           git rev-parse HEAD > july_theme_results/git_commit.txt
-          sha256sum july_theme_system/SYSTEM_SPEC.md july_theme_system/METHOD_EVIDENCE.md july_theme_system/playbook_rules_v1.json july_theme_system/july_2026_theme_timeline.csv july_theme_system/daily_theme_priority.csv july_theme_system/daily_core_roles.csv july_theme_system/run_theme_review_backtest.py july_theme_system/run_theme_review_production.py > july_theme_results/input_code_sha256.txt
+          sha256sum \
+            july_theme_system/SYSTEM_SPEC.md \
+            july_theme_system/METHOD_EVIDENCE.md \
+            july_theme_system/playbook_rules_v1.json \
+            july_theme_system/july_2026_theme_timeline.csv \
+            july_theme_system/daily_theme_priority.csv \
+            july_theme_system/daily_core_roles.csv \
+            july_theme_system/theme_group_map.csv \
+            july_theme_system/industry_chain_reference.csv \
+            july_theme_system/run_theme_review_backtest.py \
+            july_theme_system/run_theme_review_production.py \
+            july_theme_system/build_review_reports.py \
+            > july_theme_results/input_code_sha256.txt
       - name: Upload complete results
         uses: actions/upload-artifact@v4
         with:
