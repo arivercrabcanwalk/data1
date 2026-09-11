@@ -1,0 +1,38 @@
+name: July Full Rebuild
+
+on:
+  push:
+    branches: [july-full-rebuild]
+    paths:
+      - 'july_full_rebuild/**'
+      - '.github/workflows/july_full_rebuild.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild-and-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow requests beautifulsoup4 lxml
+      - name: Rebuild 23-day PIT web facts
+        run: python july_full_rebuild/rebuild_pit.py
+      - name: Enforce readiness gate
+        run: python july_full_rebuild/readiness_gate.py
+      - name: Run causal daily-review backtest
+        run: python july_full_rebuild/causal_backtest.py
+      - name: Upload PIT and results
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-full-rebuild-results
+          path: |
+            july_full_rebuild/pit_data/
+            july_full_rebuild/results/
+          if-no-files-found: error
