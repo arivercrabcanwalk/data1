@@ -20,11 +20,7 @@ def _stock_anchors(node):
 
 
 def _smallest_container(text_node, expected: int | None, stop_node=None):
-    """Climb from a header text node to the smallest ancestor containing stock links.
-
-    This deliberately avoids site-specific classes. For a theme row we prefer an
-    ancestor whose link count is compatible with the displayed '<theme> · N 只'.
-    """
+    """Climb from a header text node to the smallest ancestor containing stock links."""
     cur=text_node.parent
     fallback=None
     for _ in range(8):
@@ -41,7 +37,6 @@ def _smallest_container(text_node, expected: int | None, stop_node=None):
 
 
 def _direct_stock_name(a) -> str:
-    # Prefer the visible leading text, removing time/risk markers but preserving *ST names.
     text=a.get_text(" ",strip=True)
     text=re.sub(r"\b\d{2}:\d{2}\b", "", text)
     text=text.replace("风险警示", "").strip()
@@ -117,7 +112,6 @@ def robust_parse_yyqyx(day: str, html: str):
         row=_smallest_container(s,expected,stop_node=t_start.parent if t_start else None)
         if row is None: continue
         links=_stock_anchors(row)
-        # If an ancestor accidentally contains the next theme too, cap to displayed N.
         if expected and len(links)>expected:
             links=links[:expected]
         for a,code in links:
@@ -128,7 +122,7 @@ def robust_parse_yyqyx(day: str, html: str):
             members.append({
               "date":day,"source_id":"yyqyx_limitup","raw_theme":raw_theme,"canonical_theme":canon,
               "source_theme_count":expected,"code":code,"stock_name":nm,"source_seal_time":_seal_time(a),
-              "risk_flag":"ST" in nm.upper(),"trade_effective_date":b.next_trading_day(day),
+              "risk_flag":"ST" in nm.upper(),"trade_effective_date":b.next_day(day),
               "availability_confidence":"medium_archive_membership"
             })
 
@@ -145,11 +139,7 @@ def robust_parse_yyqyx(day: str, html: str):
             seen_l.add(key); nm=_direct_stock_name(a)
             ladder.append({"date":day,"source_id":"yyqyx_limitup","code":code,"stock_name":nm,"board_level":level,"source_time":_seal_time(a)})
 
-    # Last-resort semantic-text fallback for sites that wrap theme header and links in
-    # sibling elements instead of one row. We only use it when DOM extraction got zero.
     if not members and t_start is not None:
-        # Iterate block-level elements after the section heading. A candidate is accepted
-        # only when its own text starts with '<theme> · N 只' and it contains stock URLs.
         for elem in t_start.find_all_next(["div","li","section","p"]):
             if t_end is not None and elem is t_end: break
             txt=elem.get_text(" ",strip=True)
@@ -162,6 +152,6 @@ def robust_parse_yyqyx(day: str, html: str):
                 key=(raw_theme,code)
                 if key in seen: continue
                 seen.add(key); nm=_direct_stock_name(a)
-                members.append({"date":day,"source_id":"yyqyx_limitup","raw_theme":raw_theme,"canonical_theme":canon,"source_theme_count":expected,"code":code,"stock_name":nm,"source_seal_time":_seal_time(a),"risk_flag":"ST" in nm.upper(),"trade_effective_date":b.next_trading_day(day),"availability_confidence":"medium_archive_membership_fallback"})
+                members.append({"date":day,"source_id":"yyqyx_limitup","raw_theme":raw_theme,"canonical_theme":canon,"source_theme_count":expected,"code":code,"stock_name":nm,"source_seal_time":_seal_time(a),"risk_flag":"ST" in nm.upper(),"trade_effective_date":b.next_day(day),"availability_confidence":"medium_archive_membership_fallback"})
 
     return summary,members,ladder
