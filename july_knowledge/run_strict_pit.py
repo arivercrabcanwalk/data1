@@ -1,12 +1,15 @@
 """Official strict-PIT build runner.
 
-This wrapper changes serialization only: numpy/pandas scalar values are converted
-to native JSON scalars when the knowledge manifest is written. It does not alter
-any market, theme, leadership, playbook, or gate rule.
+This runner changes no strategy or score rule. It applies two implementation-only
+adapters before the strict knowledge build:
+1) numpy/pandas scalars are serialized as native JSON scalars;
+2) YYQYX theme/ladder rows are parsed by semantic headings + stock URLs rather
+   than fragile site-specific CSS class names.
 """
 import json
 import numpy as np
 import build_knowledge_layer_strict_pit as strict
+from robust_yyqyx_parser import robust_parse_yyqyx
 
 _original_dumps = json.dumps
 
@@ -25,6 +28,7 @@ def _safe_dumps(*args, **kwargs):
     return _original_dumps(*args, **kwargs)
 
 strict.json.dumps = _safe_dumps
+strict.b.parse_yyqyx = robust_parse_yyqyx
 
 if __name__ == "__main__":
     strict.main()
