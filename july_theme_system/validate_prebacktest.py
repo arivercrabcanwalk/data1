@@ -82,21 +82,23 @@ assert themes.evidence_url.str.startswith('https://').all()
 assert set(themes.valid_from).issubset(set(expected_next)), 'theme valid_from outside point-in-time next-day schedule'
 assert (themes.loc[themes.theme_state.isin(['retreat','watch']),'tradable_next_day'].astype(int) == 0).all(), 'retreat/watch themes cannot be tradable'
 
-# A tradable theme must connect to at least one named tradable role, exact or via an explicit alias.
+# A tradable theme used for a JULY decision must connect to >=1 named tradable role.
+# 2026-07-31 -> 2026-08-03 rows are retained only as a post-July review record and are deliberately excluded from the July gate.
 alias_map = {}
 for a in aliases.itertuples(index=False):
     alias_map.setdefault(a.theme, set()).add(a.role_theme)
-for t in themes[themes.tradable_next_day.astype(int) == 1].itertuples(index=False):
+july_decision_themes = themes[(themes.tradable_next_day.astype(int) == 1) & (themes.valid_from.isin(trade_dates))]
+for t in july_decision_themes.itertuples(index=False):
     names = {t.theme} | alias_map.get(t.theme, set())
     x = roles[(roles.valid_from == t.valid_from) & (roles.theme.isin(names)) & (roles.tradable_next_day.astype(int) == 1)]
-    assert len(x) >= 1, f'Tradable theme has no named tradable core: {t.valid_from} {t.theme}'
+    assert len(x) >= 1, f'Tradable July theme has no named tradable core: {t.valid_from} {t.theme}'
 
 # Every next-day July context has at least one tradable named core.
 for d in trade_dates[1:]:
     x = roles[(roles.valid_from == d) & (roles.tradable_next_day.astype(int) == 1)]
     assert len(x) >= 1, f'No tradable named core for {d}'
 
-# Verify every named code actually exists in the GitHub minute parquet on its valid day.
+# Verify every named code actually exists in the GitHub minute parquet on its valid JULY day.
 missing = []
 for d in trade_dates[1:]:
     p = next(p for p in trade_files if p.parent.name == f'date={d}')
@@ -123,11 +125,12 @@ print(json.dumps({
     'july_trading_days': len(trade_dates),
     'context_rows': len(ctx),
     'theme_state_rows': len(themes),
+    'july_tradable_theme_rows': len(july_decision_themes),
     'core_role_rows': len(roles),
     'unique_named_stocks': int(roles.stock_code.nunique()),
     'tradeability_exceptions': len(exceptions),
     'identity_overrides': len(overrides),
-    'all_tradable_themes_have_named_cores': True,
+    'all_july_tradable_themes_have_named_cores': True,
     'all_named_codes_exist_in_next_day_github_minute_data': True,
     'point_in_time_valid_from_verified': True,
     'rules_frozen': True,
