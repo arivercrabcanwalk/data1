@@ -1,73 +1,90 @@
 {
-  "version": "review-playbook-v1",
+  "version": "review-playbook-v1.1-prebacktest",
   "effective_policy": "frozen_before_backtest",
   "data_policy": {
     "price": "2026-07/**/minute1.parquet only",
     "status": "same-day daily_stock_status.parquet only",
-    "theme_context": "july_2026_theme_timeline.csv; a row becomes usable only from valid_from",
+    "theme_context": "july_2026_theme_timeline.csv + daily_theme_priority.csv + daily_core_roles.csv; rows usable only from valid_from",
     "old_backtest_forbidden": true,
     "august_forbidden": true,
-    "same_day_new_theme": "not tradable unless separately timestamped intraday source existed before decision; v1 defaults to next-day only"
+    "same_day_new_theme": "not tradable in v1.1 even if an isolated intraday article exists, because intraday source coverage is not yet exhaustive; all web close-review context becomes usable next trading day only"
   },
   "market_risk": {
-    "主跌/极端冰点": {"max_equity_exposure": 0.20, "allowed": ["ice_point_repair", "cash"]},
-    "冰点/主跌": {"max_equity_exposure": 0.20, "allowed": ["ice_point_repair", "cash"]},
-    "恐慌/冰点": {"max_equity_exposure": 0.20, "allowed": ["ice_point_repair", "cash"]},
-    "冰点后的局部试错": {"max_equity_exposure": 0.30, "allowed": ["low_level_switch", "ice_point_repair", "cash"]},
-    "冰点反抽/红利占优": {"max_equity_exposure": 0.30, "allowed": ["low_level_switch", "leader_weak_to_strong", "cash"]},
+    "强势轮动/科技分歧": {"max_equity_exposure": 0.45, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "low_level_switch", "cash"]},
+    "强分歧/硬科技退潮": {"max_equity_exposure": 0.25, "allowed": ["low_level_switch", "leader_weak_to_strong", "cash"]},
     "修复但快速轮动": {"max_equity_exposure": 0.40, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]},
-    "冰点修复/快速轮动": {"max_equity_exposure": 0.40, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]},
-    "强修复/科技一致": {"max_equity_exposure": 0.55, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "cash"]},
+    "分歧转弱": {"max_equity_exposure": 0.20, "allowed": ["leader_weak_to_strong", "cash"]},
+    "冰点/主跌": {"max_equity_exposure": 0.15, "allowed": ["ice_point_repair", "cash"]},
+    "冰点后的局部试错": {"max_equity_exposure": 0.30, "allowed": ["low_level_switch", "ice_point_repair", "cash"]},
     "硬科技强修复/一致加速": {"max_equity_exposure": 0.45, "allowed": ["leader_divergence_to_consensus", "cash"]},
-    "短线修复/电力电网主线化": {"max_equity_exposure": 0.60, "allowed": ["leader_divergence_to_consensus", "supplement_after_leader_confirmed", "cash"]},
-    "全面修复/高低切并存": {"max_equity_exposure": 0.50, "allowed": ["leader_divergence_to_consensus", "low_level_switch", "cash"]},
-    "default": {"max_equity_exposure": 0.30, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]}
+    "高潮次日强分歧/短线冰点": {"max_equity_exposure": 0.20, "allowed": ["ice_point_repair", "low_level_switch", "cash"]},
+    "恐慌/冰点": {"max_equity_exposure": 0.15, "allowed": ["ice_point_repair", "cash"]},
+    "冰点修复/快速轮动": {"max_equity_exposure": 0.40, "allowed": ["leader_weak_to_strong", "low_level_switch", "ice_point_repair", "cash"]},
+    "结构分化/医药主导": {"max_equity_exposure": 0.45, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "supplement_after_leader_confirmed", "cash"]},
+    "分歧转退潮": {"max_equity_exposure": 0.25, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]},
+    "主跌/极端冰点": {"max_equity_exposure": 0.10, "allowed": ["ice_point_repair", "cash"]},
+    "冰点反抽/红利占优": {"max_equity_exposure": 0.30, "allowed": ["low_level_switch", "leader_weak_to_strong", "ice_point_repair", "cash"]},
+    "强修复/科技一致": {"max_equity_exposure": 0.55, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "cash"]},
+    "科技分歧/电力资源抱团": {"max_equity_exposure": 0.45, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "supplement_after_leader_confirmed", "cash"]},
+    "短线修复/电力电网主线化": {"max_equity_exposure": 0.60, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "supplement_after_leader_confirmed", "cash"]},
+    "主线分歧/电力退潮": {"max_equity_exposure": 0.20, "allowed": ["low_level_switch", "leader_weak_to_strong", "cash"]},
+    "全面修复/高低切并存": {"max_equity_exposure": 0.50, "allowed": ["leader_divergence_to_consensus", "leader_weak_to_strong", "low_level_switch", "cash"]},
+    "指数主跌但小票高低切": {"max_equity_exposure": 0.25, "allowed": ["low_level_switch", "leader_weak_to_strong", "cash"]},
+    "深V修复/AI应用和消费轮动": {"max_equity_exposure": 0.45, "allowed": ["low_level_switch", "leader_weak_to_strong", "leader_divergence_to_consensus", "cash"]},
+    "再度分歧/红利消费防御": {"max_equity_exposure": 0.30, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]},
+    "反弹中的强分歧/轮动": {"max_equity_exposure": 0.35, "allowed": ["leader_weak_to_strong", "low_level_switch", "cash"]}
   },
   "core_confirmation": {
     "must_be_named_in_prior_available_web_context": true,
     "roles_eligible": ["theme_leader", "capacity_core", "trend_core", "elastic_core", "market_high", "supplement"],
     "follower_entry_forbidden": true,
     "negative_anchor_entry_forbidden": true,
-    "same_theme_confirmation": "at least 2 named representatives excluding the candidate must show non-negative return at the decision window OR one representative is limit-up/near-limit while capacity core is positive",
-    "market_confirmation": "whole-market median return at decision window must not be below -1.5%, except ice_point_repair"
+    "same_theme_confirmation": "at least 2 named representatives excluding the candidate show return >=0 at observation OR one other representative is >=90% of its daily up-limit and a named capacity_core in the same theme is positive",
+    "market_confirmation": "whole-market median return at observation >= -1.5%, except ice_point_repair",
+    "breadth_worsening_definition": "for leader_weak_to_strong, whole-market advancer ratio at observation must be >= the 09:35 advancer ratio"
   },
   "playbooks": {
     "leader_divergence_to_consensus": {
-      "prerequisites": ["prior theme is confirmed/accelerating/repair and not retreat", "candidate is theme_leader/capacity_core/trend_core/elastic_core", "candidate was not prior negative_anchor"],
+      "prerequisites": ["theme_state in confirm/accelerate/repair/divergence", "candidate role in theme_leader/capacity_core/trend_core/elastic_core", "candidate is not a prior negative_anchor", "theme tradable_next_day=1"],
       "entry_windows": ["09:46", "10:01", "10:31"],
-      "trigger": "candidate opens between -4% and +5%; after a completed observation minute recovers above previous close or above day open; is in upper 60% of its intraday range; same-theme confirmation passes",
-      "forbidden": ["prior-day theme leader failed with batch limit-down contagion", "candidate already >8.5% above prior close at observation", "whole-market severe deterioration without repair evidence"],
+      "observation_windows": ["09:45", "10:00", "10:30"],
+      "trigger": "open gap in [-4%,+5%]; at completed observation candidate close >= previous close OR close > day open; intraday range position >=60%; same-theme confirmation passes; candidate return <8.5%",
+      "forbidden": ["theme_state retreat/watch", "prior-day theme leader failed with batch negative anchors", "whole-market median < -1.5%", "candidate return >=8.5% at observation"],
       "max_single_position": 0.25
     },
     "leader_weak_to_strong": {
-      "prerequisites": ["candidate is prior named core", "prior expectation is normal divergence/repair rather than certain acceleration"],
+      "prerequisites": ["candidate is prior named core", "theme_state in new_trial/confirm/repair/divergence", "theme tradable_next_day=1"],
       "entry_windows": ["09:46", "10:01"],
-      "trigger": "open gap between -3.5% and +2%; completed observation shows return >= +1%, price above day open, intraday range position >=70%, same-theme confirmation passes",
-      "forbidden": ["candidate is a prior negative_anchor", "theme is marked retreat", "market breadth keeps worsening from 09:35 to observation"],
+      "observation_windows": ["09:45", "10:00"],
+      "trigger": "open gap in [-3.5%,+2%]; observation return >=1%; close > day open; intraday range position >=70%; same-theme confirmation passes; market advancer ratio at observation >=09:35 ratio",
+      "forbidden": ["candidate prior negative_anchor", "theme_state retreat/watch", "market breadth worsens from 09:35", "whole-market median < -1.5%"],
       "max_single_position": 0.22
     },
     "low_level_switch": {
-      "prerequisites": ["old high-level theme is divergence/retreat/main-down", "new theme was documented no later than prior close in v1", "new theme has at least two named representatives"],
+      "prerequisites": ["at least one theme in same valid_from is retreat OR prior market phase contains 主跌/退潮/分歧/冰点", "candidate theme_state=new_trial", "new theme documented by prior close", "new theme has at least two named representatives"],
       "entry_windows": ["09:46", "10:01", "10:31"],
-      "trigger": "new-theme leader positive and above day open; at least two representatives positive; old-theme negative anchors remain weak; candidate not already >8.5% at observation",
-      "forbidden": ["new theme was identified only by post-close hindsight on same date", "old theme unexpectedly reclaims leadership before entry"],
+      "observation_windows": ["09:45", "10:00", "10:30"],
+      "trigger": "candidate return >0 and close > day open; at least two same-theme named representatives return >0; median return of prior negative anchors <=0; candidate return <8.5%",
+      "forbidden": ["theme identified only by same-day post-close hindsight", "old negative anchors collectively reverse positive before entry", "candidate return >=8.5%"],
       "max_single_position": 0.18
     },
     "supplement_after_leader_confirmed": {
-      "prerequisites": ["same-theme leader is already confirmed strong that day", "theme was a prior mainline candidate", "candidate is prior named supplement"],
+      "prerequisites": ["candidate role=supplement", "theme_state in confirm/accelerate", "a named theme_leader exists and is tradable/observable"],
       "entry_windows": ["10:01", "10:31"],
-      "trigger": "leader remains strong; supplement turns positive with range position >=70%; board breadth not contracting",
-      "forbidden": ["leader opens/turns into negative feedback", "supplement is mid-level crowded stock without clear role"],
+      "observation_windows": ["10:00", "10:30"],
+      "trigger": "theme_leader return >0 and above day open; candidate return >0 and range position >=70%; at least two named representatives are non-negative",
+      "forbidden": ["leader return <=0", "theme retreat/watch", "candidate is itself a negative anchor"],
       "max_single_position": 0.15
     },
     "ice_point_repair": {
-      "prerequisites": ["prior market phase is ice/main-down/panic", "candidate is a named low-level core or capacity core"],
+      "prerequisites": ["prior market phase contains 冰点 or 主跌 or 恐慌", "candidate role in theme_leader/capacity_core/trend_core/elastic_core", "theme tradable_next_day=1"],
       "entry_windows": ["10:01", "10:31"],
-      "trigger": "whole-market breadth improves by >=10 percentage points from 09:35; candidate return >=1%; at least two same-theme representatives positive; no old negative anchor reversal is required",
-      "forbidden": ["market breadth remains below 30% advancers", "candidate is simply prior high-level loser rebounding without theme breadth"],
+      "observation_windows": ["10:00", "10:30"],
+      "trigger": "whole-market advancer ratio improves >=10 percentage points from 09:35; candidate return >=1%; at least two same-theme named representatives return >0; whole-market advancer ratio >=30%",
+      "forbidden": ["market breadth remains <30%", "candidate is a prior negative_anchor", "theme has no group breadth"],
       "max_single_position": 0.15
     },
-    "cash": {"trigger": "no other playbook passes all prerequisites and triggers", "max_single_position": 0.0}
+    "cash": {"trigger": "no non-cash playbook passes all phase/theme/core/intraday gates", "max_single_position": 0.0}
   },
   "execution": {
     "confirmation_then_fill": "next-minute open",
@@ -81,17 +98,17 @@
     "month_end": "liquidate at 2026-07-31 close for measurement only and mark evaluation liquidation"
   },
   "exit": {
-    "hard_failure": "first sellable day after entry: if 10:00 completed return from entry <= -5%, exit next minute open",
-    "expectation_failure": "first sellable day: if candidate <= -2.5% vs prior close and below day open while theme confirmation fails, exit next minute open",
-    "leader_loss_of_status": "if prior-day review demotes the stock to negative_anchor/retreat and position is sellable, exit at next day first valid evaluation window",
-    "right_tail": "do not use fixed small take-profit; after MFE >=10%, protect only after >=5% drawdown from post-entry peak or loss of core status",
-    "time_stop": "after 3 sellable days, if return from entry <3% and stock never established/retained core status, exit",
-    "max_holding": "7 sellable days unless still explicitly a core in latest available review"
+    "hard_failure": "first sellable day after entry: at 10:00 completed observation, if return from entry <= -5%, exit 10:01 open if sellable",
+    "expectation_failure": "first sellable day or later: at 10:00, if return vs prior close <= -2.5%, close below day open, and same-theme confirmation fails, exit 10:01 open",
+    "leader_loss_of_status": "if prior close review marks held stock negative_anchor OR its theme retreat, exit at next available 09:31 open if sellable",
+    "right_tail": "after post-entry MFE >=10%, exit at 10:01 open if 10:00 close is >=5% below post-entry peak or prior review removes core status",
+    "time_stop": "after 3 sellable days, if return from entry <3% and latest prior review does not retain the stock as an eligible core, exit at 10:01 open",
+    "max_holding": "after 7 sellable days exit at 10:01 unless latest prior review still retains the stock as an eligible core"
   },
   "learning": {
     "single_trade_threshold_tuning_forbidden": true,
     "after_each_day": ["append prediction score", "append trade errors", "append missed opportunities", "update per-playbook samples"],
-    "temporary_risk_response": "2 consecutive process-valid losses in same playbook -> next two eligible signals half size; 3 consecutive -> pause new entries for two trading days",
+    "temporary_risk_response": "2 consecutive process-valid losses in same playbook => next two eligible entries in that playbook at 50% size; 3 consecutive process-valid losses => pause new entries in that playbook for next two trading days",
     "rule_change_min_closed_samples": 8,
     "rule_change_requires": ["same error mechanism repeated", "hypothesis written before change", "effective_from next trading day", "old version retained"],
     "july_end_retuning_forbidden": true
