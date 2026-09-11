@@ -1,0 +1,79 @@
+{
+  "version": "2026-09-11.1",
+  "timezone": "Asia/Shanghai",
+  "trading_days": ["2026-07-01","2026-07-02","2026-07-03","2026-07-06","2026-07-07","2026-07-08","2026-07-09","2026-07-10","2026-07-13","2026-07-14","2026-07-15","2026-07-16","2026-07-17","2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-07-24","2026-07-27","2026-07-28","2026-07-29","2026-07-30","2026-07-31"],
+  "daily_sources": [
+    {
+      "id": "lianban_archive",
+      "url_template": "https://lianban.net/days/{date}.html",
+      "role": "primary_semantic_archive",
+      "fields": ["emotion_stage","temperature","limit_up_count","limit_down_count","max_board","board_count","broken_board_count","seal_rate","yesterday_limitup_return","mainline_themes","theme_leaders","catalyst_text","limitup_ladder"],
+      "effective_rule": "after_close_T_plus_1",
+      "trade_eligible": true,
+      "forbidden_sections": ["明日推演","同景日期","历史频率","前瞻回验","未来结果","AI事后回验"],
+      "notes": "只使用当日收盘事实、当日题材/催化/梯队；页面后来新增的未来统计字段永不进入信号。"
+    },
+    {
+      "id": "yyqyx_limitup",
+      "url_template": "https://www.yyqyx.com/limit-up/{date}",
+      "role": "secondary_fact_and_membership",
+      "fields": ["limit_up_count","limit_down_count","broken_board_count","max_board","market_breadth","turnover","limitup_ladder","theme_membership","limitup_list"],
+      "effective_rule": "after_close_T_plus_1",
+      "trade_eligible": true,
+      "forbidden_sections": [],
+      "notes": "用于交叉校验涨停/炸板/梯队，并提供更宽的股票-题材映射；与其他来源口径差异必须保留。"
+    }
+  ],
+  "fallback_sources": {
+    "2026-07-07": [
+      {
+        "id": "sina_0707_review",
+        "url": "https://www.sina.cn/news/detail/5318115400614342.html",
+        "role": "same_day_theme_fallback",
+        "effective_rule": "after_close_T_plus_1",
+        "trade_eligible": true,
+        "notes": "2026-07-07 18:43 发布的板块梯队汇总；仅用于当日收盘后题材补充。"
+      }
+    ]
+  },
+  "methodology_sources": [
+    {
+      "id": "kobe_live_archive_up",
+      "url": "https://www.bilibili.com/video/BV19cYgeZEs9/",
+      "evidence": "recorded_live_repost",
+      "use": "92科比龙头/补涨/切换/情绪周期框架的公开视频留档"
+    },
+    {
+      "id": "kobe_live_archive_down",
+      "url": "https://www.bilibili.com/video/BV1PrYuekEHH/",
+      "evidence": "recorded_live_repost",
+      "use": "92科比直播下集留档"
+    },
+    {
+      "id": "tgb_official_kobe_summary",
+      "url": "https://www.sohu.com/a/459763424_120100059",
+      "evidence": "secondary_official_account_repost",
+      "use": "龙头-补涨-切换-空仓、补涨与切换周期差异的二手整理；不得冒充本人原话"
+    },
+    {
+      "id": "kobe_tgb_quote_archive",
+      "url": "https://www.tgb.cn/dialog/20r4C0g5H0r_71749995_1",
+      "evidence": "community_quote_archive",
+      "use": "低位震荡/主升/高位震荡/主跌等周期语境，作为交叉验证，不单独定规则"
+    },
+    {
+      "id": "tuixue_xiaoming_archive",
+      "url": "https://xueqiu.com/1379561525/245413116",
+      "evidence": "secondary_archive_of_original_post",
+      "use": "退学炒股《我和小明》相关计划、回撤线、牛熊与确定性、行为纠错思想；不得冒充原站原帖"
+    }
+  ],
+  "source_conflict_policy": {
+    "never_silently_overwrite": true,
+    "market_ohlcv_truth": "github_minute_parquet",
+    "semantic_truth": "multi_source_with_confidence",
+    "count_disagreement": "store_each_source_and_compute_disagreement_flag",
+    "theme_disagreement": "store_union_and_source_votes; mainline requires >=2 evidence channels or strong primary evidence",
+    "unknown": "null_not_false"
+  }
+}
