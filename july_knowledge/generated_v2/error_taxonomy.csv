@@ -1,0 +1,13 @@
+﻿error_tag,category,definition,corrective_action
+NO_THEME_SUPPORT,认知,没有高置信题材支持却交易个股,下一次必须先通过题材门
+LOW_RANK_FOLLOWER,选股,买入后排/跟风而非核心,限制为前排地位候选
+LATE_CYCLE_ENTRY,择时,高潮末端或退潮继续接力,按周期降低频率/禁止后排一致
+FALSE_REPAIR,认知,把普通V形反弹误认成核心修复,要求地位+题材跟随双确认
+NO_LEADERSHIP,选股,个股自身强但没有5/10/20分钟带动,降低地位评分或淘汰
+EXPECTATION_NOT_CONFIRMED,计划,盘中未达到昨晚确认条件仍交易,计划失效即取消
+FOMO_CHASE,情绪,踏空后临时追高,只允许计划池交易
+REVENGE_TRADE,情绪,亏损后急于回本而降低标准,触发冷却与风险预算下调
+STYLE_DRIFT,纪律,临时更换模式或无模式交易,必须绑定P1-P6之一
+OVERSIZED,仓位,仓位超过预先风险预算,按账户风险预算强制裁剪
+EXIT_RULE_VIOLATION,执行,退出与失效规则不一致,记录执行偏差并复核
+DATA_NOT_PIT,数据,使用当时不可证明可获得的信息,交易样本作废并修复数据链
