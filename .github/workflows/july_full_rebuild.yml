@@ -33,13 +33,16 @@ jobs:
         run: python july_full_rebuild/rebuild_pit_v4.py
       - name: Enforce strict readiness gate
         run: python july_full_rebuild/readiness_gate_v2.py
-      - name: Run causal daily-review backtest with member confirmation
+      - name: Run adaptive causal daily-review backtest
         run: python july_full_rebuild/causal_backtest_v2.py
-      - name: Upload PIT and results
+      - name: Run frozen-review control
+        run: python july_full_rebuild/causal_backtest_fixed_control.py
+      - name: Upload PIT and both results
         uses: actions/upload-artifact@v4
         with:
-          name: july-full-rebuild-results-v4
+          name: july-full-rebuild-results-v5
           path: |
             july_full_rebuild/pit_data/
             july_full_rebuild/results/
+            july_full_rebuild/results_fixed_control/
           if-no-files-found: error
