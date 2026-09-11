@@ -1,20 +1,27 @@
 import re, requests
 from urllib.parse import urljoin
 
+# Lianban raw fetch is intentionally probed only to document that the browser-rendered archive
+# cannot be reproduced from a GitHub runner. We do not bypass its access controls.
 URL='https://lianban.net/days/2026-07-01.html'
 s=requests.Session(); s.headers['User-Agent']='Mozilla/5.0'
-r=s.get(URL,timeout=30); print('PAGE',r.status_code,len(r.text)); html=r.text
-for pat in ['热点题材','opendata','fetch(','axios','/api/','theme','limitup','lianban','days/']:
-    if pat in html: print('INLINE_HAS',pat)
-for src in re.findall(r'<script[^>]+src=["\']([^"\']+)',html,re.I):
-    u=urljoin(URL,src); print('SCRIPT',u)
-    try:
-        x=s.get(u,timeout=30); print('SCRIPT_STATUS',x.status_code,len(x.text))
-        for line in x.text.splitlines():
-            low=line.lower()
-            if any(k in low for k in ['fetch(','axios','/api/','theme','hotspot','limit_up','limitup','review','day-data','daily']):
-                print('HIT',line[:1000])
-    except Exception as e: print('ERR',u,repr(e))
-# Also surface URL-like strings from inline HTML/JS.
-for m in sorted(set(re.findall(r'["\']([^"\']*(?:api|theme|review|hot|limit|board)[^"\']*)["\']',html,re.I))):
-    if len(m)<300: print('URLLIKE',m)
+r=s.get(URL,timeout=30); print('LIANBAN_PAGE',r.status_code,len(r.text))
+
+# Name->ticker resolution is metadata only, not a trading signal. Probe Eastmoney's public
+# A-share list so manually audited PIT member names can be mapped to the GitHub minute-data code.
+api='https://80.push2.eastmoney.com/api/qt/clist/get'
+params={
+    'pn':1,'pz':6000,'po':1,'np':1,'fltt':2,'invt':2,'fid':'f3',
+    'fs':'m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23','fields':'f12,f14'
+}
+try:
+    x=s.get(api,params=params,timeout=30)
+    print('EASTMONEY',x.status_code,len(x.text))
+    if x.status_code==200:
+        j=x.json(); diff=((j.get('data') or {}).get('diff') or [])
+        mp={str(v.get('f14')):str(v.get('f12')).zfill(6) for v in diff if v.get('f14') and v.get('f12')}
+        print('MAPPED',len(mp))
+        for n in ['多氟多','埃斯顿','海南海药','大名城','立新能源','爱丽家居','一鸣食品','泛微网络']:
+            print('NAME_CODE',n,mp.get(n))
+except Exception as e:
+    print('EASTMONEY_ERR',repr(e))
