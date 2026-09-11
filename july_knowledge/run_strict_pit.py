@@ -8,17 +8,22 @@ adapters before the strict knowledge build:
 3) the 23 YYQYX pages are read from the preserved GitHub Actions artifact created
    by run 34588894613 (artifact 10194836931, digest recorded in workflow/provenance)
    when available. This makes the historical knowledge build deterministic and
-   avoids current-site soft blocking changing historical inputs.
+   avoids current-site soft blocking changing historical inputs;
+4) missing first-limit-touch times are normalized to an empty string before the
+   existing leadership scorer runs, avoiding float-NaN/string comparison without
+   changing any score weight or threshold.
 """
 import hashlib
 import json
 from pathlib import Path
 import numpy as np
+import pandas as pd
 import build_knowledge_layer_strict_pit as strict
 from robust_yyqyx_parser import robust_parse_yyqyx
 
 _original_dumps = json.dumps
 _original_fetch = strict.b.fetch_with_retry
+_original_leader_candidates = strict.b.leader_candidates
 _BOOT = Path(__file__).resolve().parent / "bootstrap_v1" / "raw_web"
 _BOOT_RUN = 34588894613
 _BOOT_ARTIFACT = 10194836931
@@ -42,7 +47,7 @@ def _preserved_fetch(url, sid, day, tries=4):
     if sid == "yyqyx_limitup":
         p = _BOOT / f"{day}_yyqyx_limitup.html"
         if p.exists():
-            b = p.read_bytes()
+            raw = p.read_bytes()
             return {
                 "date": day,
                 "source_id": sid,
@@ -51,16 +56,25 @@ def _preserved_fetch(url, sid, day, tries=4):
                 "status": 200,
                 "error": None,
                 "path": str(p),
-                "sha256": hashlib.sha256(b).hexdigest(),
+                "sha256": hashlib.sha256(raw).hexdigest(),
                 "fetched_at_utc": "2026-09-11T10:23:00Z~10:24:00Z",
-                "html": b.decode("utf-8", errors="replace"),
+                "html": raw.decode("utf-8", errors="replace"),
                 "provenance": f"github_actions_run={_BOOT_RUN};artifact={_BOOT_ARTIFACT};digest={_BOOT_DIGEST}"
             }
     return _original_fetch(url, sid, day, tries=tries)
 
+def _safe_leader_candidates(theme_rank, members, stocks, cycle):
+    s = stocks.copy()
+    if "first_limit_touch_time" in s.columns:
+        s["first_limit_touch_time"] = s["first_limit_touch_time"].where(
+            s["first_limit_touch_time"].notna(), ""
+        ).astype(str)
+    return _original_leader_candidates(theme_rank, members, s, cycle)
+
 strict.json.dumps = _safe_dumps
 strict.b.parse_yyqyx = robust_parse_yyqyx
 strict.b.fetch_with_retry = _preserved_fetch
+strict.b.leader_candidates = _safe_leader_candidates
 
 if __name__ == "__main__":
     strict.main()
