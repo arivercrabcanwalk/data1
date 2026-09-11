@@ -9,9 +9,9 @@ adapters before the strict knowledge build:
    by run 34588894613 (artifact 10194836931, digest recorded in workflow/provenance)
    when available. This makes the historical knowledge build deterministic and
    avoids current-site soft blocking changing historical inputs;
-4) missing first-limit-touch times are normalized to an empty string before the
-   existing leadership scorer runs, avoiding float-NaN/string comparison without
-   changing any score weight or threshold.
+4) leadership scoring only receives theme members that have same-day GitHub stock
+   evidence; missing first-limit-touch times are normalized to an empty string.
+   This prevents unmatched web-only rows from fabricating price/leadership facts.
 """
 import hashlib
 import json
@@ -69,7 +69,9 @@ def _safe_leader_candidates(theme_rank, members, stocks, cycle):
         s["first_limit_touch_time"] = s["first_limit_touch_time"].where(
             s["first_limit_touch_time"].notna(), ""
         ).astype(str)
-    return _original_leader_candidates(theme_rank, members, s, cycle)
+    valid_keys = s[["date", "code"]].drop_duplicates()
+    m = members.merge(valid_keys, on=["date", "code"], how="inner")
+    return _original_leader_candidates(theme_rank, m, s, cycle)
 
 strict.json.dumps = _safe_dumps
 strict.b.parse_yyqyx = robust_parse_yyqyx
