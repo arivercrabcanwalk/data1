@@ -19,11 +19,13 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install pandas numpy pyarrow
+      - name: Patch signed down-limit handling only
+        run: sed -i "s/p=pct(rr.get('price_limit_down_pct',np.nan)); pc=rr.prev_close/p=abs(pct(rr.get('price_limit_down_pct',np.nan))); pc=rr.prev_close/" july_review/run_july_review.py
       - name: Run isolated July review backtest
         run: python july_review/run_july_review.py
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
-          name: july-review-causal-results
+          name: july-review-causal-results-fixed
           path: july_review_results/
           if-no-files-found: error
