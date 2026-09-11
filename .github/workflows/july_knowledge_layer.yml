@@ -4,7 +4,11 @@ on:
   push:
     branches: [july-knowledge-layer]
     paths:
-      - 'july_knowledge/**'
+      - 'july_knowledge/build_knowledge_layer_v2.py'
+      - 'july_knowledge/test_knowledge_layer_v2.py'
+      - 'july_knowledge/source_registry.json'
+      - 'july_knowledge/pit_corroboration_registry.json'
+      - 'july_knowledge/theme_ontology.json'
       - '.github/workflows/july_knowledge_layer.yml'
   workflow_dispatch:
 
@@ -17,6 +21,11 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            2026-07
+            july_knowledge
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
