@@ -7,6 +7,7 @@ on:
       - 'july_knowledge/build_knowledge_layer_v2.py'
       - 'july_knowledge/build_knowledge_layer_strict_pit.py'
       - 'july_knowledge/run_strict_pit.py'
+      - 'july_knowledge/robust_yyqyx_parser.py'
       - 'july_knowledge/test_knowledge_layer_v2.py'
       - 'july_knowledge/source_registry.json'
       - 'july_knowledge/pit_corroboration_registry.json'
@@ -16,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   build-v2:
@@ -33,19 +35,52 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install pandas numpy pyarrow requests beautifulsoup4 pytest
+      - name: Restore preserved July web snapshots
+        uses: actions/download-artifact@v4
+        with:
+          name: july-knowledge-layer
+          path: july_knowledge/bootstrap_v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: arivercrabcanwalk/data1
+          run-id: 34588894613
+      - name: Smoke-test preserved theme and ladder parser
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'july_knowledge')
+          import build_knowledge_layer_v2 as b
+          from robust_yyqyx_parser import robust_parse_yyqyx
+          root=Path('july_knowledge/bootstrap_v1/raw_web')
+          total_members=0; total_ladder=0; missing=[]
+          for day in b.DAYS:
+              p=root/f'{day}_yyqyx_limitup.html'
+              if not p.exists():
+                  missing.append(day); continue
+              s,m,l=robust_parse_yyqyx(day,p.read_text(encoding='utf-8',errors='replace'))
+              if not m:
+                  raise SystemExit(f'{day}: zero theme members')
+              total_members += len(m); total_ladder += len(l)
+          print({'days':len(b.DAYS)-len(missing),'members':total_members,'ladder_rows':total_ladder,'missing':missing})
+          assert not missing
+          assert total_members >= 1000
+          assert total_ladder >= 100
+          PY
       - name: Build full July strict-PIT knowledge layer
         run: python july_knowledge/run_strict_pit.py
       - name: Run full admission and anti-leakage tests
         run: pytest -q july_knowledge/test_knowledge_layer_v2.py
       - name: Upload full knowledge artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: july-knowledge-layer-v2
           path: |
             july_knowledge/generated_v2/
-            july_knowledge/raw_web_v2/
-          if-no-files-found: error
+            july_knowledge/bootstrap_v1/raw_web/
+          if-no-files-found: warn
       - name: Sync verified generated outputs to branch
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
