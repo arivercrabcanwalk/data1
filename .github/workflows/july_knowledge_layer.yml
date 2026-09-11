@@ -6,6 +6,7 @@ on:
     paths:
       - 'july_knowledge/build_knowledge_layer_v2.py'
       - 'july_knowledge/build_knowledge_layer_strict_pit.py'
+      - 'july_knowledge/run_strict_pit.py'
       - 'july_knowledge/test_knowledge_layer_v2.py'
       - 'july_knowledge/source_registry.json'
       - 'july_knowledge/pit_corroboration_registry.json'
@@ -33,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: pip install pandas numpy pyarrow requests beautifulsoup4 pytest
       - name: Build full July strict-PIT knowledge layer
-        run: python july_knowledge/build_knowledge_layer_strict_pit.py
+        run: python july_knowledge/run_strict_pit.py
       - name: Run full admission and anti-leakage tests
         run: pytest -q july_knowledge/test_knowledge_layer_v2.py
       - name: Upload full knowledge artifact
