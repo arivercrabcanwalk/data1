@@ -1,0 +1,30 @@
+name: July Theme Prebacktest Validation
+
+on:
+  push:
+    branches:
+      - july-theme-context-v1
+    paths:
+      - 'july_theme_system/**'
+      - '.github/workflows/july_theme_prebacktest_validation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install validation dependencies
+        run: pip install pandas pyarrow
+      - name: Validate point-in-time theme system
+        run: python july_theme_system/validate_prebacktest.py | tee july_theme_system/PREBACKTEST_VALIDATION.json
+      - name: Upload validation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-theme-prebacktest-validation
+          path: july_theme_system/PREBACKTEST_VALIDATION.json
+          if-no-files-found: error
