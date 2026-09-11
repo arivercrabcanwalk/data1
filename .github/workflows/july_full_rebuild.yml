@@ -1,0 +1,55 @@
+name: July Full Rebuild
+
+on:
+  push:
+    branches: [july-full-rebuild]
+    paths:
+      - 'july_full_rebuild/**'
+      - '.github/workflows/july_full_rebuild.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild-and-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            2026-07
+            july_full_rebuild
+            .github/workflows/july_full_rebuild.yml
+          sparse-checkout-cone-mode: false
+          filter: blob:none
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Install auditable name-code resolver
+        run: npm install stock-sdk@2.4.3
+      - name: Resolve audited member names to A-share codes
+        run: node july_full_rebuild/resolve_member_codes.mjs
+      - name: Build 23-day curated PIT layers from audited web facts plus GitHub July minutes
+        run: python july_full_rebuild/build_curated_pit.py
+      - name: Enforce formal completeness gate
+        run: python july_full_rebuild/readiness_gate_v3.py
+      - name: Run adaptive causal daily-review backtest
+        run: python july_full_rebuild/causal_backtest_v3.py
+      - name: Run frozen-review formal control
+        run: python july_full_rebuild/causal_backtest_fixed_control_v3.py
+      - name: Upload PIT and both formal results
+        uses: actions/upload-artifact@v4
+        with:
+          name: july-full-rebuild-formal-v1
+          path: |
+            july_full_rebuild/pit_data/
+            july_full_rebuild/results/
+            july_full_rebuild/results_fixed_control/
+          if-no-files-found: error

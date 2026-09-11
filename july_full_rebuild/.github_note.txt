@@ -1,0 +1,1 @@
+This rebuild is intentionally incomplete until readiness_gate.py prints READY. Do not use partial PIT data for formal performance claims.
