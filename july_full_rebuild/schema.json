@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "required_daily_layers": ["market_snapshot","theme_snapshot","ladder_snapshot","role_snapshot","expectation_snapshot","source_evidence"],
+  "market_snapshot": ["date","limit_up_count","limit_down_count","broken_board_count","seal_rate","max_board","continuous_board_count","advance_count","decline_count","yesterday_limitup_premium","turnover_amount","emotion_phase"],
+  "theme_snapshot": ["date","theme","catalyst","catalyst_first_visible_at","limit_up_count","strong_stock_count","max_board","first_board_count","second_board_count","higher_board_count","broken_board_count","big_loss_count","breadth","turnover_amount","continuity_3d","continuity_5d","theme_phase","theme_strength_score"],
+  "ladder_snapshot": ["date","code","theme","board_level","is_first_board","is_continuous_board","seal_time","broken_times"],
+  "role_snapshot": ["date","code","theme","role","recognition_score","lead_lag_score","capacity_score","ladder_score","theme_score","role_confidence"],
+  "expectation_snapshot": ["date","target_date","theme","scenario","trigger_conditions","invalid_conditions","planned_actions","created_at"],
+  "source_evidence": ["date","source_url","source_name","published_at","available_at","evidence_type","captured_fact","pit_ok"],
+  "allowed_roles": ["market_dragon","theme_dragon","capacity_core","elastic_core","front_row","supplement","switch_pioneer","follower","misc","unknown"],
+  "emotion_phases": ["ice","repair","warming","climax","cooling","retreat"],
+  "theme_phases": ["day0","launch","confirm","ferment","climax","first_divergence","repair","second_divergence","retreat"],
+  "playbooks": ["dragon_mainrise","core_first_divergence_to_consensus","core_weak_to_strong","supplement_after_height","low_level_switch","ice_repair_pioneer","capacity_core_pullback","stay_cash"],
+  "error_tags": ["FOMO_CHASE","REVENGE_TRADE","STYLE_DRIFT","LOW_RANK_FOLLOWER","LATE_CYCLE_ENTRY","NO_THEME_SUPPORT","EXPECTATION_NOT_CONFIRMED","WRONG_ROLE","WRONG_CYCLE","CORRELATED_BETS","EXIT_TOO_EARLY","EXIT_TOO_LATE"]
+}
