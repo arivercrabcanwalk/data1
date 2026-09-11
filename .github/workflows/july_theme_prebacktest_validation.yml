@@ -28,6 +28,7 @@ jobs:
             python -m py_compile july_theme_system/run_theme_review_backtest.py july_theme_system/run_theme_review_production.py july_theme_system/build_review_reports.py
             python july_theme_system/validate_prebacktest.py
             python july_theme_system/validate_phase_map.py
+            python july_theme_system/validate_industry_chain.py
             PYTHONPATH=july_theme_system python july_theme_system/validate_engine_contract.py
           } | tee july_theme_system/PREBACKTEST_VALIDATION.txt
       - name: Upload validation evidence
