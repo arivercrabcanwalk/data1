@@ -4,6 +4,7 @@ on:
     branches: [july-full-rebuild]
     paths:
       - 'tools_tmp/discover_lianban_dynamic.py'
+      - 'tools_tmp/probe_stock_sdk.mjs'
       - '.github/workflows/discover_lianban_dynamic.yml'
 jobs:
   probe:
@@ -13,6 +14,7 @@ jobs:
         with:
           sparse-checkout: |
             tools_tmp/discover_lianban_dynamic.py
+            tools_tmp/probe_stock_sdk.mjs
             .github/workflows/discover_lianban_dynamic.yml
           sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
@@ -20,3 +22,8 @@ jobs:
           python-version: '3.11'
       - run: pip install requests
       - run: python tools_tmp/discover_lianban_dynamic.py
+      - name: Probe stock-sdk name-code metadata
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install stock-sdk@2.4.3
+          node tools_tmp/probe_stock_sdk.mjs
