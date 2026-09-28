@@ -16,7 +16,7 @@ from sklearn.preprocessing import StandardScaler
 from first_buy_v12_research import load_daily, build_features
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "backtest" / "results_first_buy_v14"
+OUT = ROOT / "backtest" / "results_first_buy_v13"
 OUT.mkdir(parents=True, exist_ok=True)
 
 OPEN_FEATURES = [
@@ -105,15 +105,6 @@ def build_relaxed_events(daily: pd.DataFrame) -> pd.DataFrame:
         & ((e["ret20"].isna()) | (e["ret20"] >= 0.0) | (e["prior_streak"] >= 5))
         & ((e["vol_prev_ratio"] >= 0.40) | (e["vol_med10"] >= 1.00))
     )
-    # V14 discovery pool: deliberately wider candidate recall. This pool is never
-    # an automatic buy rule; the second-stage score and walk-forward gate still decide.
-    e["pool_max"] = (
-        (e["height_gap"] <= 6)
-        & (e["amount"] >= 8e7)
-        & (e["range"] >= 0.025)
-        & ((e["ret20"].isna()) | (e["ret20"] >= -0.05) | (e["prior_streak"] >= 5))
-        & ((e["vol_prev_ratio"] >= 0.35) | (e["vol_med10"] >= 0.90))
-    )
     return e
 
 
@@ -154,31 +145,26 @@ def add_m30_features(e: pd.DataFrame, path_map: dict[str, str]) -> pd.DataFrame:
         if m.empty:
             continue
         for code, z in m.groupby("code"):
-            z = z.reset_index(drop=True)
-            # First 30 completed minutes are features. Execution is the NEXT minute open.
-            # This prevents filling on the same minute close used to make the decision.
-            if len(z) < 31:
+            z = z.head(30)
+            if len(z) < 20:
                 continue
-            confirm = z.iloc[:30]
-            next_bar = z.iloc[30]
             idxs = [idx for idx, c in pairs if c == code]
             if not idxs:
                 continue
-            first_open = float(confirm.iloc[0]["open"])
-            last_close = float(confirm.iloc[-1]["close"])
-            next_open = float(next_bar["open"])
-            hh = float(confirm["high"].max())
-            ll = float(confirm["low"].min())
+            first_open = float(z.iloc[0]["open"])
+            last_close = float(z.iloc[-1]["close"])
+            hh = float(z["high"].max())
+            ll = float(z["low"].min())
             den = hh - ll
-            vol = float(confirm["volume"].sum())
-            amt = float(confirm["amount"].sum())
+            vol = float(z["volume"].sum())
+            amt = float(z["amount"].sum())
             vwap = amt / vol if vol > 0 else np.nan
             if np.isfinite(vwap) and last_close > 0 and vwap / last_close > 20:
                 vwap /= 100.0
             for idx in idxs:
                 event_close = float(e.at[idx, "close"])
                 d1_amount = float(e.at[idx, "d1_amount"]) if "d1_amount" in e.columns and pd.notna(e.at[idx, "d1_amount"]) else np.nan
-                e.at[idx, "m30_entry"] = next_open
+                e.at[idx, "m30_entry"] = last_close
                 e.at[idx, "m30_ret_open"] = last_close / first_open - 1.0 if first_open > 0 else np.nan
                 e.at[idx, "m30_ret_event"] = last_close / event_close - 1.0 if event_close > 0 else np.nan
                 e.at[idx, "m30_range"] = (hh - ll) / first_open if first_open > 0 else np.nan
@@ -389,9 +375,9 @@ def metrics(trades: pd.DataFrame):
 
 
 PROFILES = {
-    "QUALITY": {"min_share":0.12, "min_win":0.58, "min_mean":0.005, "w_mean":110.0, "w_win":13.0, "w_n":0.22, "w_worst":50.0},
-    "BALANCED": {"min_share":0.22, "min_win":0.54, "min_mean":0.000, "w_mean":100.0, "w_win":10.5, "w_n":0.65, "w_worst":38.0},
-    "QUANTITY": {"min_share":0.32, "min_win":0.50, "min_mean":0.000, "w_mean":78.0, "w_win":8.0, "w_n":1.10, "w_worst":28.0},
+    "QUALITY": {"min_share":0.15, "w_mean":100.0, "w_win":12.0, "w_n":0.25, "w_worst":45.0},
+    "BALANCED": {"min_share":0.25, "w_mean":100.0, "w_win":10.0, "w_n":0.60, "w_worst":35.0},
+    "QUANTITY": {"min_share":0.35, "w_mean":75.0, "w_win":8.0, "w_n":1.00, "w_worst":25.0},
 }
 
 
@@ -429,7 +415,7 @@ def select_inner_config(inner_train, inner_val, profile_name):
     q_opens = [0.55, 0.65, 0.75, 0.85]
     q_watchs = [0.25, 0.40, 0.55]
     q_confirms = [0.50, 0.65, 0.80]
-    for pool in ["mid","wide","ultra","max"]:
+    for pool in ["mid","wide","ultra"]:
         tr, va, os, cs, ots, cts, _, _ = score_bundle(inner_train, inner_val, pool)
         if len(tr) < 8 or len(va) == 0:
             continue
@@ -445,9 +431,8 @@ def select_inner_config(inner_train, inner_val, profile_name):
                         m = metrics(t)
                         if m["trades"] < min_trades:
                             continue
-                        # Every profile must clear a positive-quality floor. Quantity is allowed
-                        # to be broader, but never by accepting an explicitly losing validation slice.
-                        if m["win_rate"] < profile["min_win"] or m["mean"] < profile["min_mean"]:
+                        # Quantity profile may be broad, but still must avoid a clearly losing selector.
+                        if profile_name == "QUANTITY" and (m["win_rate"] < 0.50 or m["mean"] < 0):
                             continue
                         candidates.append((utility(m, profile), pool, qo, qw, qc, spec, m))
         if candidates:
@@ -516,7 +501,7 @@ def run_walkforward(e: pd.DataFrame):
 
 def pool_diagnostics(e: pd.DataFrame):
     out = {}
-    for pool in ["mid","wide","ultra","max"]:
+    for pool in ["mid","wide","ultra"]:
         z = e[e[f"pool_{pool}"]]
         out[pool] = {
             "events": int(len(z)),
@@ -553,8 +538,8 @@ def main():
     daily = attach_d1_amount(daily)
     daily = add_history_features(daily)
     events = build_relaxed_events(daily)
-    print("V14|first_break_relaxed_raw", len(events))
-    print("V14|pool_diag", json.dumps(pool_diagnostics(events), ensure_ascii=False))
+    print("V13|first_break_relaxed_raw", len(events))
+    print("V13|pool_diag", json.dumps(pool_diagnostics(events), ensure_ascii=False))
 
     events = add_m30_features(events, path_map)
     events = add_fixed_targets(events)
@@ -563,9 +548,9 @@ def main():
     results = run_walkforward(events)
     payload = {
         "method": {
-            "candidate_layer": "four recall tiers from mid to max; hard first-break semantics stay fixed while the widest tier raises recall",
-            "buy_layer": "regularized logistic win model + ridge return model; high score open entry, medium score requires 30 completed minutes then executes at minute 31 open",
-            "sell_layer": "nested walk-forward selects among close-based holding/stop/take rules; every profile must clear non-losing validation quality floors",
+            "candidate_layer": "relaxed leader pool; no theme/family hard gate in this historical GitHub dataset",
+            "buy_layer": "regularized logistic win model + ridge return model; high score open entry, medium score requires first-30m confirmation",
+            "sell_layer": "nested walk-forward selects among close-based holding/stop/take rules",
             "outer_tests": ["2026-05","2026-06","2026-07","2026-08"],
             "anti_leakage": "inner previous-month validation chooses pool/thresholds/exit; outer month is then predicted using only earlier months",
         },
@@ -580,7 +565,7 @@ def main():
         "code","date","d1_date","month","prior_streak","market_height_prev","height_gap",
         "ret5","ret10","ret20","event_ret","event_gap","range","vol_prev_ratio","vol_med10",
         "amount","close_vwap","close_loc","touched_upper","d1_gap","d1_tradable",
-        "pool_mid","pool_wide","pool_ultra","pool_max","m30_entry","m30_ret_open","m30_ret_event",
+        "pool_mid","pool_wide","pool_ultra","m30_entry","m30_ret_open","m30_ret_event",
         "m30_close_loc","m30_close_vwap","m30_reclaim_event","h3_ret_open","h3_ret_confirm",
     ]
     events[save_cols].to_csv(OUT/"relaxed_events.csv", index=False)
@@ -600,9 +585,9 @@ def main():
             })
     pd.DataFrame(rows).to_csv(OUT/"walkforward_folds.csv", index=False)
 
-    print("V14_SUMMARY_JSON_BEGIN")
+    print("V13_SUMMARY_JSON_BEGIN")
     print(json.dumps(payload, ensure_ascii=False, indent=2))
-    print("V14_SUMMARY_JSON_END")
+    print("V13_SUMMARY_JSON_END")
 
 
 if __name__ == "__main__":
