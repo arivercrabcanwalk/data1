@@ -7,6 +7,8 @@ on:
     paths:
       - 'backtest/first_buy_v12_research.py'
       - 'backtest/first_buy_v12_refine.py'
+      - 'backtest/first_buy_v12_overlay.py'
+      - 'backtest/test_first_buy_v12_overlay.py'
       - '.github/workflows/first-buy-v12-research.yml'
   workflow_dispatch:
 
@@ -27,5 +29,9 @@ jobs:
         run: |
           python -m py_compile backtest/first_buy_v12_research.py
           python -m py_compile backtest/first_buy_v12_refine.py
+          python -m py_compile backtest/first_buy_v12_overlay.py
+          python -m py_compile backtest/test_first_buy_v12_overlay.py
+      - name: Run overlay boundary tests
+        run: cd backtest && python -m unittest -v test_first_buy_v12_overlay.py
       - name: Run focused V12 refinement
         run: cd backtest && python first_buy_v12_refine.py
