@@ -1,0 +1,31 @@
+name: first-buy-v13-2-sell
+
+on:
+  push:
+    branches:
+      - research/first-buy-v13-two-stage-20260928
+    paths:
+      - 'backtest/first_buy_v13_2_sell.py'
+      - '.github/workflows/first-buy-v13-2-sell.yml'
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax check
+        run: python -m py_compile backtest/first_buy_v13_2_sell.py
+      - name: Run sell optimizer
+        run: cd backtest && python first_buy_v13_2_sell.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v13-2-sell-results
+          path: backtest/results_first_buy_v13_2_sell/
