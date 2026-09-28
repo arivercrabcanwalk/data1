@@ -10,6 +10,15 @@ on:
       - 'backtest/first_buy_v14_robust_cv.py'
       - 'backtest/v13_meta/**'
       - '.github/workflows/first-buy-v14-robust.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backtest/first_buy_v14_robust.py'
+      - 'backtest/first_buy_v14_robust_cv.py'
+      - 'backtest/first_buy_v14_meta_walkforward.py'
+      - 'backtest/v13_meta/**'
+      - '.github/workflows/first-buy-v14-robust.yml'
   workflow_dispatch:
 
 permissions:
