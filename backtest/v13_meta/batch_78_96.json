@@ -18,11 +18,37 @@
   },
   {
     "issue": 79,
-    "pending": true
+    "code": "002990",
+    "date": "2026-04-20",
+    "name": "盛视科技",
+    "sector_rank": 5,
+    "sector_n": 61,
+    "sector_lu3": 38,
+    "leader": false,
+    "prior_leader": false,
+    "prior_sector_rank": 3,
+    "prior_sector_lu3": 31,
+    "shock_base": false,
+    "theme_primary": "算力",
+    "bridge_ret20": 0.6838487972508591,
+    "bridge_prior_ret20": 0.7783595113438047
   },
   {
     "issue": 80,
-    "pending": true
+    "code": "003018",
+    "date": "2026-04-23",
+    "name": "金富科技",
+    "sector_rank": 1,
+    "sector_n": 65,
+    "sector_lu3": 15,
+    "leader": true,
+    "prior_leader": true,
+    "prior_sector_rank": 1,
+    "prior_sector_lu3": 23,
+    "shock_base": true,
+    "theme_primary": "算力",
+    "bridge_ret20": 1.1352826510721248,
+    "bridge_prior_ret20": 1.088
   },
   {
     "issue": 81,
