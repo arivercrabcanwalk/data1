@@ -1,0 +1,33 @@
+name: first-buy-v12-multichannel-research
+
+on:
+  push:
+    branches:
+      - research/first-buy-v12-multichannel-20260928
+    paths:
+      - 'backtest/first_buy_v12_research.py'
+      - '.github/workflows/first-buy-v12-research.yml'
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Syntax check
+        run: python -m py_compile backtest/first_buy_v12_research.py
+      - name: Run V12 research
+        run: python backtest/first_buy_v12_research.py
+      - name: Upload V12 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v12-results
+          path: backtest/results_first_buy_v12/
