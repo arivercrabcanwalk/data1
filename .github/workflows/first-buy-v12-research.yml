@@ -1,0 +1,37 @@
+name: first-buy-v12-multichannel-research
+
+on:
+  push:
+    branches:
+      - research/first-buy-v12-multichannel-20260928
+    paths:
+      - 'backtest/first_buy_v12_research.py'
+      - 'backtest/first_buy_v12_refine.py'
+      - 'backtest/first_buy_v12_overlay.py'
+      - 'backtest/test_first_buy_v12_overlay.py'
+      - '.github/workflows/first-buy-v12-research.yml'
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v12_research.py
+          python -m py_compile backtest/first_buy_v12_refine.py
+          python -m py_compile backtest/first_buy_v12_overlay.py
+          python -m py_compile backtest/test_first_buy_v12_overlay.py
+      - name: Run overlay boundary tests
+        run: cd backtest && python -m unittest -v test_first_buy_v12_overlay.py
+      - name: Run focused V12 refinement
+        run: cd backtest && python first_buy_v12_refine.py
