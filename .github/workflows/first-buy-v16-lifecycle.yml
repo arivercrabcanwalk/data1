@@ -1,4 +1,5 @@
 name: first-buy-v16-lifecycle
+# sync: lifecycle backtest trigger
 
 on:
   push:
