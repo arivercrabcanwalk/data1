@@ -135,7 +135,11 @@ def add_m30_features(e: pd.DataFrame, path_map: dict[str, str]) -> pd.DataFrame:
         if not path:
             continue
         codes = {c for _, c in pairs}
-        cols = ["code","datetime","open","high","low","close","volume","amount"]\n        try:\n            m = pd.read_parquet(path, columns=cols, filters=[("code", "in", sorted(codes))])\n        except Exception:\n            m = pd.read_parquet(path, columns=cols)
+        cols = ["code","datetime","open","high","low","close","volume","amount"]
+        try:
+            m = pd.read_parquet(path, columns=cols, filters=[("code", "in", sorted(codes))])
+        except Exception:
+            m = pd.read_parquet(path, columns=cols)
         m["code"] = m["code"].astype(str).str.zfill(6)
         m = m[m["code"].isin(codes)].sort_values(["code","datetime"])
         if m.empty:
@@ -400,7 +404,8 @@ def score_bundle(train, target, pool):
     cs, ccoef = fit_score(tr[tr["m30_entry"].notna()], te, CONFIRM_FEATURES, "h3_ret_confirm")
     # score train itself only to derive causal thresholds from the training distribution
     ots, _ = fit_score(tr, tr, OPEN_FEATURES, "h3_ret_open")
-    confirm_train = tr[tr["m30_entry"].notna()].copy()\n    cts, _ = fit_score(confirm_train, confirm_train, CONFIRM_FEATURES, "h3_ret_confirm")
+    confirm_train = tr[tr["m30_entry"].notna()].copy()
+    cts, _ = fit_score(confirm_train, confirm_train, CONFIRM_FEATURES, "h3_ret_confirm")
     return tr, te, os, cs, ots, cts, ocoef, ccoef
 
 
