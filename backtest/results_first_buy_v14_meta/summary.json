@@ -1,0 +1,426 @@
+{
+  "method": "V14 four-tier candidate recall + theme/leader metadata as soft features + causal minute-31 execution + multi-month nested walk-forward selection",
+  "metadata_coverage": {
+    "events_total": 94,
+    "ultra_events": 92,
+    "ultra_with_meta": 83,
+    "meta_missing_ultra": 9
+  },
+  "profiles": {
+    "QUALITY": {
+      "combined_metrics": {
+        "trades": 1,
+        "win_rate": 0.0,
+        "mean": -0.03548795944233196,
+        "median": -0.03548795944233196,
+        "sum": -0.03548795944233196,
+        "worst": -0.03548795944233196
+      },
+      "folds": [
+        {
+          "test_month": "2026-06",
+          "pool": "wide",
+          "q_open": 0.8,
+          "q_watch": 0.35,
+          "q_confirm": 0.82,
+          "exit": "H2",
+          "selection_utility": 5.421978917122781,
+          "prior_cv": {
+            "trades": 5,
+            "win_rate": 0.6,
+            "mean": 0.04349777069110006,
+            "median": 0.015688138816258634,
+            "sum": 0.2174888534555003,
+            "worst": -0.07309582309582319,
+            "positive_months": 1,
+            "nonnegative_months": 1,
+            "folds": 1
+          },
+          "prior_cv_months": [
+            {
+              "month": "2026-05",
+              "trades": 5,
+              "win_rate": 0.6,
+              "mean": 0.04349777069110006,
+              "median": 0.015688138816258634,
+              "sum": 0.2174888534555003,
+              "worst": -0.07309582309582319
+            }
+          ],
+          "test_metrics": {
+            "trades": 0,
+            "win_rate": null,
+            "mean": null,
+            "median": null,
+            "sum": 0.0,
+            "worst": null
+          },
+          "test_candidates": 17,
+          "top_open_coef": [
+            [
+              "close_vwap",
+              -0.039548313867917004
+            ],
+            [
+              "rank1_flag",
+              0.03400252462352454
+            ],
+            [
+              "sector_lu3",
+              -0.023709124881350917
+            ],
+            [
+              "sector_rank",
+              0.021729967892635395
+            ],
+            [
+              "log_amount",
+              0.02057364645554977
+            ],
+            [
+              "lu20",
+              -0.019376991267198808
+            ],
+            [
+              "prior_sector_lu3",
+              0.016466131918667977
+            ],
+            [
+              "touched_upper",
+              -0.015646175354653756
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "sector_n",
+              -0.03891043794030635
+            ],
+            [
+              "m30_close_loc",
+              0.03268761337376734
+            ],
+            [
+              "rank1_flag",
+              0.03177710685592338
+            ],
+            [
+              "lu20",
+              -0.0292541712690083
+            ],
+            [
+              "ret20",
+              0.026622419205836544
+            ],
+            [
+              "log_amount",
+              0.02297338118072757
+            ],
+            [
+              "height_gap",
+              0.02161613628172292
+            ],
+            [
+              "close_vwap",
+              -0.02098791298001912
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-07",
+          "pool": "wide",
+          "q_open": 0.8,
+          "q_watch": 0.35,
+          "q_confirm": 0.82,
+          "exit": "H2",
+          "selection_utility": 4.171978917122781,
+          "prior_cv": {
+            "trades": 5,
+            "win_rate": 0.6,
+            "mean": 0.04349777069110006,
+            "median": 0.015688138816258634,
+            "sum": 0.2174888534555003,
+            "worst": -0.07309582309582319,
+            "positive_months": 1,
+            "nonnegative_months": 1,
+            "folds": 2
+          },
+          "prior_cv_months": [
+            {
+              "month": "2026-05",
+              "trades": 5,
+              "win_rate": 0.6,
+              "mean": 0.04349777069110006,
+              "median": 0.015688138816258634,
+              "sum": 0.2174888534555003,
+              "worst": -0.07309582309582319
+            },
+            {
+              "month": "2026-06",
+              "trades": 0,
+              "win_rate": null,
+              "mean": null,
+              "median": null,
+              "sum": 0.0,
+              "worst": null
+            }
+          ],
+          "test_metrics": {
+            "trades": 1,
+            "win_rate": 0.0,
+            "mean": -0.03548795944233196,
+            "median": -0.03548795944233196,
+            "sum": -0.03548795944233196,
+            "worst": -0.03548795944233196
+          },
+          "test_candidates": 10,
+          "top_open_coef": [
+            [
+              "sector_rank",
+              0.04279203301980614
+            ],
+            [
+              "rank1_flag",
+              0.03874076371344777
+            ],
+            [
+              "prior_sector_rank",
+              -0.03138608524504365
+            ],
+            [
+              "range",
+              0.031037233981615515
+            ],
+            [
+              "close_vwap",
+              -0.029003034958223955
+            ],
+            [
+              "touched_upper",
+              -0.028662080788920942
+            ],
+            [
+              "close_loc",
+              -0.024398533726413422
+            ],
+            [
+              "prior_sector_lu3",
+              0.02280197434809672
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "rank1_flag",
+              0.04127929904343945
+            ],
+            [
+              "prior_leader_flag",
+              -0.030280769351992302
+            ],
+            [
+              "sector_n",
+              -0.027828845525633562
+            ],
+            [
+              "m30_close_loc",
+              0.026675056930804786
+            ],
+            [
+              "log_amount",
+              0.024980426147168923
+            ],
+            [
+              "ret10",
+              0.023338214545477836
+            ],
+            [
+              "ret20",
+              0.019239796083904206
+            ],
+            [
+              "prior_streak",
+              -0.018742620834107333
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-08",
+          "selected": null
+        }
+      ],
+      "trades": [
+        {
+          "idx": 62,
+          "code": "600744",
+          "event_date": "2026-07-23",
+          "entry_date": "2026-07-24",
+          "entry_mode": "M30",
+          "entry_price": 7.89,
+          "open_score": 0.7495053592668948,
+          "confirm_score": 0.7998879806028953,
+          "ret": -0.03548795944233196,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.2030534351145039,
+          "event_ret": -0.007556675062972307,
+          "d1_gap": -0.043147208121827374,
+          "test_month": "2026-07",
+          "profile": "QUALITY"
+        }
+      ]
+    },
+    "BALANCED": {
+      "combined_metrics": {
+        "trades": 0,
+        "win_rate": null,
+        "mean": null,
+        "median": null,
+        "sum": 0.0,
+        "worst": null
+      },
+      "folds": [
+        {
+          "test_month": "2026-06",
+          "pool": "wide",
+          "q_open": 0.8,
+          "q_watch": 0.35,
+          "q_confirm": 0.82,
+          "exit": "H2",
+          "selection_utility": 6.082709060616361,
+          "prior_cv": {
+            "trades": 5,
+            "win_rate": 0.6,
+            "mean": 0.04349777069110006,
+            "median": 0.015688138816258634,
+            "sum": 0.2174888534555003,
+            "worst": -0.07309582309582319,
+            "positive_months": 1,
+            "nonnegative_months": 1,
+            "folds": 1
+          },
+          "prior_cv_months": [
+            {
+              "month": "2026-05",
+              "trades": 5,
+              "win_rate": 0.6,
+              "mean": 0.04349777069110006,
+              "median": 0.015688138816258634,
+              "sum": 0.2174888534555003,
+              "worst": -0.07309582309582319
+            }
+          ],
+          "test_metrics": {
+            "trades": 0,
+            "win_rate": null,
+            "mean": null,
+            "median": null,
+            "sum": 0.0,
+            "worst": null
+          },
+          "test_candidates": 17,
+          "top_open_coef": [
+            [
+              "close_vwap",
+              -0.039548313867917004
+            ],
+            [
+              "rank1_flag",
+              0.03400252462352454
+            ],
+            [
+              "sector_lu3",
+              -0.023709124881350917
+            ],
+            [
+              "sector_rank",
+              0.021729967892635395
+            ],
+            [
+              "log_amount",
+              0.02057364645554977
+            ],
+            [
+              "lu20",
+              -0.019376991267198808
+            ],
+            [
+              "prior_sector_lu3",
+              0.016466131918667977
+            ],
+            [
+              "touched_upper",
+              -0.015646175354653756
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "sector_n",
+              -0.03891043794030635
+            ],
+            [
+              "m30_close_loc",
+              0.03268761337376734
+            ],
+            [
+              "rank1_flag",
+              0.03177710685592338
+            ],
+            [
+              "lu20",
+              -0.0292541712690083
+            ],
+            [
+              "ret20",
+              0.026622419205836544
+            ],
+            [
+              "log_amount",
+              0.02297338118072757
+            ],
+            [
+              "height_gap",
+              0.02161613628172292
+            ],
+            [
+              "close_vwap",
+              -0.02098791298001912
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-07",
+          "selected": null
+        },
+        {
+          "test_month": "2026-08",
+          "selected": null
+        }
+      ],
+      "trades": []
+    },
+    "ACTIVE": {
+      "combined_metrics": {
+        "trades": 0,
+        "win_rate": null,
+        "mean": null,
+        "median": null,
+        "sum": 0.0,
+        "worst": null
+      },
+      "folds": [
+        {
+          "test_month": "2026-06",
+          "selected": null
+        },
+        {
+          "test_month": "2026-07",
+          "selected": null
+        },
+        {
+          "test_month": "2026-08",
+          "selected": null
+        }
+      ],
+      "trades": []
+    }
+  }
+}
