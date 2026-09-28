@@ -1,0 +1,43 @@
+name: first-buy-research-pr-runner
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backtest/first_buy_v*.py'
+      - '.github/workflows/first-buy-research-pr-runner.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  v16-lifecycle:
+    if: startsWith(github.head_ref, 'research/first-buy-v16-lifecycle-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v16_lifecycle.py
+          python -m py_compile backtest/first_buy_v16_robust_cv.py
+      - name: Run V16 lifecycle research
+        run: cd backtest && python first_buy_v16_lifecycle.py
+      - name: Run V16 lifecycle robust CV
+        run: cd backtest && python first_buy_v16_robust_cv.py
+      - name: Upload V16 result artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v16-results
+          path: |
+            backtest/results_first_buy_v16/
+            backtest/results_first_buy_v16_cv/
