@@ -11,7 +11,8 @@ import first_buy_v13_meta_walkforward as meta
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/"backtest"/"results_first_buy_v13_stratified"
 OUT.mkdir(parents=True,exist_ok=True)
-RESEARCH_REV = "V13.1b"\nMONTHS=["2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"]
+RESEARCH_REV = "V13.1b"
+MONTHS=["2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"]
 
 
 def prepare():
