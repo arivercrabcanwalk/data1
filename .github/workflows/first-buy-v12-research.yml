@@ -6,6 +6,7 @@ on:
       - research/first-buy-v12-multichannel-20260928
     paths:
       - 'backtest/first_buy_v12_research.py'
+      - 'backtest/first_buy_v12_refine.py'
       - '.github/workflows/first-buy-v12-research.yml'
   workflow_dispatch:
 
@@ -22,12 +23,9 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install pandas numpy pyarrow
-      - name: Syntax check
-        run: python -m py_compile backtest/first_buy_v12_research.py
-      - name: Run V12 research
-        run: python backtest/first_buy_v12_research.py
-      - name: Upload V12 results
-        uses: actions/upload-artifact@v4
-        with:
-          name: first-buy-v12-results
-          path: backtest/results_first_buy_v12/
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v12_research.py
+          python -m py_compile backtest/first_buy_v12_refine.py
+      - name: Run focused V12 refinement
+        run: cd backtest && python first_buy_v12_refine.py
