@@ -1,0 +1,54 @@
+name: run-v16-lifecycle-from-main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/run-v16-lifecycle-from-main.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-v16:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/first-buy-v16-lifecycle-20260928
+          lfs: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v16_lifecycle.py
+          python -m py_compile backtest/first_buy_v16_robust_cv.py
+      - name: Run V16 lifecycle research
+        run: cd backtest && python first_buy_v16_lifecycle.py
+      - name: Run V16 lifecycle robust CV
+        run: cd backtest && python first_buy_v16_robust_cv.py
+      - name: Persist V16 results to research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backtest/results_first_buy_v16/ backtest/results_first_buy_v16_cv/
+          if git diff --cached --quiet; then
+            echo "No result changes"
+          else
+            git commit -m "Persist V16 lifecycle backtest results [skip ci]"
+            git push origin HEAD:research/first-buy-v16-lifecycle-20260928
+          fi
+      - name: Upload V16 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v16-results
+          path: |
+            backtest/results_first_buy_v16/
+            backtest/results_first_buy_v16_cv/
