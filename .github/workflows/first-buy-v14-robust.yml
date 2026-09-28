@@ -1,0 +1,55 @@
+name: first-buy-v14-robust-walkforward
+
+on:
+  push:
+    branches:
+      - research/first-buy-v14-robust-20260928
+    paths:
+      - 'backtest/first_buy_v14_robust.py'
+      - 'backtest/first_buy_v14_meta_walkforward.py'
+      - 'backtest/v13_meta/**'
+      - '.github/workflows/first-buy-v14-robust.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v14_robust.py
+          python -m py_compile backtest/first_buy_v14_meta_walkforward.py
+      - name: Run V14 base robust walk-forward
+        run: cd backtest && python first_buy_v14_robust.py
+      - name: Run V14 metadata-aware walk-forward
+        run: cd backtest && python first_buy_v14_meta_walkforward.py
+      - name: Upload V14 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v14-results
+          path: |
+            backtest/results_first_buy_v14/
+            backtest/results_first_buy_v14_meta/
+      - name: Persist auditable result snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backtest/results_first_buy_v14/ backtest/results_first_buy_v14_meta/
+          if git diff --cached --quiet; then
+            echo "No result changes"
+          else
+            git commit -m "Persist V14 walk-forward results [skip ci]"
+            git push
+          fi
