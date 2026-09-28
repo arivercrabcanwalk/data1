@@ -88,21 +88,21 @@ def build_relaxed_events(daily: pd.DataFrame) -> pd.DataFrame:
         (e["height_gap"] <= 3)
         & (e["amount"] >= 2e8)
         & (e["range"] >= 0.05)
-        & ((e["ret20"] >= 0.15) | (e["prior_streak"] >= 5))
+        & ((e["ret20"].isna()) | (e["ret20"] >= 0.15) | (e["prior_streak"] >= 5))
         & ((e["vol_prev_ratio"] >= 0.60) | (e["vol_med10"] >= 1.50))
     )
     e["pool_wide"] = (
         (e["height_gap"] <= 4)
         & (e["amount"] >= 1.5e8)
         & (e["range"] >= 0.04)
-        & ((e["ret20"] >= 0.08) | (e["prior_streak"] >= 5))
+        & ((e["ret20"].isna()) | (e["ret20"] >= 0.08) | (e["prior_streak"] >= 5))
         & ((e["vol_prev_ratio"] >= 0.50) | (e["vol_med10"] >= 1.20))
     )
     e["pool_ultra"] = (
         (e["height_gap"] <= 5)
         & (e["amount"] >= 1e8)
         & (e["range"] >= 0.03)
-        & ((e["ret20"] >= 0.0) | (e["prior_streak"] >= 5))
+        & ((e["ret20"].isna()) | (e["ret20"] >= 0.0) | (e["prior_streak"] >= 5))
         & ((e["vol_prev_ratio"] >= 0.40) | (e["vol_med10"] >= 1.00))
     )
     return e
@@ -135,7 +135,7 @@ def add_m30_features(e: pd.DataFrame, path_map: dict[str, str]) -> pd.DataFrame:
         if not path:
             continue
         codes = {c for _, c in pairs}
-        m = pd.read_parquet(path, columns=["code","datetime","open","high","low","close","volume","amount"])
+        cols = ["code","datetime","open","high","low","close","volume","amount"]\n        try:\n            m = pd.read_parquet(path, columns=cols, filters=[("code", "in", sorted(codes))])\n        except Exception:\n            m = pd.read_parquet(path, columns=cols)
         m["code"] = m["code"].astype(str).str.zfill(6)
         m = m[m["code"].isin(codes)].sort_values(["code","datetime"])
         if m.empty:
@@ -400,7 +400,7 @@ def score_bundle(train, target, pool):
     cs, ccoef = fit_score(tr[tr["m30_entry"].notna()], te, CONFIRM_FEATURES, "h3_ret_confirm")
     # score train itself only to derive causal thresholds from the training distribution
     ots, _ = fit_score(tr, tr, OPEN_FEATURES, "h3_ret_open")
-    cts, _ = fit_score(tr[tr["m30_entry"].notna()], tr, CONFIRM_FEATURES, "h3_ret_confirm")
+    confirm_train = tr[tr["m30_entry"].notna()].copy()\n    cts, _ = fit_score(confirm_train, confirm_train, CONFIRM_FEATURES, "h3_ret_confirm")
     return tr, te, os, cs, ots, cts, ocoef, ccoef
 
 
