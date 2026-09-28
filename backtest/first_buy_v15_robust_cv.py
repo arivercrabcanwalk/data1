@@ -133,8 +133,21 @@ def run(events):
                 "top_confirm_coef":sorted(test["ccoef"].items(),key=lambda kv:abs(kv[1]),reverse=True)[:8],
             })
         combined=pd.concat(alltr,ignore_index=True) if alltr else pd.DataFrame()
+        source_breakdown = {}
+        if not combined.empty:
+            for label, mask in {
+                "3board": combined["prior_streak"].astype(int).eq(3),
+                "4plus": combined["prior_streak"].astype(int).ge(4),
+            }.items():
+                source_breakdown[label] = base.metrics(combined.loc[mask].copy())
+            source_breakdown["by_prior_streak"] = {
+                str(int(k)): base.metrics(z.copy())
+                for k, z in combined.groupby("prior_streak")
+            }
         results[profile_name]={
-            "combined_metrics":base.metrics(combined),"folds":folds,
+            "combined_metrics":base.metrics(combined),
+            "source_breakdown":source_breakdown,
+            "folds":folds,
             "trades":combined.to_dict("records") if not combined.empty else [],
         }
     return results
