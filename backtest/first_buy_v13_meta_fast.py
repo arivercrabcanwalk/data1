@@ -138,7 +138,11 @@ def main():
     daily,e=prepare()
     cache=make_cache(e)
     result=run(e,cache)
+    e.to_csv(OUT/"events_with_meta.csv",index=False)
+    missing=e.loc[e["pool_ultra"] & e["meta_missing"].eq(1),["code","date"]].copy()
+    missing["date"]=missing["date"].dt.strftime("%Y-%m-%d")
     payload=safe({"method":"cached metadata-aware nested walk-forward",
+                  "missing_meta_events":missing.to_dict("records"),
                   "metadata_coverage":{"ultra":int(e["pool_ultra"].sum()),
                                        "ultra_with_meta":int(e.loc[e["pool_ultra"],"meta_missing"].eq(0).sum())},
                   "profiles":result})
