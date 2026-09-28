@@ -1,0 +1,1699 @@
+{
+  "method": {
+    "candidate_layer": "four recall tiers from mid to max; hard first-break semantics stay fixed while the widest tier raises recall",
+    "buy_layer": "regularized logistic win model + ridge return model; high score open entry, medium score requires 30 completed minutes then executes at minute 31 open",
+    "sell_layer": "nested walk-forward selects among close-based holding/stop/take rules; every profile must clear non-losing validation quality floors",
+    "outer_tests": [
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08"
+    ],
+    "anti_leakage": "inner previous-month validation chooses pool/thresholds/exit; outer month is then predicted using only earlier months"
+  },
+  "pool_diagnostics": {
+    "mid": {
+      "events": 78,
+      "by_month": {
+        "2026-03": 11,
+        "2026-04": 10,
+        "2026-05": 15,
+        "2026-06": 17,
+        "2026-07": 7,
+        "2026-08": 18
+      },
+      "prior_streak": {
+        "4": 47,
+        "5": 20,
+        "6": 6,
+        "7": 2,
+        "8": 2,
+        "10": 1
+      },
+      "height_gap_median": 0.0,
+      "ret20_median": 0.5585960031052286,
+      "amount_median_m": 2152.46204925
+    },
+    "wide": {
+      "events": 88,
+      "by_month": {
+        "2026-03": 12,
+        "2026-04": 12,
+        "2026-05": 17,
+        "2026-06": 17,
+        "2026-07": 10,
+        "2026-08": 20
+      },
+      "prior_streak": {
+        "4": 53,
+        "5": 21,
+        "6": 6,
+        "7": 5,
+        "8": 2,
+        "10": 1
+      },
+      "height_gap_median": 0.0,
+      "ret20_median": 0.5465994962216623,
+      "amount_median_m": 2152.46204925
+    },
+    "ultra": {
+      "events": 92,
+      "by_month": {
+        "2026-03": 12,
+        "2026-04": 12,
+        "2026-05": 17,
+        "2026-06": 18,
+        "2026-07": 10,
+        "2026-08": 23
+      },
+      "prior_streak": {
+        "4": 56,
+        "5": 22,
+        "6": 6,
+        "7": 5,
+        "8": 2,
+        "10": 1
+      },
+      "height_gap_median": 0.0,
+      "ret20_median": 0.5045871559633026,
+      "amount_median_m": 2134.064541
+    },
+    "max": {
+      "events": 93,
+      "by_month": {
+        "2026-03": 12,
+        "2026-04": 12,
+        "2026-05": 17,
+        "2026-06": 18,
+        "2026-07": 10,
+        "2026-08": 24
+      },
+      "prior_streak": {
+        "4": 57,
+        "5": 22,
+        "6": 6,
+        "7": 5,
+        "8": 2,
+        "10": 1
+      },
+      "height_gap_median": 0.0,
+      "ret20_median": 0.503129698382989,
+      "amount_median_m": 2121.320766
+    }
+  },
+  "profiles": {
+    "QUALITY": {
+      "folds": [
+        {
+          "test_month": "2026-05",
+          "inner_val_month": "2026-04",
+          "pool": "wide",
+          "q_open": 0.85,
+          "q_watch": 0.25,
+          "q_confirm": 0.5,
+          "exit": "H3",
+          "inner_val_utility": 17.54408332409229,
+          "inner_val_metrics": {
+            "trades": 5,
+            "win_rate": 1.0,
+            "mean": 0.09040075749174807,
+            "median": 0.09725630158376086,
+            "sum": 0.45200378745874037,
+            "worst": 0.019360858409144033
+          },
+          "outer_test_metrics": {
+            "trades": 9,
+            "win_rate": 0.3333333333333333,
+            "mean": -0.034240056103609064,
+            "median": -0.053383458646616644,
+            "sum": -0.3081605049324816,
+            "worst": -0.18196078431372553
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "range",
+              -0.03868252447758563
+            ],
+            [
+              "event_gap",
+              -0.02475020952929173
+            ],
+            [
+              "ret10",
+              -0.022047634507115395
+            ],
+            [
+              "amount_ratio10",
+              0.01686838030924072
+            ],
+            [
+              "log_amount",
+              -0.016814434632278934
+            ],
+            [
+              "event_ret",
+              -0.012525944425695868
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "range",
+              -0.03281883584297772
+            ],
+            [
+              "m30_close_loc",
+              0.02588485421406177
+            ],
+            [
+              "height_gap",
+              0.02386346829146989
+            ],
+            [
+              "ret5",
+              -0.023716691432452874
+            ],
+            [
+              "event_ret",
+              -0.023680827415112172
+            ],
+            [
+              "ret20",
+              0.02325715540650091
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-06",
+          "inner_val_month": "2026-05",
+          "pool": "wide",
+          "q_open": 0.75,
+          "q_watch": 0.25,
+          "q_confirm": 0.8,
+          "exit": "H2",
+          "inner_val_utility": 3.529963621229846,
+          "inner_val_metrics": {
+            "trades": 5,
+            "win_rate": 0.6,
+            "mean": 0.04349777069110006,
+            "median": 0.015688138816258634,
+            "sum": 0.2174888534555003,
+            "worst": -0.07309582309582319
+          },
+          "outer_test_metrics": {
+            "trades": 1,
+            "win_rate": 1.0,
+            "mean": 0.015452538631346435,
+            "median": 0.015452538631346435,
+            "sum": 0.015452538631346435,
+            "worst": 0.015452538631346435
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "close_vwap",
+              -0.03457497392343847
+            ],
+            [
+              "lu10",
+              0.031110167096858335
+            ],
+            [
+              "log_amount",
+              0.026597533603348843
+            ],
+            [
+              "lu20",
+              -0.01957632139790667
+            ],
+            [
+              "ret20",
+              0.013548193258487004
+            ],
+            [
+              "prior_streak",
+              -0.012444943981379483
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "m30_close_loc",
+              0.032560494546757225
+            ],
+            [
+              "lu20",
+              -0.03177719250209867
+            ],
+            [
+              "log_amount",
+              0.0304515900984017
+            ],
+            [
+              "ret20",
+              0.02345106123243412
+            ],
+            [
+              "close_vwap",
+              -0.018150547413835406
+            ],
+            [
+              "lu10",
+              0.015556500092801349
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-07",
+          "inner_val_month": "2026-06",
+          "pool": "mid",
+          "q_open": 0.65,
+          "q_watch": 0.4,
+          "q_confirm": 0.5,
+          "exit": "H2",
+          "inner_val_utility": 13.65733145200446,
+          "inner_val_metrics": {
+            "trades": 3,
+            "win_rate": 1.0,
+            "mean": 0.05906664956367691,
+            "median": 0.05767012687427919,
+            "sum": 0.17719994869103073,
+            "worst": 0.05569306930693063
+          },
+          "outer_test_metrics": {
+            "trades": 2,
+            "win_rate": 0.0,
+            "mean": -0.033630267346584086,
+            "median": -0.033630267346584086,
+            "sum": -0.06726053469316817,
+            "worst": -0.03548795944233196
+          },
+          "outer_test_pool_candidates": 7,
+          "top_open_coef": [
+            [
+              "close_loc",
+              -0.03159105399502667
+            ],
+            [
+              "touched_upper",
+              -0.0237704201474864
+            ],
+            [
+              "d1_gap",
+              -0.02365246862184202
+            ],
+            [
+              "market_height_prev",
+              -0.02254967658182297
+            ],
+            [
+              "log_amount",
+              0.020971618333347587
+            ],
+            [
+              "range",
+              0.020826938397735868
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "ret10",
+              0.03785531603954275
+            ],
+            [
+              "log_amount",
+              0.032889213680962696
+            ],
+            [
+              "vol_prev_ratio",
+              -0.02264882526139632
+            ],
+            [
+              "ret20",
+              0.021575033935522923
+            ],
+            [
+              "close_loc",
+              -0.021047686386731813
+            ],
+            [
+              "prior_streak",
+              -0.018914667285831445
+            ]
+          ]
+        }
+      ],
+      "combined_metrics": {
+        "trades": 12,
+        "win_rate": 0.3333333333333333,
+        "mean": -0.029997375082858612,
+        "median": -0.033630267346584086,
+        "sum": -0.35996850099430333,
+        "worst": -0.18196078431372553
+      },
+      "trades": [
+        {
+          "idx": 71199,
+          "code": "002081",
+          "event_date": "2026-05-08",
+          "entry_date": "2026-05-11",
+          "entry_mode": "M30",
+          "entry_price": 7.48,
+          "open_score": 0.5275174897211595,
+          "confirm_score": 0.8889820489773282,
+          "ret": 0.053475935828877,
+          "prior_streak": 5,
+          "height_gap": 0.0,
+          "ret20": 1.0543806646525677,
+          "event_ret": -0.04761904761904756,
+          "d1_gap": 0.02499999999999991,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 109123,
+          "code": "002421",
+          "event_date": "2026-05-21",
+          "entry_date": "2026-05-22",
+          "entry_mode": "OPEN",
+          "entry_price": 3.86,
+          "open_score": 0.7710362246768075,
+          "confirm_score": 0.5978627485670591,
+          "ret": 0.20466321243523322,
+          "prior_streak": 4,
+          "height_gap": 4.0,
+          "ret20": 0.3655172413793104,
+          "event_ret": -0.07259953161592503,
+          "d1_gap": -0.025252525252525304,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 122337,
+          "code": "002552",
+          "event_date": "2026-05-13",
+          "entry_date": "2026-05-14",
+          "entry_mode": "M30",
+          "entry_price": 34.22,
+          "open_score": 0.7006101606771082,
+          "confirm_score": 0.6587049612197793,
+          "ret": 0.03272939801285801,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.8897937024972855,
+          "event_ret": 0.04034668260609697,
+          "d1_gap": -0.018672795173800827,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 160454,
+          "code": "002918",
+          "event_date": "2026-05-18",
+          "entry_date": "2026-05-19",
+          "entry_mode": "OPEN",
+          "entry_price": 16.28,
+          "open_score": 0.9190772691331521,
+          "confirm_score": 0.8213115897683116,
+          "ret": -0.13943488943488946,
+          "prior_streak": 6,
+          "height_gap": 0.0,
+          "ret20": 0.4544666088464875,
+          "event_ret": -0.0998389694041868,
+          "d1_gap": -0.029218843172331477,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 219568,
+          "code": "600530",
+          "event_date": "2026-05-14",
+          "entry_date": "2026-05-15",
+          "entry_mode": "M30",
+          "entry_price": 7.47,
+          "open_score": 0.8681355392540239,
+          "confirm_score": 0.603150871198823,
+          "ret": -0.0789825970548862,
+          "prior_streak": 4,
+          "height_gap": 2.0,
+          "ret20": 0.49905123339658464,
+          "event_ret": -0.003783102143757766,
+          "d1_gap": -0.03924050632911402,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 294389,
+          "code": "603082",
+          "event_date": "2026-05-20",
+          "entry_date": "2026-05-21",
+          "entry_mode": "M30",
+          "entry_price": 42.07,
+          "open_score": 0.9670613144741818,
+          "confirm_score": 0.9547355463193512,
+          "ret": -0.028286189683860208,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.22957821676454881,
+          "event_ret": -0.10003907776475185,
+          "d1_gap": -0.04472427268779855,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 295765,
+          "code": "603095",
+          "event_date": "2026-05-06",
+          "entry_date": "2026-05-07",
+          "entry_mode": "M30",
+          "entry_price": 26.6,
+          "open_score": 0.5279574011025752,
+          "confirm_score": 0.43233634215337047,
+          "ret": -0.053383458646616644,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3817142857142857,
+          "event_ret": -0.046905794245171495,
+          "d1_gap": -0.007444168734491274,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 317092,
+          "code": "603316",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "M30",
+          "entry_price": 25.5,
+          "open_score": 0.7833140778744216,
+          "confirm_score": 0.7731142056605766,
+          "ret": -0.18196078431372553,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.7166560306317804,
+          "event_ret": -0.012844036697247763,
+          "d1_gap": -0.04052044609665428,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 344721,
+          "code": "603779",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "OPEN",
+          "entry_price": 13.25,
+          "open_score": 0.8946897021349799,
+          "confirm_score": 0.9792456443822743,
+          "ret": -0.11698113207547178,
+          "prior_streak": 7,
+          "height_gap": 0.0,
+          "ret20": 1.111470113085622,
+          "event_ret": -0.09986225895316803,
+          "d1_gap": 0.01377199693955622,
+          "test_month": "2026-05",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 216314,
+          "code": "600500",
+          "event_date": "2026-06-15",
+          "entry_date": "2026-06-16",
+          "entry_mode": "M30",
+          "entry_price": 9.06,
+          "open_score": 0.3913502004368581,
+          "confirm_score": 0.8165834126369871,
+          "ret": 0.015452538631346435,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3226324237560192,
+          "event_ret": 0.0390920554854981,
+          "d1_gap": 0.09223300970873782,
+          "test_month": "2026-06",
+          "profile": "QUALITY",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 16843,
+          "code": "000566",
+          "event_date": "2026-07-03",
+          "entry_date": "2026-07-06",
+          "entry_mode": "M30",
+          "entry_price": 5.98,
+          "open_score": 0.8102654523606341,
+          "confirm_score": 0.6209605194326265,
+          "ret": -0.03177257525083621,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.5465994962216623,
+          "event_ret": 0.01655629139072845,
+          "d1_gap": -0.07328990228013021,
+          "test_month": "2026-07",
+          "profile": "QUALITY",
+          "pool": "mid",
+          "exit": "H2"
+        },
+        {
+          "idx": 235552,
+          "code": "600744",
+          "event_date": "2026-07-23",
+          "entry_date": "2026-07-24",
+          "entry_mode": "M30",
+          "entry_price": 7.89,
+          "open_score": 0.6598456131770538,
+          "confirm_score": 0.6364972241748368,
+          "ret": -0.03548795944233196,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.2030534351145039,
+          "event_ret": -0.007556675062972307,
+          "d1_gap": -0.043147208121827374,
+          "test_month": "2026-07",
+          "profile": "QUALITY",
+          "pool": "mid",
+          "exit": "H2"
+        }
+      ]
+    },
+    "BALANCED": {
+      "folds": [
+        {
+          "test_month": "2026-05",
+          "inner_val_month": "2026-04",
+          "pool": "wide",
+          "q_open": 0.85,
+          "q_watch": 0.25,
+          "q_confirm": 0.5,
+          "exit": "H3",
+          "inner_val_utility": 17.540075749174807,
+          "inner_val_metrics": {
+            "trades": 5,
+            "win_rate": 1.0,
+            "mean": 0.09040075749174807,
+            "median": 0.09725630158376086,
+            "sum": 0.45200378745874037,
+            "worst": 0.019360858409144033
+          },
+          "outer_test_metrics": {
+            "trades": 9,
+            "win_rate": 0.3333333333333333,
+            "mean": -0.034240056103609064,
+            "median": -0.053383458646616644,
+            "sum": -0.3081605049324816,
+            "worst": -0.18196078431372553
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "range",
+              -0.03868252447758563
+            ],
+            [
+              "event_gap",
+              -0.02475020952929173
+            ],
+            [
+              "ret10",
+              -0.022047634507115395
+            ],
+            [
+              "amount_ratio10",
+              0.01686838030924072
+            ],
+            [
+              "log_amount",
+              -0.016814434632278934
+            ],
+            [
+              "event_ret",
+              -0.012525944425695868
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "range",
+              -0.03281883584297772
+            ],
+            [
+              "m30_close_loc",
+              0.02588485421406177
+            ],
+            [
+              "height_gap",
+              0.02386346829146989
+            ],
+            [
+              "ret5",
+              -0.023716691432452874
+            ],
+            [
+              "event_ret",
+              -0.023680827415112172
+            ],
+            [
+              "ret20",
+              0.02325715540650091
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-06",
+          "inner_val_month": "2026-05",
+          "pool": "wide",
+          "q_open": 0.55,
+          "q_watch": 0.25,
+          "q_confirm": 0.8,
+          "exit": "H2",
+          "inner_val_utility": 7.002707970162808,
+          "inner_val_metrics": {
+            "trades": 7,
+            "win_rate": 0.5714285714285714,
+            "mean": 0.044803492478040906,
+            "median": 0.015688138816258634,
+            "sum": 0.31362444734628636,
+            "worst": -0.07309582309582319
+          },
+          "outer_test_metrics": {
+            "trades": 4,
+            "win_rate": 0.75,
+            "mean": 0.007415854329600541,
+            "median": 0.017737392786196016,
+            "sum": 0.029663417318402163,
+            "worst": -0.062043795620437936
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "close_vwap",
+              -0.03457497392343847
+            ],
+            [
+              "lu10",
+              0.031110167096858335
+            ],
+            [
+              "log_amount",
+              0.026597533603348843
+            ],
+            [
+              "lu20",
+              -0.01957632139790667
+            ],
+            [
+              "ret20",
+              0.013548193258487004
+            ],
+            [
+              "prior_streak",
+              -0.012444943981379483
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "m30_close_loc",
+              0.032560494546757225
+            ],
+            [
+              "lu20",
+              -0.03177719250209867
+            ],
+            [
+              "log_amount",
+              0.0304515900984017
+            ],
+            [
+              "ret20",
+              0.02345106123243412
+            ],
+            [
+              "close_vwap",
+              -0.018150547413835406
+            ],
+            [
+              "lu10",
+              0.015556500092801349
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-07",
+          "inner_val_month": "2026-06",
+          "pool": "wide",
+          "q_open": 0.75,
+          "q_watch": 0.25,
+          "q_confirm": 0.5,
+          "exit": "H2",
+          "inner_val_utility": 12.07008577265165,
+          "inner_val_metrics": {
+            "trades": 4,
+            "win_rate": 1.0,
+            "mean": 0.042200857726516494,
+            "median": 0.047840382700220174,
+            "sum": 0.16880343090606598,
+            "worst": 0.015452538631346435
+          },
+          "outer_test_metrics": {
+            "trades": 2,
+            "win_rate": 0.0,
+            "mean": -0.033630267346584086,
+            "median": -0.033630267346584086,
+            "sum": -0.06726053469316817,
+            "worst": -0.03548795944233196
+          },
+          "outer_test_pool_candidates": 10,
+          "top_open_coef": [
+            [
+              "range",
+              0.03050304811269655
+            ],
+            [
+              "lu10",
+              0.02708979212707329
+            ],
+            [
+              "close_vwap",
+              -0.02444705424575311
+            ],
+            [
+              "log_amount",
+              0.023987669992330672
+            ],
+            [
+              "close_loc",
+              -0.019727957798158693
+            ],
+            [
+              "touched_upper",
+              -0.0178312225543216
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "ret10",
+              0.03360023546644849
+            ],
+            [
+              "log_amount",
+              0.03038710758221201
+            ],
+            [
+              "m30_close_loc",
+              0.023353688162009275
+            ],
+            [
+              "range",
+              0.02184723944857621
+            ],
+            [
+              "vol_prev_ratio",
+              -0.019678304802444615
+            ],
+            [
+              "max_streak20",
+              -0.019432947975762224
+            ]
+          ]
+        }
+      ],
+      "combined_metrics": {
+        "trades": 15,
+        "win_rate": 0.4,
+        "mean": -0.023050508153816505,
+        "median": -0.03177257525083621,
+        "sum": -0.3457576223072476,
+        "worst": -0.18196078431372553
+      },
+      "trades": [
+        {
+          "idx": 71199,
+          "code": "002081",
+          "event_date": "2026-05-08",
+          "entry_date": "2026-05-11",
+          "entry_mode": "M30",
+          "entry_price": 7.48,
+          "open_score": 0.5275174897211595,
+          "confirm_score": 0.8889820489773282,
+          "ret": 0.053475935828877,
+          "prior_streak": 5,
+          "height_gap": 0.0,
+          "ret20": 1.0543806646525677,
+          "event_ret": -0.04761904761904756,
+          "d1_gap": 0.02499999999999991,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 109123,
+          "code": "002421",
+          "event_date": "2026-05-21",
+          "entry_date": "2026-05-22",
+          "entry_mode": "OPEN",
+          "entry_price": 3.86,
+          "open_score": 0.7710362246768075,
+          "confirm_score": 0.5978627485670591,
+          "ret": 0.20466321243523322,
+          "prior_streak": 4,
+          "height_gap": 4.0,
+          "ret20": 0.3655172413793104,
+          "event_ret": -0.07259953161592503,
+          "d1_gap": -0.025252525252525304,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 122337,
+          "code": "002552",
+          "event_date": "2026-05-13",
+          "entry_date": "2026-05-14",
+          "entry_mode": "M30",
+          "entry_price": 34.22,
+          "open_score": 0.7006101606771082,
+          "confirm_score": 0.6587049612197793,
+          "ret": 0.03272939801285801,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.8897937024972855,
+          "event_ret": 0.04034668260609697,
+          "d1_gap": -0.018672795173800827,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 160454,
+          "code": "002918",
+          "event_date": "2026-05-18",
+          "entry_date": "2026-05-19",
+          "entry_mode": "OPEN",
+          "entry_price": 16.28,
+          "open_score": 0.9190772691331521,
+          "confirm_score": 0.8213115897683116,
+          "ret": -0.13943488943488946,
+          "prior_streak": 6,
+          "height_gap": 0.0,
+          "ret20": 0.4544666088464875,
+          "event_ret": -0.0998389694041868,
+          "d1_gap": -0.029218843172331477,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 219568,
+          "code": "600530",
+          "event_date": "2026-05-14",
+          "entry_date": "2026-05-15",
+          "entry_mode": "M30",
+          "entry_price": 7.47,
+          "open_score": 0.8681355392540239,
+          "confirm_score": 0.603150871198823,
+          "ret": -0.0789825970548862,
+          "prior_streak": 4,
+          "height_gap": 2.0,
+          "ret20": 0.49905123339658464,
+          "event_ret": -0.003783102143757766,
+          "d1_gap": -0.03924050632911402,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 294389,
+          "code": "603082",
+          "event_date": "2026-05-20",
+          "entry_date": "2026-05-21",
+          "entry_mode": "M30",
+          "entry_price": 42.07,
+          "open_score": 0.9670613144741818,
+          "confirm_score": 0.9547355463193512,
+          "ret": -0.028286189683860208,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.22957821676454881,
+          "event_ret": -0.10003907776475185,
+          "d1_gap": -0.04472427268779855,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 295765,
+          "code": "603095",
+          "event_date": "2026-05-06",
+          "entry_date": "2026-05-07",
+          "entry_mode": "M30",
+          "entry_price": 26.6,
+          "open_score": 0.5279574011025752,
+          "confirm_score": 0.43233634215337047,
+          "ret": -0.053383458646616644,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3817142857142857,
+          "event_ret": -0.046905794245171495,
+          "d1_gap": -0.007444168734491274,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 317092,
+          "code": "603316",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "M30",
+          "entry_price": 25.5,
+          "open_score": 0.7833140778744216,
+          "confirm_score": 0.7731142056605766,
+          "ret": -0.18196078431372553,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.7166560306317804,
+          "event_ret": -0.012844036697247763,
+          "d1_gap": -0.04052044609665428,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 344721,
+          "code": "603779",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "OPEN",
+          "entry_price": 13.25,
+          "open_score": 0.8946897021349799,
+          "confirm_score": 0.9792456443822743,
+          "ret": -0.11698113207547178,
+          "prior_streak": 7,
+          "height_gap": 0.0,
+          "ret20": 1.111470113085622,
+          "event_ret": -0.09986225895316803,
+          "d1_gap": 0.01377199693955622,
+          "test_month": "2026-05",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 14059,
+          "code": "000539",
+          "event_date": "2026-06-02",
+          "entry_date": "2026-06-03",
+          "entry_mode": "OPEN",
+          "entry_price": 8.99,
+          "open_score": 0.5767896481431478,
+          "confirm_score": 0.6616738880845887,
+          "ret": 0.020022246941045596,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3981623277182236,
+          "event_ret": -0.06550665301944714,
+          "d1_gap": -0.01533406352683464,
+          "test_month": "2026-06",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 52358,
+          "code": "001257",
+          "event_date": "2026-06-17",
+          "entry_date": "2026-06-18",
+          "entry_mode": "OPEN",
+          "entry_price": 32.01,
+          "open_score": 0.5107391213143191,
+          "confirm_score": 0.4979836834999834,
+          "ret": 0.05623242736644807,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3193548387096774,
+          "event_ret": -0.025029797377830842,
+          "d1_gap": -0.02169926650366749,
+          "test_month": "2026-06",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 216314,
+          "code": "600500",
+          "event_date": "2026-06-15",
+          "entry_date": "2026-06-16",
+          "entry_mode": "M30",
+          "entry_price": 9.06,
+          "open_score": 0.3913502004368581,
+          "confirm_score": 0.8165834126369871,
+          "ret": 0.015452538631346435,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3226324237560192,
+          "event_ret": 0.0390920554854981,
+          "d1_gap": 0.09223300970873782,
+          "test_month": "2026-06",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 369925,
+          "code": "605366",
+          "event_date": "2026-06-29",
+          "entry_date": "2026-06-30",
+          "entry_mode": "OPEN",
+          "entry_price": 13.7,
+          "open_score": 0.5133010675218002,
+          "confirm_score": 0.34679690100615346,
+          "ret": -0.062043795620437936,
+          "prior_streak": 4,
+          "height_gap": 2.0,
+          "ret20": 0.2674524025385314,
+          "event_ret": -0.02781641168289295,
+          "d1_gap": -0.02002861230329045,
+          "test_month": "2026-06",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 16843,
+          "code": "000566",
+          "event_date": "2026-07-03",
+          "entry_date": "2026-07-06",
+          "entry_mode": "M30",
+          "entry_price": 5.98,
+          "open_score": 0.7516206577380227,
+          "confirm_score": 0.5706899886070077,
+          "ret": -0.03177257525083621,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.5465994962216623,
+          "event_ret": 0.01655629139072845,
+          "d1_gap": -0.07328990228013021,
+          "test_month": "2026-07",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 235552,
+          "code": "600744",
+          "event_date": "2026-07-23",
+          "entry_date": "2026-07-24",
+          "entry_mode": "M30",
+          "entry_price": 7.89,
+          "open_score": 0.726170193139869,
+          "confirm_score": 0.697403004620397,
+          "ret": -0.03548795944233196,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.2030534351145039,
+          "event_ret": -0.007556675062972307,
+          "d1_gap": -0.043147208121827374,
+          "test_month": "2026-07",
+          "profile": "BALANCED",
+          "pool": "wide",
+          "exit": "H2"
+        }
+      ]
+    },
+    "QUANTITY": {
+      "folds": [
+        {
+          "test_month": "2026-05",
+          "inner_val_month": "2026-04",
+          "pool": "wide",
+          "q_open": 0.65,
+          "q_watch": 0.25,
+          "q_confirm": 0.5,
+          "exit": "H3",
+          "inner_val_utility": 16.99638403470153,
+          "inner_val_metrics": {
+            "trades": 6,
+            "win_rate": 1.0,
+            "mean": 0.0820049235218145,
+            "median": 0.08760673364633764,
+            "sum": 0.49202954113088704,
+            "worst": 0.00634206219312583
+          },
+          "outer_test_metrics": {
+            "trades": 9,
+            "win_rate": 0.4444444444444444,
+            "mean": -0.014079205227163834,
+            "median": -0.028286189683860208,
+            "sum": -0.1267128470444745,
+            "worst": -0.18196078431372553
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "range",
+              -0.03868252447758563
+            ],
+            [
+              "event_gap",
+              -0.02475020952929173
+            ],
+            [
+              "ret10",
+              -0.022047634507115395
+            ],
+            [
+              "amount_ratio10",
+              0.01686838030924072
+            ],
+            [
+              "log_amount",
+              -0.016814434632278934
+            ],
+            [
+              "event_ret",
+              -0.012525944425695868
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "range",
+              -0.03281883584297772
+            ],
+            [
+              "m30_close_loc",
+              0.02588485421406177
+            ],
+            [
+              "height_gap",
+              0.02386346829146989
+            ],
+            [
+              "ret5",
+              -0.023716691432452874
+            ],
+            [
+              "event_ret",
+              -0.023680827415112172
+            ],
+            [
+              "ret20",
+              0.02325715540650091
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-06",
+          "inner_val_month": "2026-05",
+          "pool": "wide",
+          "q_open": 0.55,
+          "q_watch": 0.25,
+          "q_confirm": 0.8,
+          "exit": "H2",
+          "inner_val_utility": 9.719417938032713,
+          "inner_val_metrics": {
+            "trades": 7,
+            "win_rate": 0.5714285714285714,
+            "mean": 0.044803492478040906,
+            "median": 0.015688138816258634,
+            "sum": 0.31362444734628636,
+            "worst": -0.07309582309582319
+          },
+          "outer_test_metrics": {
+            "trades": 4,
+            "win_rate": 0.75,
+            "mean": 0.007415854329600541,
+            "median": 0.017737392786196016,
+            "sum": 0.029663417318402163,
+            "worst": -0.062043795620437936
+          },
+          "outer_test_pool_candidates": 17,
+          "top_open_coef": [
+            [
+              "close_vwap",
+              -0.03457497392343847
+            ],
+            [
+              "lu10",
+              0.031110167096858335
+            ],
+            [
+              "log_amount",
+              0.026597533603348843
+            ],
+            [
+              "lu20",
+              -0.01957632139790667
+            ],
+            [
+              "ret20",
+              0.013548193258487004
+            ],
+            [
+              "prior_streak",
+              -0.012444943981379483
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "m30_close_loc",
+              0.032560494546757225
+            ],
+            [
+              "lu20",
+              -0.03177719250209867
+            ],
+            [
+              "log_amount",
+              0.0304515900984017
+            ],
+            [
+              "ret20",
+              0.02345106123243412
+            ],
+            [
+              "close_vwap",
+              -0.018150547413835406
+            ],
+            [
+              "lu10",
+              0.015556500092801349
+            ]
+          ]
+        },
+        {
+          "test_month": "2026-07",
+          "inner_val_month": "2026-06",
+          "pool": "ultra",
+          "q_open": 0.55,
+          "q_watch": 0.25,
+          "q_confirm": 0.5,
+          "exit": "H2",
+          "inner_val_utility": 6.710321534762153,
+          "inner_val_metrics": {
+            "trades": 6,
+            "win_rate": 0.6666666666666666,
+            "mean": 0.006592493317962578,
+            "median": 0.017737392786196016,
+            "sum": 0.03955495990777547,
+            "worst": -0.062043795620437936
+          },
+          "outer_test_metrics": {
+            "trades": 2,
+            "win_rate": 0.0,
+            "mean": -0.033630267346584086,
+            "median": -0.033630267346584086,
+            "sum": -0.06726053469316817,
+            "worst": -0.03548795944233196
+          },
+          "outer_test_pool_candidates": 10,
+          "top_open_coef": [
+            [
+              "range",
+              0.031147156459168306
+            ],
+            [
+              "lu10",
+              0.02726715214065374
+            ],
+            [
+              "close_vwap",
+              -0.02423564218698871
+            ],
+            [
+              "log_amount",
+              0.02395540642047875
+            ],
+            [
+              "close_loc",
+              -0.019270789140235885
+            ],
+            [
+              "touched_upper",
+              -0.017584542639022163
+            ]
+          ],
+          "top_confirm_coef": [
+            [
+              "ret10",
+              0.035802251425635784
+            ],
+            [
+              "log_amount",
+              0.030870400994785174
+            ],
+            [
+              "range",
+              0.02354236552593952
+            ],
+            [
+              "vol_prev_ratio",
+              -0.020223796924648967
+            ],
+            [
+              "m30_close_loc",
+              0.01991001134746707
+            ],
+            [
+              "prior_streak",
+              -0.019301695825408097
+            ]
+          ]
+        }
+      ],
+      "combined_metrics": {
+        "trades": 15,
+        "win_rate": 0.4666666666666667,
+        "mean": -0.010953997627949368,
+        "median": -0.028286189683860208,
+        "sum": -0.1643099644192405,
+        "worst": -0.18196078431372553
+      },
+      "trades": [
+        {
+          "idx": 71199,
+          "code": "002081",
+          "event_date": "2026-05-08",
+          "entry_date": "2026-05-11",
+          "entry_mode": "OPEN",
+          "entry_price": 6.97,
+          "open_score": 0.5275174897211595,
+          "confirm_score": 0.8889820489773282,
+          "ret": 0.1305595408895266,
+          "prior_streak": 5,
+          "height_gap": 0.0,
+          "ret20": 1.0543806646525677,
+          "event_ret": -0.04761904761904756,
+          "d1_gap": 0.02499999999999991,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 109123,
+          "code": "002421",
+          "event_date": "2026-05-21",
+          "entry_date": "2026-05-22",
+          "entry_mode": "OPEN",
+          "entry_price": 3.86,
+          "open_score": 0.7710362246768075,
+          "confirm_score": 0.5978627485670591,
+          "ret": 0.20466321243523322,
+          "prior_streak": 4,
+          "height_gap": 4.0,
+          "ret20": 0.3655172413793104,
+          "event_ret": -0.07259953161592503,
+          "d1_gap": -0.025252525252525304,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 122337,
+          "code": "002552",
+          "event_date": "2026-05-13",
+          "entry_date": "2026-05-14",
+          "entry_mode": "OPEN",
+          "entry_price": 34.16,
+          "open_score": 0.7006101606771082,
+          "confirm_score": 0.6587049612197793,
+          "ret": 0.03454332552693229,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.8897937024972855,
+          "event_ret": 0.04034668260609697,
+          "d1_gap": -0.018672795173800827,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 160454,
+          "code": "002918",
+          "event_date": "2026-05-18",
+          "entry_date": "2026-05-19",
+          "entry_mode": "OPEN",
+          "entry_price": 16.28,
+          "open_score": 0.9190772691331521,
+          "confirm_score": 0.8213115897683116,
+          "ret": -0.13943488943488946,
+          "prior_streak": 6,
+          "height_gap": 0.0,
+          "ret20": 0.4544666088464875,
+          "event_ret": -0.0998389694041868,
+          "d1_gap": -0.029218843172331477,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 219568,
+          "code": "600530",
+          "event_date": "2026-05-14",
+          "entry_date": "2026-05-15",
+          "entry_mode": "M30",
+          "entry_price": 7.47,
+          "open_score": 0.8681355392540239,
+          "confirm_score": 0.603150871198823,
+          "ret": -0.0789825970548862,
+          "prior_streak": 4,
+          "height_gap": 2.0,
+          "ret20": 0.49905123339658464,
+          "event_ret": -0.003783102143757766,
+          "d1_gap": -0.03924050632911402,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 294389,
+          "code": "603082",
+          "event_date": "2026-05-20",
+          "entry_date": "2026-05-21",
+          "entry_mode": "M30",
+          "entry_price": 42.07,
+          "open_score": 0.9670613144741818,
+          "confirm_score": 0.9547355463193512,
+          "ret": -0.028286189683860208,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.22957821676454881,
+          "event_ret": -0.10003907776475185,
+          "d1_gap": -0.04472427268779855,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 295765,
+          "code": "603095",
+          "event_date": "2026-05-06",
+          "entry_date": "2026-05-07",
+          "entry_mode": "OPEN",
+          "entry_price": 24.0,
+          "open_score": 0.5279574011025752,
+          "confirm_score": 0.43233634215337047,
+          "ret": 0.04916666666666658,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3817142857142857,
+          "event_ret": -0.046905794245171495,
+          "d1_gap": -0.007444168734491274,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 317092,
+          "code": "603316",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "M30",
+          "entry_price": 25.5,
+          "open_score": 0.7833140778744216,
+          "confirm_score": 0.7731142056605766,
+          "ret": -0.18196078431372553,
+          "prior_streak": 4,
+          "height_gap": 3.0,
+          "ret20": 0.7166560306317804,
+          "event_ret": -0.012844036697247763,
+          "d1_gap": -0.04052044609665428,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 344721,
+          "code": "603779",
+          "event_date": "2026-05-22",
+          "entry_date": "2026-05-25",
+          "entry_mode": "OPEN",
+          "entry_price": 13.25,
+          "open_score": 0.8946897021349799,
+          "confirm_score": 0.9792456443822743,
+          "ret": -0.11698113207547178,
+          "prior_streak": 7,
+          "height_gap": 0.0,
+          "ret20": 1.111470113085622,
+          "event_ret": -0.09986225895316803,
+          "d1_gap": 0.01377199693955622,
+          "test_month": "2026-05",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H3"
+        },
+        {
+          "idx": 14059,
+          "code": "000539",
+          "event_date": "2026-06-02",
+          "entry_date": "2026-06-03",
+          "entry_mode": "OPEN",
+          "entry_price": 8.99,
+          "open_score": 0.5767896481431478,
+          "confirm_score": 0.6616738880845887,
+          "ret": 0.020022246941045596,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3981623277182236,
+          "event_ret": -0.06550665301944714,
+          "d1_gap": -0.01533406352683464,
+          "test_month": "2026-06",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 52358,
+          "code": "001257",
+          "event_date": "2026-06-17",
+          "entry_date": "2026-06-18",
+          "entry_mode": "OPEN",
+          "entry_price": 32.01,
+          "open_score": 0.5107391213143191,
+          "confirm_score": 0.4979836834999834,
+          "ret": 0.05623242736644807,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3193548387096774,
+          "event_ret": -0.025029797377830842,
+          "d1_gap": -0.02169926650366749,
+          "test_month": "2026-06",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 216314,
+          "code": "600500",
+          "event_date": "2026-06-15",
+          "entry_date": "2026-06-16",
+          "entry_mode": "M30",
+          "entry_price": 9.06,
+          "open_score": 0.3913502004368581,
+          "confirm_score": 0.8165834126369871,
+          "ret": 0.015452538631346435,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.3226324237560192,
+          "event_ret": 0.0390920554854981,
+          "d1_gap": 0.09223300970873782,
+          "test_month": "2026-06",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 369925,
+          "code": "605366",
+          "event_date": "2026-06-29",
+          "entry_date": "2026-06-30",
+          "entry_mode": "OPEN",
+          "entry_price": 13.7,
+          "open_score": 0.5133010675218002,
+          "confirm_score": 0.34679690100615346,
+          "ret": -0.062043795620437936,
+          "prior_streak": 4,
+          "height_gap": 2.0,
+          "ret20": 0.2674524025385314,
+          "event_ret": -0.02781641168289295,
+          "d1_gap": -0.02002861230329045,
+          "test_month": "2026-06",
+          "profile": "QUANTITY",
+          "pool": "wide",
+          "exit": "H2"
+        },
+        {
+          "idx": 16843,
+          "code": "000566",
+          "event_date": "2026-07-03",
+          "entry_date": "2026-07-06",
+          "entry_mode": "M30",
+          "entry_price": 5.98,
+          "open_score": 0.7439452339845007,
+          "confirm_score": 0.5466172554423492,
+          "ret": -0.03177257525083621,
+          "prior_streak": 4,
+          "height_gap": 0.0,
+          "ret20": 0.5465994962216623,
+          "event_ret": 0.01655629139072845,
+          "d1_gap": -0.07328990228013021,
+          "test_month": "2026-07",
+          "profile": "QUANTITY",
+          "pool": "ultra",
+          "exit": "H2"
+        },
+        {
+          "idx": 235552,
+          "code": "600744",
+          "event_date": "2026-07-23",
+          "entry_date": "2026-07-24",
+          "entry_mode": "M30",
+          "entry_price": 7.89,
+          "open_score": 0.7179484912784495,
+          "confirm_score": 0.7071479670604208,
+          "ret": -0.03548795944233196,
+          "prior_streak": 4,
+          "height_gap": 1.0,
+          "ret20": 0.2030534351145039,
+          "event_ret": -0.007556675062972307,
+          "d1_gap": -0.043147208121827374,
+          "test_month": "2026-07",
+          "profile": "QUANTITY",
+          "pool": "ultra",
+          "exit": "H2"
+        }
+      ]
+    }
+  }
+}

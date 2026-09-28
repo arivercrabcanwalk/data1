@@ -1,0 +1,51 @@
+name: first-buy-v13-meta-walkforward
+
+on:
+  push:
+    branches:
+      - research/first-buy-v13-two-stage-20260928
+    paths:
+      - 'backtest/first_buy_v13_walkforward.py'
+      - 'backtest/first_buy_v13_meta_walkforward.py'
+      - 'backtest/v13_meta/**'
+      - '.github/workflows/first-buy-v13-meta.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v13_walkforward.py
+          python -m py_compile backtest/first_buy_v13_meta_walkforward.py
+      - name: Run metadata-aware V13
+        run: cd backtest && python first_buy_v13_meta_walkforward.py
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v13-meta-results
+          path: backtest/results_first_buy_v13_meta/
+      - name: Persist result snapshot to research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backtest/results_first_buy_v13_meta/
+          if git diff --cached --quiet; then
+            echo "No result changes"
+          else
+            git commit -m "Persist V13 metadata walk-forward results [skip ci]"
+            git push
+          fi
