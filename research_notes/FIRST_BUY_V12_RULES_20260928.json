@@ -1,0 +1,140 @@
+{
+  "version": "V12_RESEARCH_CANDIDATE",
+  "scope": "first_buy_only",
+  "forbidden_logic": [
+    "R50",
+    "second_buy",
+    "lifecycle",
+    "secondary_break",
+    "D+2_old_event_reuse"
+  ],
+  "data_semantics": {
+    "recompute_limit_up": true,
+    "rebuild_streak": true,
+    "first_break_prior_streak_min": 4,
+    "core_age_max_sessions_mainline": 8
+  },
+  "lanes": {
+    "HIGH_GAP_HEIGHT_5PLUS": {
+      "status": "candidate",
+      "prior_streak_min": 5,
+      "market_height_gap_max": 1,
+      "event_ret_min": 0,
+      "close_vwap_min": 0.98,
+      "close_loc_min": 0.35,
+      "d1_gap": [
+        0.08,
+        0.102
+      ],
+      "d1_must_be_tradable": true
+    },
+    "HIGH_GAP_THEME_4": {
+      "status": "candidate",
+      "prior_streak_exact": 4,
+      "prior_theme_leader_or_rank1": true,
+      "event_touch_upper": true,
+      "strict_explosion": true,
+      "event_ret_min": 0,
+      "close_vwap_min": 0.98,
+      "d1_gap": [
+        0.08,
+        0.102
+      ],
+      "d1_must_be_tradable": true
+    },
+    "SUPER_HIGH_ABSORPTION": {
+      "status": "experimental_half_size",
+      "prior_streak_min": 8,
+      "market_height_gap_max": 1,
+      "event_ret_min": -0.02,
+      "close_loc_min": 0.8,
+      "close_vwap_min": 1.02,
+      "d1_gap": [
+        -0.03,
+        0.08
+      ]
+    },
+    "PANIC_REPAIR_5PLUS": {
+      "status": "experimental_half_size",
+      "prior_streak_min": 5,
+      "market_height_gap_max": 1,
+      "event_ret_min": 0.03,
+      "close_loc_min": 0.6,
+      "close_vwap_min": 0.98,
+      "d1_gap": [
+        -0.102,
+        -0.04
+      ],
+      "open_buy": false,
+      "reclaim_event_close_within_minutes": 60
+    },
+    "TRUE_RED_6_7_HEIGHT_OVERRIDE": {
+      "status": "experimental_half_size",
+      "prior_streak": [
+        6,
+        7
+      ],
+      "market_height_gap_max": 1,
+      "strict_explosion": true,
+      "event_ret": [
+        -0.08,
+        0
+      ],
+      "event_ret_max_exclusive": true,
+      "close_vwap_min": 0.95,
+      "d1_gap": [
+        0,
+        0.08
+      ]
+    },
+    "QUALIFIED_PROBE_ADD": {
+      "status": "position_upgrade_only",
+      "generates_new_candidate": false,
+      "requires_v11_qualified_probe": true,
+      "d1_gap": [
+        -0.02,
+        0
+      ],
+      "d1_gap_max_exclusive": true,
+      "event_ret_min": 0,
+      "reclaim_event_close_within_minutes": 60
+    }
+  },
+  "rejected": {
+    "broad_price_height_expansion": {
+      "trades": 29,
+      "h3_win_rate": 0.551724,
+      "h3_mean": 0.029292,
+      "h3_worst": -0.168707
+    }
+  },
+  "cases": {
+    "high_gap_002827": {
+      "event": "2026-08-05",
+      "h3": 0.21915,
+      "h5": 0.25271
+    },
+    "super_high_603221": {
+      "event": "2026-08-07",
+      "h3": 0.15696,
+      "h5": 0.10297
+    },
+    "panic_600664": {
+      "event": "2026-07-17",
+      "reclaim": "2026-07-20 09:53",
+      "h3": 0.12195,
+      "h5": 0.01313
+    },
+    "true_red_002297": {
+      "event": "2026-04-21",
+      "h3": 0.16754,
+      "h5": 0.1822
+    },
+    "probe_add_002552": {
+      "event": "2026-05-13",
+      "reclaim": "2026-05-14 10:02",
+      "h3": 0.01464,
+      "h5": 0.07379
+    }
+  }
+}

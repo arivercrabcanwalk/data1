@@ -1,0 +1,62 @@
+name: first-buy-v16-lifecycle
+# sync: lifecycle backtest trigger
+
+on:
+  push:
+    branches:
+      - research/first-buy-v16-lifecycle-20260928
+    paths:
+      - 'backtest/first_buy_v16_lifecycle.py'
+      - 'backtest/first_buy_v16_robust_cv.py'
+      - '.github/workflows/first-buy-v16-lifecycle.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backtest/first_buy_v16_lifecycle.py'
+      - 'backtest/first_buy_v16_robust_cv.py'
+      - '.github/workflows/first-buy-v16-lifecycle.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pandas numpy pyarrow scikit-learn
+      - name: Syntax checks
+        run: |
+          python -m py_compile backtest/first_buy_v16_lifecycle.py
+          python -m py_compile backtest/first_buy_v16_robust_cv.py
+      - name: Run V16 lifecycle research
+        run: cd backtest && python first_buy_v16_lifecycle.py
+      - name: Run V16 lifecycle robust CV
+        run: cd backtest && python first_buy_v16_robust_cv.py
+      - name: Upload V16 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-buy-v16-results
+          path: |
+            backtest/results_first_buy_v16/
+            backtest/results_first_buy_v16_cv/
+      - name: Persist V16 audit snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backtest/results_first_buy_v16/ backtest/results_first_buy_v16_cv/
+          if git diff --cached --quiet; then
+            echo "No result changes"
+          else
+            git commit -m "Persist V16 lifecycle results [skip ci]"
+            git push
+          fi
