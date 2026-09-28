@@ -171,7 +171,20 @@
   },
   {
     "issue": 107,
-    "pending": true
+    "code": "603137",
+    "date": "2026-07-10",
+    "name": "恒尚节能",
+    "sector_rank": 1,
+    "sector_n": 108,
+    "sector_lu3": 30,
+    "leader": true,
+    "prior_leader": false,
+    "prior_sector_rank": 2,
+    "prior_sector_lu3": 33,
+    "shock_base": false,
+    "theme_primary": "半导体",
+    "bridge_ret20": 1.076863354037267,
+    "bridge_prior_ret20": 0.9905213270142179
   },
   {
     "issue": 108,
