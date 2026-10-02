@@ -1,0 +1,57 @@
+{
+  "status": "FROZEN_BEFORE_NEXT_UNSEEN_SESSION",
+  "data_through": "2026-09-30",
+  "latest_day1_date": "2026-09-30",
+  "no_retroactive_rule_change_after_next_session_seen": true,
+  "core_and_temporally_confirmed_buy_lanes": [
+    "CORE_RED_4P_REPAIR45",
+    "PANIC_3_LIQ_RECLAIM45",
+    "POS_4P_VOLUME_RECLAIM35"
+  ],
+  "observation_only_lanes": [
+    "B3_NORMAL_DEEP_IMPULSE3",
+    "B4P_PANIC_DEEP_IMPULSE5",
+    "B3_NORMAL_FLUSH_REBOUND2",
+    "POS_4P_DEEP_ABSORBED_OPEN"
+  ],
+  "latest_watchlist": [
+    {
+      "date": "2026-09-30",
+      "code": "002912",
+      "name": "中新赛克",
+      "event_id": "002912_20260930_g1",
+      "event_type": "RECYCLE_2PLUS",
+      "generation": 1,
+      "prior_streak": 2,
+      "branch": "PANIC",
+      "d1_quality": "WEAK",
+      "bucket": "R2",
+      "day1_ret": -0.08653846153846156,
+      "day1_gap": -0.01888736263736268,
+      "vol_prev": 1.2582856478088962,
+      "amount": 951601967.21,
+      "plan": "OBSERVE_ONLY",
+      "tier": "LIFECYCLE",
+      "why": "R2 remains in the 30-day lifecycle but is not a V18 buy lane."
+    },
+    {
+      "date": "2026-09-30",
+      "code": "603949",
+      "name": "雪龙集团",
+      "event_id": "603949_20260930_g0",
+      "event_type": "PRIMARY_3PLUS",
+      "generation": 0,
+      "prior_streak": 4,
+      "branch": "PANIC",
+      "d1_quality": "WEAK",
+      "bucket": "B4P",
+      "day1_ret": -0.09975550122249388,
+      "day1_gap": 0.0004889975550121939,
+      "vol_prev": 8.169956448660031,
+      "amount": 550760191.0,
+      "plan": "WATCH_SMALL_N_B4P_PANIC_DEEP_IMPULSE5",
+      "tier": "SMALL_N_RESEARCH",
+      "why": "Only if D2 gaps <=-3% and five completed minutes gain >=3% from open while above cumulative VWAP; fill minute-6 open."
+    }
+  ]
+}
