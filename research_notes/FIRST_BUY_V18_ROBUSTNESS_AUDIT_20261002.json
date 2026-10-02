@@ -1,0 +1,285 @@
+{
+  "status": "ANTI_OVERFIT_AUDIT",
+  "principle": "A strong Jan-Jun score is insufficient. Jul-Sep temporal behavior and threshold neighborhoods are used to reject fragile expansions.",
+  "rejected": {
+    "NORMAL_B4P_HOLD1_GENERIC": {
+      "metrics": {
+        "train_jan_jun": {
+          "n": 8,
+          "win_rate": 1.0,
+          "mean": 0.08221522173620144,
+          "median": 0.07641668679507906,
+          "bad3": 0.0,
+          "worst": 0.013747368421052602
+        },
+        "pseudo_oos_jul_sep": {
+          "n": 4,
+          "win_rate": 0.75,
+          "mean": 0.035837944683738784,
+          "median": 0.04840535431818781,
+          "bad3": 0.25,
+          "worst": -0.11755026848409757
+        }
+      },
+      "reason": "Train was perfect, but Jul-Sep contains a -11.76% loss. Five-minute repair remains safer."
+    },
+    "PANIC_B3_RECLAIM_D2_GAP_0_3": {
+      "metrics": {
+        "train_jan_jun": {
+          "n": 7,
+          "win_rate": 0.8571428571428571,
+          "mean": 0.07478009817680657,
+          "median": 0.06996339869281042,
+          "bad3": 0.0,
+          "worst": -0.026351586368977626
+        },
+        "pseudo_oos_jul_sep": {
+          "n": 2,
+          "win_rate": 0.0,
+          "mean": -0.06698581090656126,
+          "median": -0.06698581090656126,
+          "bad3": 1.0,
+          "worst": -0.08578608058608063
+        }
+      },
+      "reason": "Strong Jan-Jun pattern reverses in Jul-Sep; rejected for regime instability."
+    },
+    "NORMAL_B4P_HOLD1_AMOUNT_FILTER": {
+      "neighborhood": [
+        {
+          "amount_min": 500000000.0,
+          "train_jan_jun": {
+            "n": 8,
+            "win_rate": 1.0,
+            "mean": 0.08221522173620144,
+            "median": 0.07641668679507906,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 4,
+            "win_rate": 0.75,
+            "mean": 0.035837944683738784,
+            "median": 0.04840535431818781,
+            "bad3": 0.25,
+            "worst": -0.11755026848409757
+          }
+        },
+        {
+          "amount_min": 750000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 4,
+            "win_rate": 0.75,
+            "mean": 0.035837944683738784,
+            "median": 0.04840535431818781,
+            "bad3": 0.25,
+            "worst": -0.11755026848409757
+          }
+        },
+        {
+          "amount_min": 800000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 4,
+            "win_rate": 0.75,
+            "mean": 0.035837944683738784,
+            "median": 0.04840535431818781,
+            "bad3": 0.25,
+            "worst": -0.11755026848409757
+          }
+        },
+        {
+          "amount_min": 900000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 4,
+            "win_rate": 0.75,
+            "mean": 0.035837944683738784,
+            "median": 0.04840535431818781,
+            "bad3": 0.25,
+            "worst": -0.11755026848409757
+          }
+        },
+        {
+          "amount_min": 950000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 4,
+            "win_rate": 0.75,
+            "mean": 0.035837944683738784,
+            "median": 0.04840535431818781,
+            "bad3": 0.25,
+            "worst": -0.11755026848409757
+          }
+        },
+        {
+          "amount_min": 1000000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 3,
+            "win_rate": 1.0,
+            "mean": 0.08696734907301756,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.027313181019331983
+          }
+        },
+        {
+          "amount_min": 1050000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 3,
+            "win_rate": 1.0,
+            "mean": 0.08696734907301756,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.027313181019331983
+          }
+        },
+        {
+          "amount_min": 1100000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 3,
+            "win_rate": 1.0,
+            "mean": 0.08696734907301756,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.027313181019331983
+          }
+        },
+        {
+          "amount_min": 1200000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 3,
+            "win_rate": 1.0,
+            "mean": 0.08696734907301756,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.027313181019331983
+          }
+        },
+        {
+          "amount_min": 1500000000.0,
+          "train_jan_jun": {
+            "n": 7,
+            "win_rate": 1.0,
+            "mean": 0.08677308140113985,
+            "median": 0.10252316950852546,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 1,
+            "win_rate": 1.0,
+            "mean": 0.06949752761704363,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.06949752761704363
+          }
+        },
+        {
+          "amount_min": 2000000000.0,
+          "train_jan_jun": {
+            "n": 6,
+            "win_rate": 1.0,
+            "mean": 0.07013592682313324,
+            "median": 0.06685109406052324,
+            "bad3": 0.0,
+            "worst": 0.013747368421052602
+          },
+          "pseudo_oos_jul_sep": {
+            "n": 1,
+            "win_rate": 1.0,
+            "mean": 0.06949752761704363,
+            "median": 0.06949752761704363,
+            "bad3": 0.0,
+            "worst": 0.06949752761704363
+          }
+        }
+      ],
+      "reason": "The apparently perfect >=1.0bn result is threshold-fragile: a Jul-Sep loser has Day1 amount ~0.997bn, so 0.95bn includes it while 1.0bn excludes it. Not promoted."
+    }
+  },
+  "accepted_experimental_reference": {
+    "POS_4P_VOLUME_RECLAIM35": {
+      "metrics": {
+        "train_jan_jun": {
+          "n": 7,
+          "win_rate": 0.5714285714285714,
+          "mean": 0.030168693098859084,
+          "median": 0.018956601416076562,
+          "bad3": 0.2857142857142857,
+          "worst": -0.04931764705882348
+        },
+        "pseudo_oos_jul_sep": {
+          "n": 4,
+          "win_rate": 1.0,
+          "mean": 0.056605171513832694,
+          "median": 0.06026426062963429,
+          "bad3": 0.0,
+          "worst": 0.00614020618556697
+        }
+      },
+      "reason": "Kept only as temporally-confirmed experimental; neighborhood in v18_summary tests nearby volume/gap/time cutoffs."
+    }
+  }
+}
