@@ -1,0 +1,59 @@
+{
+  "status": "V19_FROZEN_BEFORE_NEXT_UNSEEN_SESSION",
+  "data_through": "2026-09-30",
+  "no_retroactive_changes_after_next_session_seen": true,
+  "b4p_panic_timing_tree": [
+    {
+      "priority": 1,
+      "lane": "B4P_PANIC_CAPITULATION_OPEN",
+      "tier": "TEMPORALLY_CONFIRMED_EXPERIMENTAL",
+      "condition": "Day1 branch=PANIC, bucket=B4P, Day1 close/VWAP <= 0.965",
+      "entry": "Day2 opening match"
+    },
+    {
+      "priority": 2,
+      "lane": "B4P_PANIC_DEEP_IMPULSE5",
+      "tier": "SMALL_N_RESEARCH",
+      "condition": "not open lane; Day2 gap <= -3%; minute-5 close/open >= +3%; minute-5 close >= cumulative VWAP",
+      "entry": "minute-6 open"
+    }
+  ],
+  "latest_watchlist": [
+    {
+      "date": "2026-09-30",
+      "code": "002912",
+      "name": "中新赛克",
+      "event_id": "002912_20260930_g1",
+      "prior_streak": 2,
+      "branch": "PANIC",
+      "bucket": "R2",
+      "d1_quality": "WEAK",
+      "day1_ret": -0.08653846153846156,
+      "day1_gap": -0.01888736263736268,
+      "day1_close_vwap": 0.9759572655392053,
+      "day1_vol_prev": 1.2582856478088962,
+      "day1_amount": 951601967.21,
+      "plan": "OBSERVE_ONLY",
+      "tier": "LIFECYCLE",
+      "why": "R2 remains observation-only."
+    },
+    {
+      "date": "2026-09-30",
+      "code": "603949",
+      "name": "雪龙集团",
+      "event_id": "603949_20260930_g0",
+      "prior_streak": 4,
+      "branch": "PANIC",
+      "bucket": "B4P",
+      "d1_quality": "WEAK",
+      "day1_ret": -0.09975550122249388,
+      "day1_gap": 0.0004889975550121939,
+      "day1_close_vwap": 0.9615346192659012,
+      "day1_vol_prev": 8.169956448660031,
+      "day1_amount": 550760191.0,
+      "plan": "WATCH_V19_OPEN_CAPITULATION",
+      "tier": "TEMPORALLY_CONFIRMED_EXPERIMENTAL",
+      "why": "Day1 close/VWAP <= 0.965. V19 experimental rule enters at Day2 opening match; no 1m/3m/5m confirmation."
+    }
+  ]
+}
