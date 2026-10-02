@@ -1,0 +1,422 @@
+{
+  "status": "RESEARCH_CANDIDATE_NOT_PROMOTED",
+  "warning": "All V17 lane statistics are retrospective research; lane discovery used 2026 history and is not a true future win rate.",
+  "cost_assumption_round_trip": 0.0052,
+  "tiers": {
+    "CORE": "Two lanes with meaningful early-history support: 4+ normal-red five-minute repair and liquid 3-board panic reclaim.",
+    "EXPERIMENTAL": "Useful structural lanes retained for further unseen validation; smaller or less stable evidence."
+  },
+  "rules": [
+    {
+      "lane": "CORE_RED_4P_REPAIR45",
+      "tier": "CORE",
+      "day1": "NORMAL_RED",
+      "height": "4+",
+      "day2": "5 consecutive completed minutes with close >= Day1 close, D2 open, cumulative VWAP; signal must complete by 09:45; enter next minute open"
+    },
+    {
+      "lane": "PANIC_3_LIQ_RECLAIM45",
+      "tier": "CORE",
+      "day1": "PANIC",
+      "height": "3",
+      "extra": "Day1 amount >= 1bn",
+      "day2": "first completed reclaim of Day1 close, D2 open and cumulative VWAP by 09:45; enter next minute open"
+    },
+    {
+      "lane": "TOUCH_3_REPAIR45",
+      "tier": "EXPERIMENTAL",
+      "day1": "TOUCH_BREAK",
+      "height": "3",
+      "day2": "3 consecutive repaired minutes by 09:45; enter next minute open"
+    },
+    {
+      "lane": "POS_4P_ABS_RECLAIM",
+      "tier": "EXPERIMENTAL",
+      "day1": "POSITIVE_BREAK + ABSORBED",
+      "height": "4+",
+      "day2": "first completed reclaim through 10:00; enter next minute open"
+    },
+    {
+      "lane": "FAILED_3_RECLAIM",
+      "tier": "EXPERIMENTAL",
+      "day1": "FAILED_OPEN",
+      "height": "3",
+      "day2": "first completed reclaim through 10:00; enter next minute open"
+    }
+  ],
+  "explicit_pass": [
+    "R2 recycle stays in 30-day observation lifecycle but is not a V17 buy lane",
+    "generic 3-board normal-red is not promoted",
+    "generic positive-break is not promoted",
+    "generic repair without Day1 branch and height context is not promoted"
+  ],
+  "metrics": {
+    "all": {
+      "trades": 45,
+      "win_rate": 0.7333333333333333,
+      "mean": 0.04456902512321809,
+      "median": 0.03460699638118202,
+      "worst": -0.07453083009253038,
+      "bad3": 0.08888888888888889,
+      "sum": 2.005606130544814
+    },
+    "core": {
+      "trades": 19,
+      "win_rate": 0.7894736842105263,
+      "mean": 0.0620234742257937,
+      "median": 0.057755254942768106,
+      "worst": -0.026351586368977626,
+      "bad3": 0.0,
+      "sum": 1.1784460102900802
+    },
+    "experimental": {
+      "trades": 26,
+      "win_rate": 0.6923076923076923,
+      "mean": 0.03181385077902822,
+      "median": 0.024164318394656808,
+      "worst": -0.07453083009253038,
+      "bad3": 0.15384615384615385,
+      "sum": 0.8271601202547337
+    },
+    "double_cost": {
+      "trades": 45,
+      "win_rate": 0.7333333333333333,
+      "mean": 0.0393690251232181,
+      "median": 0.029406996381182018,
+      "worst": -0.07973083009253037,
+      "bad3": 0.1111111111111111,
+      "sum": 1.7716061305448143
+    },
+    "top_profit_codes": [
+      "000601",
+      "603989"
+    ],
+    "drop_top1": {
+      "trades": 44,
+      "win_rate": 0.7272727272727273,
+      "mean": 0.04169121721819357,
+      "median": 0.031090693312542314,
+      "worst": -0.07453083009253038,
+      "bad3": 0.09090909090909091,
+      "sum": 1.834413557600517
+    },
+    "drop_top2": {
+      "trades": 43,
+      "win_rate": 0.7209302325581395,
+      "mean": 0.03883404254965901,
+      "median": 0.027574390243902607,
+      "worst": -0.07453083009253038,
+      "bad3": 0.09302325581395349,
+      "sum": 1.6698638296353376
+    },
+    "by_month": {
+      "2026-01": {
+        "trades": 1,
+        "win_rate": 1.0,
+        "mean": 0.1295869177403369,
+        "median": 0.1295869177403369,
+        "worst": 0.1295869177403369,
+        "bad3": 0.0,
+        "sum": 0.1295869177403369
+      },
+      "2026-02": {
+        "trades": 3,
+        "win_rate": 0.3333333333333333,
+        "mean": 0.015805146254723904,
+        "median": -0.0014640099626398624,
+        "worst": -0.018257671381936808,
+        "bad3": 0.0,
+        "sum": 0.04741543876417171
+      },
+      "2026-03": {
+        "trades": 5,
+        "win_rate": 0.6,
+        "mean": 0.033087635996965174,
+        "median": 0.023184279475982544,
+        "worst": -0.0475048869438366,
+        "bad3": 0.2,
+        "sum": 0.16543817998482588
+      },
+      "2026-04": {
+        "trades": 6,
+        "win_rate": 0.6666666666666666,
+        "mean": 0.02702444451124778,
+        "median": 0.02635937377861684,
+        "worst": -0.019476002719238678,
+        "bad3": 0.0,
+        "sum": 0.16214666706748668
+      },
+      "2026-05": {
+        "trades": 6,
+        "win_rate": 0.6666666666666666,
+        "mean": 0.017212290141264203,
+        "median": 0.04021592732273237,
+        "worst": -0.07453083009253038,
+        "bad3": 0.16666666666666666,
+        "sum": 0.10327374084758523
+      },
+      "2026-06": {
+        "trades": 8,
+        "win_rate": 0.75,
+        "mean": 0.044904054332918754,
+        "median": 0.01704779223346196,
+        "worst": -0.022535214674460752,
+        "bad3": 0.0,
+        "sum": 0.35923243466335003
+      },
+      "2026-07": {
+        "trades": 3,
+        "win_rate": 0.6666666666666666,
+        "mean": 0.02145659228682875,
+        "median": 0.01006717557251911,
+        "worst": -0.03618220171390908,
+        "bad3": 0.3333333333333333,
+        "sum": 0.06436977686048624
+      },
+      "2026-08": {
+        "trades": 9,
+        "win_rate": 0.8888888888888888,
+        "mean": 0.07514064292857368,
+        "median": 0.10010612244897953,
+        "worst": -0.05923458213256484,
+        "bad3": 0.1111111111111111,
+        "sum": 0.6762657863571632
+      },
+      "2026-09": {
+        "trades": 4,
+        "win_rate": 1.0,
+        "mean": 0.07446929706485203,
+        "median": 0.07875360677663167,
+        "worst": 0.012107692307692246,
+        "bad3": 0.0,
+        "sum": 0.2978771882594081
+      }
+    },
+    "by_lane": {
+      "CORE_RED_4P_REPAIR45": {
+        "trades": 11,
+        "win_rate": 0.8181818181818182,
+        "mean": 0.06724606123249156,
+        "median": 0.06713712010874838,
+        "worst": -0.0027450081833061586,
+        "bad3": 0.0,
+        "sum": 0.7397066735574072
+      },
+      "FAILED_3_RECLAIM": {
+        "trades": 5,
+        "win_rate": 0.8,
+        "mean": 0.03779313295423936,
+        "median": 0.01006717557251911,
+        "worst": -0.010255611729019249,
+        "bad3": 0.0,
+        "sum": 0.1889656647711968
+      },
+      "PANIC_3_LIQ_RECLAIM45": {
+        "trades": 8,
+        "win_rate": 0.75,
+        "mean": 0.054842417091584154,
+        "median": 0.05102495984467202,
+        "worst": -0.026351586368977626,
+        "bad3": 0.0,
+        "sum": 0.43873933673267324
+      },
+      "POS_4P_ABS_RECLAIM": {
+        "trades": 15,
+        "win_rate": 0.6,
+        "mean": 0.02475622564971562,
+        "median": 0.023184279475982544,
+        "worst": -0.07453083009253038,
+        "bad3": 0.2,
+        "sum": 0.3713433847457343
+      },
+      "TOUCH_3_REPAIR45": {
+        "trades": 6,
+        "win_rate": 0.8333333333333334,
+        "mean": 0.04447517845630045,
+        "median": 0.02706890377474423,
+        "worst": -0.03618220171390908,
+        "bad3": 0.16666666666666666,
+        "sum": 0.26685107073780273
+      }
+    },
+    "prefix": {
+      "2026-04": {
+        "trades": 15,
+        "win_rate": 0.6,
+        "mean": 0.03363914690378809,
+        "median": 0.025144357313331072,
+        "worst": -0.0475048869438366,
+        "bad3": 0.06666666666666667,
+        "sum": 0.5045872035568213
+      },
+      "2026-06": {
+        "trades": 29,
+        "win_rate": 0.6551724137931034,
+        "mean": 0.033348047554060574,
+        "median": 0.025144357313331072,
+        "worst": -0.07453083009253038,
+        "bad3": 0.06896551724137931,
+        "sum": 0.9670933790677566
+      },
+      "2026-07": {
+        "trades": 32,
+        "win_rate": 0.65625,
+        "mean": 0.03223322362275759,
+        "median": 0.024164318394656808,
+        "worst": -0.07453083009253038,
+        "bad3": 0.09375,
+        "sum": 1.0314631559282428
+      },
+      "2026-08": {
+        "trades": 41,
+        "win_rate": 0.7073170731707317,
+        "mean": 0.041651925421595265,
+        "median": 0.027574390243902607,
+        "worst": -0.07453083009253038,
+        "bad3": 0.0975609756097561,
+        "sum": 1.7077289422854058
+      },
+      "2026-09": {
+        "trades": 45,
+        "win_rate": 0.7333333333333333,
+        "mean": 0.04456902512321809,
+        "median": 0.03460699638118202,
+        "worst": -0.07453083009253038,
+        "bad3": 0.08888888888888889,
+        "sum": 2.005606130544814
+      }
+    },
+    "late": {
+      "2026-05": {
+        "trades": 30,
+        "win_rate": 0.8,
+        "mean": 0.050033964232933076,
+        "median": 0.054113143582806486,
+        "worst": -0.07453083009253038,
+        "bad3": 0.1,
+        "sum": 1.5010189269879923
+      },
+      "2026-07": {
+        "trades": 16,
+        "win_rate": 0.875,
+        "mean": 0.06490704696731608,
+        "median": 0.0785886985992491,
+        "worst": -0.05923458213256484,
+        "bad3": 0.125,
+        "sum": 1.0385127514770573
+      },
+      "2026-08": {
+        "trades": 13,
+        "win_rate": 0.9230769230769231,
+        "mean": 0.0749340749705055,
+        "median": 0.09975195861049523,
+        "worst": -0.05923458213256484,
+        "bad3": 0.07692307692307693,
+        "sum": 0.9741429746165714
+      }
+    }
+  },
+  "neighborhood": [
+    {
+      "panic_amount": 800000000.0,
+      "repair_cut": "09:40",
+      "trades": 43,
+      "win_rate": 0.7209302325581395,
+      "mean": 0.04166517686945393,
+      "median": 0.027574390243902607,
+      "worst": -0.08578608058608063,
+      "bad3": 0.09302325581395349,
+      "sum": 1.791602605386519
+    },
+    {
+      "panic_amount": 800000000.0,
+      "repair_cut": "09:45",
+      "trades": 48,
+      "win_rate": 0.7291666666666666,
+      "mean": 0.0471413546207382,
+      "median": 0.04021592732273237,
+      "worst": -0.08578608058608063,
+      "bad3": 0.10416666666666667,
+      "sum": 2.2627850217954335
+    },
+    {
+      "panic_amount": 800000000.0,
+      "repair_cut": "09:50",
+      "trades": 49,
+      "win_rate": 0.7142857142857143,
+      "mean": 0.044720966389464836,
+      "median": 0.03460699638118202,
+      "worst": -0.08578608058608063,
+      "bad3": 0.12244897959183673,
+      "sum": 2.191327353083777
+    },
+    {
+      "panic_amount": 1000000000.0,
+      "repair_cut": "09:40",
+      "trades": 41,
+      "win_rate": 0.7317073170731707,
+      "mean": 0.04161975672982859,
+      "median": 0.027574390243902607,
+      "worst": -0.07453083009253038,
+      "bad3": 0.07317073170731707,
+      "sum": 1.7064100259229722
+    },
+    {
+      "panic_amount": 1000000000.0,
+      "repair_cut": "09:45",
+      "trades": 45,
+      "win_rate": 0.7333333333333333,
+      "mean": 0.04456902512321809,
+      "median": 0.03460699638118202,
+      "worst": -0.07453083009253038,
+      "bad3": 0.08888888888888889,
+      "sum": 2.005606130544814
+    },
+    {
+      "panic_amount": 1000000000.0,
+      "repair_cut": "09:50",
+      "trades": 46,
+      "win_rate": 0.717391304347826,
+      "mean": 0.04204670569202516,
+      "median": 0.031090693312542314,
+      "worst": -0.07453083009253038,
+      "bad3": 0.10869565217391304,
+      "sum": 1.9341484618331575
+    },
+    {
+      "panic_amount": 1200000000.0,
+      "repair_cut": "09:40",
+      "trades": 41,
+      "win_rate": 0.7317073170731707,
+      "mean": 0.04161975672982859,
+      "median": 0.027574390243902607,
+      "worst": -0.07453083009253038,
+      "bad3": 0.07317073170731707,
+      "sum": 1.7064100259229722
+    },
+    {
+      "panic_amount": 1200000000.0,
+      "repair_cut": "09:45",
+      "trades": 45,
+      "win_rate": 0.7333333333333333,
+      "mean": 0.04456902512321809,
+      "median": 0.03460699638118202,
+      "worst": -0.07453083009253038,
+      "bad3": 0.08888888888888889,
+      "sum": 2.005606130544814
+    },
+    {
+      "panic_amount": 1200000000.0,
+      "repair_cut": "09:50",
+      "trades": 46,
+      "win_rate": 0.717391304347826,
+      "mean": 0.04204670569202516,
+      "median": 0.031090693312542314,
+      "worst": -0.07453083009253038,
+      "bad3": 0.10869565217391304,
+      "sum": 1.9341484618331575
+    }
+  ]
+}
+
+[executed on device: zhanghaodeMacBook-Air-3.local (656495e0-4b4b-466c-a782-26cb2f66ad3e)]
