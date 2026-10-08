@@ -1,0 +1,11 @@
+[Unit]
+Description=龙头一买 09:25 Preopen boot (market-calendar filtered)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 09:25:00
+AccuracySec=5s
+Persistent=false
+Unit=longtou-yimai-live.service
+
+[Install]
+WantedBy=timers.target
