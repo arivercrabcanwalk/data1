@@ -1,0 +1,30 @@
+{
+  "status": "CAUSAL_ENGINE_HISTORICAL_QA_NOT_FORWARD",
+  "eligible_historical_events": 209,
+  "historical_v21_n": 52,
+  "strict_matched": 52,
+  "strict_selected": 52,
+  "missing": [],
+  "new": [],
+  "entry_mismatches": [
+    {
+      "event_id": "603989_20260623_g0",
+      "code": "603989",
+      "name": "艾华集团",
+      "lane": "NORMAL_B4P_LIQUID_M3",
+      "v21_lane": "CORE_RED_4P_REPAIR45",
+      "entry_price": 43.88,
+      "v21_entry": 45.95
+    }
+  ],
+  "historical_replay_metrics": {
+    "n": 52,
+    "wins": 44,
+    "win_rate": 0.8461538461538461,
+    "avg": 0.07194500889678214,
+    "worst": -0.03685033911077619,
+    "sum": 3.7411404626326714
+  },
+  "no_future_engine": "V22_STRICT_PREFIX_SHADOW",
+  "note": "Previous same-sample fitted 52 historic events; not genuine unseen proof."
+}
