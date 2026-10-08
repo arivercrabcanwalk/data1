@@ -12,7 +12,8 @@ import pandas as pd
 import numpy as np
 
 ROOT=Path(__file__).resolve().parent
-STATE=ROOT/'state'
+DEDICATED_DATA=Path('/srv/longtou-yimai-data')
+STATE=DEDICATED_DATA/'state'
 SEED=ROOT/'seed'
 R50=Path('/opt/leader-relaunch-r50')
 sys.path.insert(0,str(R50))
@@ -55,17 +56,36 @@ def freeze_integrity():
     return c
 
 def fs_preflight():
-    # An ext4 mount displaying stale 'rw' is not evidence of block-device health.
-    # The device has to exist, and its root must be readable.
-    if not Path('/sys/block/vdb').exists() or not Path('/dev/vdb').is_block_device():
-        return False,'DATA_DEVICE_VDB_MISSING'
+    """Do not mistake the broken old /data mount or bare unformatted vdc for healthy storage."""
+    path=DEDICATED_DATA
+    if not path.is_dir() or not os.path.ismount(str(path)):
+        return False,'NEW_DATA_DISK_NOT_MOUNTED'
     try:
-        with os.scandir('/data') as entries:
-            for i,_ in enumerate(entries):
-                if i>=1:break
-        os.statvfs('/data')
-    except OSError as e:return False,'DATA_MOUNT_IO_FAILURE:'+type(e).__name__
-    return True,'DATA_DEVICE_PRESENT_AND_DIRECTORY_READABLE'
+        root_dev=os.stat('/').st_dev
+        disk_dev=path.stat().st_dev
+        if root_dev==disk_dev:return False,'STORAGE_ON_SYSTEM_DISK_NOT_DEDICATED'
+        mounted=subprocess.run(['findmnt','-n','-o','SOURCE,FSTYPE,OPTIONS','--target',str(path)],
+                               capture_output=True,text=True,timeout=3)
+        if mounted.returncode!=0:return False,'MOUNT_METADATA_UNAVAILABLE'
+        detail=mounted.stdout.strip().split()
+        if len(detail)<3 or detail[1]!='ext4':return False,'EXPECTED_EXT4_DEDICATED_MOUNT'
+        if 'rw' not in detail[2].split(','):return False,'DEDICATED_DISK_READ_ONLY'
+        free=os.statvfs(path)
+        available=int(free.f_bavail)*int(free.f_frsize)
+        if available < 3*1024**3:return False,'DEDICATED_DATA_DISK_LOW_SPACE'
+        directory=path/'health'
+        if not directory.is_dir():return False,'DEDICATED_HEALTH_DIRECTORY_MISSING'
+        test=directory/('check-'+str(os.getpid())+'.tmp')
+        raw=os.urandom(8192)
+        with test.open('xb') as f:
+            f.write(raw);f.flush();os.fsync(f.fileno())
+        if test.read_bytes()!=raw:return False,'DEDICATED_DISK_READBACK_MISMATCH'
+        test.unlink()
+        for name in ['daily','events','signals','delivery']:
+            if not (STATE/name).is_dir():return False,'DEDICATED_STATE_DIR_MISSING:'+name
+    except (OSError,ValueError,subprocess.TimeoutExpired) as e:
+        return False,'DEDICATED_DISK_IO_FAILURE:'+type(e).__name__
+    return True,'HEALTHY_INDEPENDENT_EXT4_DATA_DISK'
 
 def market_calendar():
     p=R50/'trade_calendar.json'
@@ -122,21 +142,25 @@ def today_live_quotes(m,day):
     return fresh,coverage,stale
 
 def realtime_pm(m,code,day):
+    """Precisely 121 session labels 13:00..15:00; exclude vendor after-hours padding."""
     src,z=m.minute_any(code)
     if str(src).replace('-','')!=day.replace('-',''):return None
-    if z.empty or not {'time','cum_volume','cum_amount','price'}.issubset(z.columns):
-        return None
+    if z.empty or not {'time','cum_volume','cum_amount','price'}.issubset(z.columns):return None
     if z.time.duplicated().any():return None
-    if '09:30' not in set(z.time) or '15:00' not in set(z.time):return None
     z=z.sort_values('time')
-    pm=z[z.time>='13:00'].copy()
-    if len(pm)<100:return None
+    if '09:30' not in set(z.time):return None
+    labels=[f'{13+i//60:02d}:{i%60:02d}' for i in range(121)]
+    pm=z[(z.time>='13:00')&(z.time<='15:00')].copy()
+    if pm.time.astype(str).tolist()!=labels:return None
     auction=z[z.time=='09:30'].iloc[-1]
     vol=pm.cum_volume.astype(float)-float(auction.cum_volume)
     amt=pm.cum_amount.astype(float)-float(auction.cum_amount)
     if (vol<=0).any() or (amt<=0).any():return None
+    if (pm.cum_volume.diff().fillna(0)<0).any() or (pm.cum_amount.diff().fillna(0)<-.01).any():return None
     vwap=amt/(vol*100.)
-    return float((pm.price.astype(float)>=vwap).mean())
+    prices=pm.price.astype(float)
+    if (vwap/prices <.75).any() or (vwap/prices>1.25).any():return None
+    return float((prices>=vwap).mean())
 
 def lifecycle_identity_at_day1(d, code, current_day):
     """Reconstruct V17 original FIRST/RECYCLE armed state from PAST bars only.
@@ -335,6 +359,18 @@ def postclose(c):
         qs,coverage,stale=today_live_quotes(market,day)
         daily,events,valid_coverage=classify(day,d,qs,market)
     finally:market.close()
+    # Independent Day1 identity and closes verified against a second live quote feed.
+    market2=Market(timeout=5)
+    try:
+        for r in events:
+            ref=market2.sina_quote(r['code'])
+            stamp=str(ref.server_time)
+            if not stamp.startswith(day.replace('-','')) or len(stamp)<12 or stamp[8:12]<'1455':
+                raise RuntimeError('DAY1_CROSS_SOURCE_STALE:'+r['code'])
+            if (abs(float(ref.price)/float(r['close'])-1)>.008 or
+                abs(float(ref.prev_close)/(float(r['close'])/(1+float(r['ret'])))-1)>.005):
+                raise RuntimeError('DAY1_CROSS_SOURCE_PRICE_MISMATCH:'+r['code'])
+    finally:market2.close()
     snapshot={'day':day,'source':'R50_TENCENT_CROSS_INFRA',
               'quote_coverage':coverage,'daily_coverage':valid_coverage,
               'quote_stale_count':stale,'captured_at':now.isoformat(),
@@ -362,6 +398,8 @@ def notify_signal(c,evt,plan,quote,when,market):
     # External independent quote protects against one-source data glitch.
     try:
         ref=market.sina_quote(evt['code'])
+        if quote_stamp(ref,signal_day,when) is None:
+            return 'REJECT_STALE_SECOND_SOURCE_QUOTE'
         price=float(ref.price);prev=float(ref.prev_close)
         if price<=0 or prev<=0 or abs(price/quote.price-1)>.008 or abs(prev/quote.prev_close-1)>.005:
             return 'REJECT_CROSS_SOURCE_MISMATCH'
