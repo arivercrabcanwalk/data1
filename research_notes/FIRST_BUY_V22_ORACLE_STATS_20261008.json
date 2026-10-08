@@ -1,0 +1,15 @@
+{
+  "status": "POSTHOC_DIAGNOSTIC_NOT_EXECUTABLE",
+  "date_end": "2026-09-30",
+  "selection_options": [
+    "OPEN",
+    "M2_OPEN",
+    "M4_OPEN",
+    "M6_OPEN"
+  ],
+  "events": 345,
+  "missed": 289,
+  "missed_gt10_oracle": 31,
+  "missed_gt5_oracle": 72,
+  "warning": "Maximum price-timed return for each missed event is obtained using future outcome. This is a deliberately unattainable oracle upper bound, not a causal policy."
+}
