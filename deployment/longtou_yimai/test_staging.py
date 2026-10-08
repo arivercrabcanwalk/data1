@@ -90,7 +90,7 @@ def notification_disabled_test():
          'date':'2026-10-08','branch':'NORMAL_RED','prior_streak':4}
     plan={'lane':'NORMAL_B4P_LIQUID_M3','signal_time':'09:33'}
     q=SimpleNamespace(price=9.70,prev_close=10.,server_time='20261009093312')
-    src=SimpleNamespace(sina_quote=lambda code: SimpleNamespace(price=9.70,prev_close=10.))
+    src=SimpleNamespace(sina_quote=lambda code: SimpleNamespace(price=9.70,prev_close=10.,server_time='20261009093312'))
     with tempfile.TemporaryDirectory(prefix='longtou_test_') as tmp:
         old=a.STATE;a.STATE=Path(tmp)
         try:
