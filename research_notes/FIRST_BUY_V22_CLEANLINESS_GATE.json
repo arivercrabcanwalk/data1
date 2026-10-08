@@ -1,0 +1,48 @@
+{
+  "asof": "2026-10-08",
+  "scope": "V22 strict 7 first-buy lanes and shadow 7 discovery lanes; no R2 first-buy",
+  "automated_monitoring": "PAUSED_MANUALLY_CONFIRMED_THROUGH_CHAT_AUTOMATION",
+  "verdict": "NOT_CERTIFIED_PREDICTIVE_QUALITY; HIGH_RESEARCH_SELECTION_BIAS",
+  "execution_causality_subcheck": "PASS_52_OF_52",
+  "point_in_time_day1_subcheck": "PASS_191_OF_191",
+  "future_field_firewall_subcheck": "PASS_52_OF_52",
+  "prior_exit_candidate_families_at_least": 973,
+  "genuine_out_of_sample_finished_trades": 0,
+  "minimum_remaining_known_gaps": [
+    "No independently untouched forward sample after the final October 8 freeze.",
+    "July-September repeatedly entered rule-selection pass/fail gates; it is pseudo-OOS only.",
+    "Causal entry signal code shares historical event tables containing future-label fields; current entry does not access them, but schema is not isolated.",
+    "Archived research panels drop events without observable T1 or minute entry data; missingness is systematic, and future T1 resets are excluded post-hoc.",
+    "Minute OPEN and closing proxies plus fixed 0.52% costs are not real executable orderbook fills.",
+    "Day2 entry snapshots may be produced after Day2 close; preregistered Day1 alone does not prove intraday signal delivery or fill.",
+    "Shadow seven lanes came from hindsight opportunities and lack independent validation.",
+    "Canonical topic label snapshots are not proven point-in-time (unused by the strictly audited entry fields)."
+  ],
+  "hold_main_version": "V21 historical archive / V22 strict version research-only, no auto forward process enabled",
+  "historical_baseline": {
+    "n": 52,
+    "wins": 44,
+    "win_rate": 0.8461538461538461,
+    "mean": 0.07088381843990328,
+    "strict_causal_replay_mean": 0.07194500889678214,
+    "win_wilson95_descriptive_only": [
+      0.7247565640845234,
+      0.9199241040911735
+    ]
+  },
+  "data_gaps": {
+    "missing_D2_open_minute_events": 63,
+    "eligible_D2_trade_event_pool": 408,
+    "candidate_day1_raw_minute_not_valid": 50
+  },
+  "evidence_files": [
+    "pit_coverage_report.json",
+    "day1_asof_checks.csv",
+    "strict_prefix_and_uncertainty.json",
+    "strict_52_prefix_checks.csv",
+    "strict_52_bar_feasibility.csv",
+    "feature_firewall_report.json",
+    "search_multiplicity_inventory.json",
+    "minute_data_quality.json"
+  ]
+}
