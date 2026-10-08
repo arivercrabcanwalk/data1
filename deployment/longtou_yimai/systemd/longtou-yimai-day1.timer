@@ -1,0 +1,11 @@
+[Unit]
+Description=龙头一买 15:12 Postclose Day1 snapshot (market-calendar filtered)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 15:12:00
+AccuracySec=10s
+Persistent=false
+Unit=longtou-yimai-day1.service
+
+[Install]
+WantedBy=timers.target
