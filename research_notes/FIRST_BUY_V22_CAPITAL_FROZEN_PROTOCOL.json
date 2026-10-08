@@ -1,0 +1,29 @@
+{
+  "config_hash": "66d5fa37b72041b68c328a54963695b29952481ef8874b4239a3554f115e4c41",
+  "engine_hash": "36cb2e059233761998c55c4451b78d39534c424aa6b452ba4d71646408791bcd",
+  "v21_historical_sha": "5f09088b4ac83482dac5e3510f454891c7a4f4f945415e3662b37f869bb4a562",
+  "registered_at": "2026-10-08T12:21:58.561473+08:00",
+  "config": {
+    "status": "SHADOW_ONLY_NO_LIVE_ORDERS",
+    "freeze": "2026-10-08",
+    "signal_source": "v21_forward_results/T1_closed.json ONLY; only Day1 preregistered before Day2 09:25",
+    "max_slots": [
+      1,
+      2,
+      3
+    ],
+    "position_notional": "min(available_cash, NAV_estimate/max_slots), skip if less than 50% target",
+    "selection_order": "first available executable Day2 clock; same-minute ticker sorted",
+    "buy_fee": 0.0026,
+    "sell_fee": 0.0026,
+    "slippage_stress_per_side": [
+      0,
+      0.001,
+      0.0026
+    ],
+    "no_short_borrowing": true,
+    "cash_interest": 0,
+    "daily_nav": "current cash plus mark of open shares at local raw daily close less liquidation fee",
+    "limitation": "Daily OHLC marks, no queue/bidask/orderbook; does not trade. Only closed cohorts are compared until pending fills resolve."
+  }
+}
