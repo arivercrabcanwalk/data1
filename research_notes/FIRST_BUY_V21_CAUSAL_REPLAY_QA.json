@@ -1,0 +1,23 @@
+{
+  "kind": "HISTORICAL_CAUSAL_REPLAY_QA_NOT_FORWARD",
+  "observed_at": "2026-10-08T11:54:47.264100+08:00",
+  "event_candidates": 210,
+  "signal_candidates": 52,
+  "pinned_trades": 52,
+  "missing_original": [],
+  "newly_detected": [],
+  "differing_entries": [
+    {
+      "event_id": "603989_20260623_g0",
+      "code": "603989",
+      "name": "艾华集团",
+      "chosen_lane": "NORMAL_B4P_LIQUID_M3",
+      "pinned_lane": "CORE_RED_4P_REPAIR45",
+      "chosen_entry": 43.88,
+      "pinned_entry": 45.95
+    }
+  ],
+  "completed_replay": 52,
+  "replay_win_rate": 0.8461538461538461,
+  "replay_mean": 0.07194500889678215
+}
