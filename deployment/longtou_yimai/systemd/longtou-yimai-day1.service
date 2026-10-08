@@ -1,0 +1,22 @@
+[Unit]
+Description=龙头一买 Day1 postclose universe and data-quality capture
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/longtou-yimai
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/home/ubuntu/longtou-yimai/private/feishu-route.env
+ExecStart=/opt/liangun/.venv/bin/python /home/ubuntu/longtou-yimai/longtou_runtime.py postclose
+TimeoutStartSec=240
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+UMask=0077
+MemoryMax=950M
+CPUQuota=65%
+StandardOutput=append:/home/ubuntu/longtou-yimai/logs/day1.log
+StandardError=append:/home/ubuntu/longtou-yimai/logs/day1.log
