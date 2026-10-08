@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-08T12:26:59.425665+08:00",
+  "sha256": "c1b8b05eff3bf8dfef125192fae3505f396dec8c5512e506c02fcb6140aa5046",
+  "engine_sha256": "758ab90f0905967ddb44f1b1bdb2a88d0010726064bf8d5ac7ee87e4e2f6776b",
+  "v21_baseline_sha256": "5f09088b4ac83482dac5e3510f454891c7a4f4f945415e3662b37f869bb4a562",
+  "rules": {
+    "version": "V22_SHADOW_STRICT_NO_FUTURE_V3",
+    "freeze_session": "2026-10-08",
+    "entry_priority": "Do not choose a winner across shadow lanes; log all independent rule triggers.",
+    "data_scope": "At M4 open use only first 3 completed minute bars plus M4 opening price; do not use M4 low or later bars.",
+    "shadow_execution": "Signal confirmed at the end of M3, next M4 open; default T1 close. Model costs 0.52% per full trip.",
+    "target": "All first-break high-visibility stocks after >=3 consecutive limit-ups. R2 only observe.",
+    "arms": {
+      "TOUCH_B3_REBOUND_M3": {
+        "branch": "TOUCH_BREAK",
+        "bucket": "B3",
+        "d2_gap_max": -0.04,
+        "m3_vs_d2_open_min": 0.02,
+        "m3_above_cvwap": true
+      },
+      "TOUCH_B4P_REBOUND_M3": {
+        "branch": "TOUCH_BREAK",
+        "bucket": "B4P",
+        "m3_vs_d2_open_min": 0.025,
+        "m3_above_cvwap": true
+      },
+      "POS_B4P_LEAD_M3": {
+        "branch": "POSITIVE_BREAK",
+        "bucket": "B4P",
+        "d1_ret_min": 0.05,
+        "d1_vol_prev_min": 1.5,
+        "m3_vs_d2_open_min": 0.0,
+        "m3_above_cvwap": true
+      },
+      "POS_B3_LIQ_M3": {
+        "branch": "POSITIVE_BREAK",
+        "bucket": "B3",
+        "d1_amount_min": 2000000000.0,
+        "m3_vs_d2_open_min": 0.015,
+        "m3_above_cvwap": true
+      },
+      "FAILED_B3_RECOVERY_M3": {
+        "branch": "FAILED_OPEN",
+        "bucket": "B3",
+        "m3_vs_d2_open_min": 0.025,
+        "m3_above_cvwap": true
+      },
+      "NORMAL_B3_GAP_IMPULSE_M3": {
+        "branch": "NORMAL_RED",
+        "bucket": "B3",
+        "d2_gap_max": -0.03,
+        "m3_vs_d2_open_min": 0.02,
+        "m3_above_cvwap": true
+      },
+      "PANIC_B4P_FAST_RECOVERY_M3": {
+        "branch": "PANIC",
+        "bucket": "B4P",
+        "d2_gap_max": -0.05,
+        "m3_vs_d2_open_min": 0.03,
+        "m3_above_cvwap": true
+      }
+    },
+    "status": "RESEARCH_SHADOW_NOT_PROMOTED",
+    "stopping_rule": "No threshold changes without a new independently registered version; first 10, 30, 50 pre-registered OOS trades reviewed."
+  }
+}
