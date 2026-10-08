@@ -82,6 +82,50 @@ def day1_priority_data_test():
     assert a.day1_priority_inputs_complete(normal)
     print('PM_PRIORITY_DATA_FAIL_CLOSED_TEST_OK')
 
+def next_session_readiness_test():
+    ts=lambda date:dt.datetime.fromisoformat(date).replace(tzinfo=TZ)
+    assert a.next_observation_session(ts('2026-10-08T16:40:00'))=='2026-10-09'
+    assert a.next_observation_session(ts('2026-10-09T09:20:00'))=='2026-10-09'
+    assert a.next_observation_session(ts('2026-10-09T15:55:00'))=='2026-10-12'
+    print('NEXT_TRADING_SESSION_READINESS_GATES_OK')
+
+def notification_mocked_armed_test():
+    import tempfile
+    from pathlib import Path
+    from unittest.mock import patch
+    evt={'event_id':'000678_20261008_g0','code':'000678','name':'合成提醒',
+         'date':'2026-10-08','branch':'NORMAL_RED','prior_streak':4}
+    plan={'lane':'NORMAL_B4P_LIQUID_M3','signal_time':'09:33'}
+    q=SimpleNamespace(price=9.70,prev_close=10.,server_time='20261009093312')
+    src=SimpleNamespace(sina_quote=lambda code:SimpleNamespace(
+       price=9.70,prev_close=10.,server_time='20261009093312'))
+    with tempfile.TemporaryDirectory(prefix='longtou_alert_test_') as tmp:
+        old=a.STATE;a.STATE=Path(tmp)
+        try:
+            class Success:
+                returncode=0
+            calls=[]
+            def mockrun(cmd,**kwargs):
+                calls.append(cmd)
+                return Success()
+            with patch.object(a.subprocess,'run',side_effect=mockrun):
+                with patch.dict(a.os.environ,{
+                    'OPENCLAW_MESSAGE_CHANNEL':'feishu',
+                    'OPENCLAW_MESSAGE_TARGET':'dummy_test_user'
+                }):
+                    outcome=a.notify_signal({'real_signals_armed':True},evt,plan,q,
+                             dt.datetime(2026,10,9,9,33,12,tzinfo=TZ),src)
+                    repeated=a.notify_signal({'real_signals_armed':True},evt,plan,q,
+                             dt.datetime(2026,10,9,9,33,20,tzinfo=TZ),src)
+            assert outcome=='FEISHU_SENT' and repeated=='ALREADY_RECORDED'
+            assert len(calls)==1
+            assert calls[0][:4]==['/usr/local/bin/openclaw','message','send','--channel']
+            import json
+            outcome_detail=json.loads((a.STATE/'delivery'/(evt['event_id']+'.json')).read_text())
+            assert outcome_detail['delivery_status']=='FEISHU_SENT'
+        finally:a.STATE=old
+    print('ARMED_FEISHU_MOCKED_DISPATCH_AND_EXACTLY_ONCE_OK no real network send')
+
 def notification_disabled_test():
     import tempfile
     from pathlib import Path
@@ -105,8 +149,66 @@ def notification_disabled_test():
         finally:a.STATE=old
     print('NOTIFICATION_DISABLED_AND_DEDUP_TEST_OK no external CLI called')
 
+def day1_daily_notification_mock_test():
+    import tempfile,json
+    from pathlib import Path
+    from unittest.mock import patch
+    ev1={'code':'000678','name':'襄阳轴承','date':'2026-10-08',
+         'prior_streak':4,'event_type':'PRIMARY_3PLUS',
+         'branch':'NORMAL_RED','bucket':'B4P','ret':-.05042668735453848,
+         'close':12.24,'d1_pm_above_ratio':0.0}
+    ev2={'code':'000011','name':'深物业A','date':'2026-10-08',
+         'prior_streak':3,'event_type':'PRIMARY_3PLUS',
+         'branch':'TOUCH_BREAK','bucket':'B3','ret':-.009803921568627527,
+         'close':12.12,'d1_pm_above_ratio':None}
+    snap={'day':'2026-10-08','captured_at':'2026-10-08T15:12:30+08:00',
+          'quote_coverage':.9602,'daily_coverage':.9933,'events':[ev2,ev1]}
+    msg=a.format_day1_daily_message(snap)
+    assert '襄阳轴承' in msg and '深物业A' in msg
+    assert '明日正式V22买点监测：1只' in msg
+    assert '仅记录观察' in msg
+    assert 'Day1≠买点' in msg
+    with tempfile.TemporaryDirectory(prefix='longtou_day1_notify_') as temp:
+        old=a.STATE;a.STATE=Path(temp)
+        root=a.STATE
+        (root/'events').mkdir();(root/'daily').mkdir()
+        (root/'events/2026-10-08.json').write_text(json.dumps(snap,ensure_ascii=False))
+        (root/'daily/2026-10-08.parquet').write_bytes(b'dummy-fixture')
+        try:
+            results=[]
+            def fake_cli(cmd,**kwargs):
+                results.append(cmd)
+                return SimpleNamespace(returncode=0)
+            with patch.object(a,'fs_preflight',return_value=(True,'TEST')):
+                with patch.object(a,'market_calendar',return_value=['2026-10-08','2026-10-09']):
+                    with patch.dict(a.os.environ,{'OPENCLAW_MESSAGE_CHANNEL':'feishu','OPENCLAW_MESSAGE_TARGET':'MOCK_ONLY_DO_NOT_SEND'}):
+                        with patch.object(a.subprocess,'run',side_effect=fake_cli):
+                            first=a.send_day1_daily({'real_signals_armed':True},'2026-10-08')
+                            repeat=a.send_day1_daily({'real_signals_armed':True},'2026-10-08')
+                        assert first=='DAY1_NOTICE_FEISHU_SENT' and repeat=='DAY1_NOTICE_ALREADY_FEISHU_SENT'
+                        assert len(results)==1
+                        assert '【龙头一买' in results[0][results[0].index('--message')+1]
+                        log=json.loads((root/'day1_delivery/2026-10-08.json').read_text())
+                        assert log['event_count']==2 and log['watch_count']==1
+                        assert log['status']=='FEISHU_SENT'
+                        assert (root/'day1_delivery/2026-10-08.json').stat().st_mode&0o777==0o600
+                        with patch.object(a,'load_daily',side_effect=AssertionError('SHOULD_NOT_REBUILD_EXISTING_EOD')):
+                            with patch.object(a,'send_day1_daily',return_value='DAY1_NOTICE_ALREADY_FEISHU_SENT') as done:
+                                # Keep this test from depending on the wall-clock or provider.
+                                with patch.object(a,'local_now',return_value=dt.datetime(2026,10,8,16,30,tzinfo=TZ)):
+                                    with patch.object(a,'is_open',return_value=True):
+                                        a.postclose({'real_signals_armed':True})
+                                assert done.call_count==1
+        finally:a.STATE=old
+    empty=dict(snap,events=[])
+    assert '没有符合冻结生命周期' in a.format_day1_daily_message(empty)
+    print('DAY1_EOD_FEISHU_DIGEST_TEST_OK 2 candidates, dedupe, mock send, zero-candidate message, no actual notification')
+
 if __name__=='__main__':
     minute_test()
+    next_session_readiness_test()
+    day1_daily_notification_mock_test()
+    notification_mocked_armed_test()
     notification_disabled_test()
     day1_priority_data_test()
     day1_legacy_match()
