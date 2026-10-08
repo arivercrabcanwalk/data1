@@ -1,0 +1,277 @@
+{
+  "generated_at": "2026-10-08",
+  "research_status": "V22_SHADOW_ONLY_NO_PROMOTION",
+  "historical_data_through": "2026-09-30",
+  "baseline_v21_unchanged": {
+    "n": 52,
+    "wins": 44,
+    "win": 0.8461538461538461,
+    "mean": 0.07088381843990328,
+    "worst": -0.03685033911077619,
+    "sum": 3.6859585588749706
+  },
+  "oracle_events": {
+    "eligible_events": 345,
+    "v21_events": 52,
+    "missed_events": 289,
+    "missed_oracle_best_gt5pct": 72,
+    "missed_oracle_best_gt10pct": 31,
+    "missed_open_available": 289,
+    "missed_fixed_open_mean": -0.014957881145054247,
+    "missed_fixed_open_win": 0.38408304498269896,
+    "missed_fixed_open_at_least_10pct": 26,
+    "missed_fixed_open_at_most_minus_5pct": 108,
+    "oracle_warning": "Max of four past-priced entries selected knowing T1 outcome, unattainable as a causal strategy."
+  },
+  "time_causal_replay": {
+    "n": 52,
+    "win": 0.8461538461538461,
+    "mean": 0.07194500889678213,
+    "sum": 3.7411404626326705,
+    "pinned_n": 52,
+    "identical_entry_n": 51,
+    "priority_mismatch": [
+      {
+        "event_id": "603989_20260623_g0",
+        "code": "603989",
+        "name": "艾华集团",
+        "chosen_lane": "NORMAL_B4P_LIQUID_M3",
+        "pinned_lane": "CORE_RED_4P_REPAIR45",
+        "chosen_entry": 43.88,
+        "pinned_entry": 45.95
+      }
+    ],
+    "warning": "Retrospective QA of deterministic first-signal logic. Do not merge these results into V21 frozen returns."
+  },
+  "prequential_models": {
+    "models": [
+      "Ridge",
+      "Logit"
+    ],
+    "train_menu_per_model": 12,
+    "train_passing_policies": 0,
+    "verified_in_future": false,
+    "note": "Mar-Jun pseudo-prequential train filters failed. Jul-Sep was not used to choose a threshold and remains non-blind pseudo-OOS."
+  },
+  "shadow_lanes": {
+    "arms": 7,
+    "historical_research_trade_count": 48,
+    "historical_diagnostic_by_arm": [
+      {
+        "lane": "FAILED_B3_RECOVERY_M3",
+        "subset": "JAN_JUN",
+        "n": 2,
+        "positive": 1,
+        "win_rate": 0.5,
+        "mean": 0.060169167372192724,
+        "worst": -0.009248582995951455
+      },
+      {
+        "lane": "FAILED_B3_RECOVERY_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 1,
+        "positive": 0,
+        "win_rate": 0.0,
+        "mean": -0.024856019656019707,
+        "worst": -0.024856019656019707
+      },
+      {
+        "lane": "NORMAL_B3_GAP_IMPULSE_M3",
+        "subset": "JAN_JUN",
+        "n": 5,
+        "positive": 2,
+        "win_rate": 0.4,
+        "mean": 0.023518831265480492,
+        "worst": -0.08067169811320764
+      },
+      {
+        "lane": "NORMAL_B3_GAP_IMPULSE_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 2,
+        "positive": 2,
+        "win_rate": 1.0,
+        "mean": 0.08215024370484202,
+        "worst": 0.07573994778067893
+      },
+      {
+        "lane": "PANIC_B4P_FAST_RECOVERY_M3",
+        "subset": "JAN_JUN",
+        "n": 1,
+        "positive": 1,
+        "win_rate": 1.0,
+        "mean": 0.20774964028776974,
+        "worst": 0.20774964028776974
+      },
+      {
+        "lane": "PANIC_B4P_FAST_RECOVERY_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 1,
+        "positive": 0,
+        "win_rate": 0.0,
+        "mean": -0.04555874439461895,
+        "worst": -0.04555874439461895
+      },
+      {
+        "lane": "POS_B3_LIQ_M3",
+        "subset": "JAN_JUN",
+        "n": 8,
+        "positive": 3,
+        "win_rate": 0.375,
+        "mean": 0.000686549337806576,
+        "worst": -0.14923973509933777
+      },
+      {
+        "lane": "POS_B3_LIQ_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 6,
+        "positive": 2,
+        "win_rate": 0.3333333333333333,
+        "mean": 0.008334610189618586,
+        "worst": -0.039996573875802924
+      },
+      {
+        "lane": "POS_B4P_LEAD_M3",
+        "subset": "JAN_JUN",
+        "n": 9,
+        "positive": 4,
+        "win_rate": 0.4444444444444444,
+        "mean": -0.00725479949653273,
+        "worst": -0.10523022061045641
+      },
+      {
+        "lane": "POS_B4P_LEAD_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 6,
+        "positive": 2,
+        "win_rate": 0.3333333333333333,
+        "mean": 0.016980334874735315,
+        "worst": -0.10520000000000009
+      },
+      {
+        "lane": "TOUCH_B3_REBOUND_M3",
+        "subset": "JUL_SEP_PSEUDO",
+        "n": 3,
+        "positive": 3,
+        "win_rate": 1.0,
+        "mean": 0.1008886603025455,
+        "worst": 0.012107692307692246
+      },
+      {
+        "lane": "TOUCH_B4P_REBOUND_M3",
+        "subset": "JAN_JUN",
+        "n": 4,
+        "positive": 2,
+        "win_rate": 0.5,
+        "mean": 0.023998060380889096,
+        "worst": -0.08322141764405923
+      }
+    ],
+    "protocol_hash": "c1b8b05eff3bf8dfef125192fae3505f396dec8c5512e506c02fcb6140aa5046",
+    "prospective_completed": 0
+  },
+  "portfolio_historical_scenarios": {
+    "one_slot": {
+      "slots": 1,
+      "fee_per_side": 0.0026,
+      "executed_trades": 38,
+      "skipped_signals": 14,
+      "terminal_nav": 9.236751063559675,
+      "net_roi": 8.236751063559675,
+      "worst_daily_drawdown": -0.1068785601879556,
+      "max_concurrent": 1,
+      "mean_capital_utilization": 0.20994475138121546,
+      "min_daily_ret": -0.1068785601879556,
+      "max_daily_ret": 0.21623587209354578
+    },
+    "two_slots": {
+      "slots": 2,
+      "fee_per_side": 0.0026,
+      "executed_trades": 51,
+      "skipped_signals": 1,
+      "terminal_nav": 5.589729755345559,
+      "net_roi": 4.589729755345559,
+      "worst_daily_drawdown": -0.0534392800939778,
+      "max_concurrent": 2,
+      "mean_capital_utilization": 0.1403814893246907,
+      "min_daily_ret": -0.0534392800939778,
+      "max_daily_ret": 0.14545688469588547
+    },
+    "three_slots": {
+      "slots": 3,
+      "fee_per_side": 0.0026,
+      "executed_trades": 52,
+      "skipped_signals": 0,
+      "terminal_nav": 3.244858631416954,
+      "net_roi": 2.244858631416954,
+      "worst_daily_drawdown": -0.0356261867293185,
+      "max_concurrent": 2,
+      "mean_capital_utilization": 0.09620762713769461,
+      "min_daily_ret": -0.0356261867293185,
+      "max_daily_ret": 0.09698202926666744
+    },
+    "three_slots_extra_0_26pct_each_side": {
+      "slots": 3,
+      "fee_per_side": 0.0052,
+      "executed_trades": 52,
+      "skipped_signals": 0,
+      "terminal_nav": 2.9576966546217305,
+      "net_roi": 1.9576966546217305,
+      "worst_daily_drawdown": -0.03717027015077157,
+      "max_concurrent": 2,
+      "mean_capital_utilization": 0.09592517097011623,
+      "min_daily_ret": -0.03717027015077157,
+      "max_daily_ret": 0.09300295860730179
+    },
+    "warning": "Capital curves are selected-sample paper-only what-if NAV, NOT realized or independently verified returns."
+  },
+  "strict_causal_engine": {
+    "protocol_hash": "442c813c65bf1b2c69b057d3d4fe1a9d08def1a93689022c71c6ff16d1dcc20d",
+    "prospective_completed": 0,
+    "historical_replay": {
+      "status": "CAUSAL_ENGINE_HISTORICAL_QA_NOT_FORWARD",
+      "eligible_historical_events": 209,
+      "historical_v21_n": 52,
+      "strict_matched": 52,
+      "strict_selected": 52,
+      "missing": [],
+      "new": [],
+      "entry_mismatches": [
+        {
+          "event_id": "603989_20260623_g0",
+          "code": "603989",
+          "name": "艾华集团",
+          "lane": "NORMAL_B4P_LIQUID_M3",
+          "v21_lane": "CORE_RED_4P_REPAIR45",
+          "entry_price": 43.88,
+          "v21_entry": 45.95
+        }
+      ],
+      "historical_replay_metrics": {
+        "n": 52,
+        "wins": 44,
+        "win_rate": 0.8461538461538461,
+        "avg": 0.07194500889678214,
+        "worst": -0.03685033911077619,
+        "sum": 3.7411404626326714
+      },
+      "no_future_engine": "V22_STRICT_PREFIX_SHADOW",
+      "note": "Previous same-sample fitted 52 historic events; not genuine unseen proof."
+    }
+  },
+  "portfolio_forward": {
+    "protocol_hash": "66d5fa37b72041b68c328a54963695b29952481ef8874b4239a3554f115e4c41",
+    "slots_tested": [
+      1,
+      2,
+      3
+    ],
+    "forward_completed": 0
+  },
+  "v21_forward_completed": 0,
+  "promotion": {
+    "new_real_trading_lane": null,
+    "v21_frozen_intact": true,
+    "future_prospectively_registered_new_lane_evidence_required": true,
+    "historical_win_rate_not_future_guarantee": true
+  }
+}
