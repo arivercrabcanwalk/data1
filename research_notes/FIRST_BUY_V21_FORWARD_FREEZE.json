@@ -1,0 +1,63 @@
+{
+  "registered_at": "2026-10-08T11:55:07.434706+08:00",
+  "spec_hash": "75314f12940fdd41e2eb13e9789f7e40ce98ed8dba9e7f25a82e4cb76e259372",
+  "engine_sha256": "1eef945fd017725017ab0b443d3e12fe490dd24fbbe2eb6206bddc80498b59f6",
+  "historical_sources_sha256": {
+    "V21_METHOD.md": "e3115d3472ae22c76f973293fb2bb8c482b20ddca17b6f52e9e3639f3110d612",
+    "v21_freeze.py": "d6a5653fbccb5641a2585d5eba75c1f7426b7d7ef7c27bb276ef977b537a647f",
+    "v21_results/v21_summary.json": "9fe0a82814c50e0ab22f30957a3214198b1e390cfa205f15a79c2972d5760737",
+    "v21_results/v21_52_trade_stack.parquet": "5f09088b4ac83482dac5e3510f454891c7a4f4f945415e3662b37f869bb4a562"
+  },
+  "config": {
+    "model": "V21_FIRST_BUY_FROZEN_PROSPECTIVE",
+    "baseline_git_commit": "1f32304",
+    "historical_data_end": "2026-09-30",
+    "first_new_day1": "2026-10-08",
+    "timezone": "Asia/Shanghai",
+    "roundtrip_cost": 0.0052,
+    "universe": "A-share main board, PRIMARY_3PLUS and RECYCLE_2PLUS rearmed to >=3 boards; exactly-2-board R2 observations never bought",
+    "rule_priority": "Earliest causally executable Day2 signal wins; same stock/event one buy",
+    "expansion_scope": "LM3 and W5 only PRIMARY_3PLUS; frozen R4/P3/PV may include RECYCLE_2PLUS with >=3 boards",
+    "normal_b4p_lm3": {
+      "d1_amount_min": 1600000000.0,
+      "d1_close_loc_max": 0.5,
+      "m3_abs_min": 0.01,
+      "m3_up_max": 0.03
+    },
+    "normal_b4p_w5": {
+      "d1_pm_above_ratio_max": 0.4,
+      "d2_m5_ret_max": -0.01
+    },
+    "normal_b4p_r4": {
+      "repaired_full_minutes": 5,
+      "last_signal_time": "09:45"
+    },
+    "panic_b3": {
+      "d1_amount_min": 1000000000.0,
+      "last_signal_time": "09:45"
+    },
+    "positive_b4p": {
+      "d1_gap_max": 0.05,
+      "d1_vol_prev_min": 1.5,
+      "last_signal_time": "09:35"
+    },
+    "panic_b4p_open": {
+      "d1_close_vwap_max": 0.965
+    },
+    "panic_b4p_m5": {
+      "d2_gap_max": -0.03,
+      "m5_return_min": 0.03
+    },
+    "T1_exits": {
+      "B4P_PANIC_CAPITULATION_OPEN": "if first minute profit >8%, M2 open, else close",
+      "PANIC_3_LIQ_RECLAIM45": "if 5-minute rise vs T1 open >0.5%, M6 open, else close",
+      "NORMAL_B4P_LIQUID_M3": "if 3-minute rise vs T1 open >5%, M4 open, else close",
+      "POS_4P_VOLUME_RECLAIM35": "if 3-minute price vs entry <-2%, M4 open, else close",
+      "CORE_RED_4P_REPAIR45": "if 3-minute fall vs T1 open <-1.5%, M4 open, else close",
+      "otherwise": "T1 closing auction proxy"
+    },
+    "execution_note": "Only a paper model. A bar open/close is a quote/price proxy, not guaranteed fill.",
+    "retrospective_asof_note": "Signals first generated after the price event are classified as backfilled OOS, never contemporaneous alerts."
+  },
+  "scope": "Prospective monitoring from Day1 Oct 8 close onward. No retrospective re-tuning."
+}
