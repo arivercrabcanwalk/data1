@@ -1,0 +1,23 @@
+[Unit]
+Description=龙头一买 V22 strict causal Day2 intraday buy-signal observer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/longtou-yimai
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/home/ubuntu/longtou-yimai/private/feishu-route.env
+ExecStart=/opt/liangun/.venv/bin/python /home/ubuntu/longtou-yimai/longtou_runtime.py watch
+Restart=no
+TimeoutStartSec=28min
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+UMask=0077
+MemoryMax=950M
+CPUQuota=65%
+StandardOutput=append:/home/ubuntu/longtou-yimai/logs/day2-live.log
+StandardError=append:/home/ubuntu/longtou-yimai/logs/day2-live.log
