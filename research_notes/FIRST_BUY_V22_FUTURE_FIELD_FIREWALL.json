@@ -1,0 +1,21 @@
+{
+  "events": 52,
+  "entry_same_with_no_future_columns": 52,
+  "not_same": 0,
+  "never_passed_to_core": [
+    "f1_date",
+    "f1_open",
+    "f2_date",
+    "f2_open",
+    "exit_t1_close",
+    "exit_t1_reset",
+    "t1_ret",
+    "watch_until",
+    "full_30d_observable",
+    "rearmed_within_30d",
+    "oracle_ret"
+  ],
+  "future_fields_in_legacy_event_schema": true,
+  "meaning": "Although the legacy E row contains future fields, current V22 strict entry produces the same result when only causal features are supplied. Treat removing future fields at the data boundary as a hardening requirement.",
+  "mismatch": []
+}
