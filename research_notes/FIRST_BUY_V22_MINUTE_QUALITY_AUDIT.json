@@ -1,0 +1,18 @@
+{
+  "n_events": 210,
+  "d1_gate_counts": {
+    "FULL_240_VALID": 160,
+    "FILE_MISSING": 39,
+    "FIRST3_NULL": 10,
+    "LUNCH_LABEL_13_00": 1
+  },
+  "d2_gate_counts": {
+    "FULL_240_VALID": 159,
+    "FILE_MISSING": 38,
+    "FIRST3_NULL": 12,
+    "LUNCH_LABEL_13_00": 1
+  },
+  "blocked_normal_primary_if_d1_pm_missing": 0,
+  "blocked_examples": [],
+  "note": "Strict monitor currently refuses all NORMAL_RED B4P PRIMARY lanes when Day1 PM is missing, even though LM3 may be testable. Full-day validity is assessed retrospectively for this data audit, not used as a signal."
+}
