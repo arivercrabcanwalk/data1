@@ -1,0 +1,250 @@
+{
+  "status": "V21_RESEARCH_FREEZE_NOT_PRODUCTION",
+  "freeze_date": "2026-10-08",
+  "data_through": "2026-09-30",
+  "round_trip_cost": 0.0052,
+  "base_v20_49": {
+    "train_jan_jun": {
+      "n": 32,
+      "win_rate": 0.71875,
+      "mean": 0.054456666396847056,
+      "median": 0.044911971466237474,
+      "worst": -0.04931764705882348,
+      "bad3": 0.0625,
+      "sum": 1.7426133246991058
+    },
+    "pseudo_oos_jul_sep": {
+      "n": 17,
+      "win_rate": 0.9411764705882353,
+      "mean": 0.07468285869173567,
+      "median": 0.06669259419662198,
+      "worst": -0.018533333333333197,
+      "bad3": 0.0,
+      "sum": 1.2696085977595064
+    },
+    "all_2026": {
+      "n": 49,
+      "win_rate": 0.7959183673469388,
+      "mean": 0.06147391678486964,
+      "median": 0.056225061425061326,
+      "worst": -0.04931764705882348,
+      "bad3": 0.04081632653061224,
+      "sum": 3.0122219224586124
+    }
+  },
+  "entry_expansion": {
+    "lane": "NORMAL_B4P_DOUBLE_WASHOUT_M5",
+    "rule": "PRIMARY + NORMAL_RED + B4P; Day1 pm_above_ratio <= 0.40; Day2 M5 return from Day2 open <= -1%; enter M6 open; default exit T1 close.",
+    "new_nonoverlap_trades": 3,
+    "new_trade_metrics_before_exit_overlay": {
+      "n": 3,
+      "win_rate": 0.6666666666666666,
+      "mean": 0.07284994495038734,
+      "median": 0.1078193905817174,
+      "worst": -0.03685033911077619,
+      "bad3": 0.3333333333333333,
+      "sum": 0.21854983485116203
+    },
+    "new_trade_names": [
+      {
+        "date": "2026-06-29 00:00:00",
+        "code": "605366",
+        "name": "宏柏新材"
+      },
+      {
+        "date": "2026-08-07 00:00:00",
+        "code": "002963",
+        "name": "豪尔赛"
+      },
+      {
+        "date": "2026-09-18 00:00:00",
+        "code": "605058",
+        "name": "澳弘电子"
+      }
+    ]
+  },
+  "exit_overlays": [
+    {
+      "lane": "B4P_PANIC_CAPITULATION_OPEN",
+      "rule": "If T1 minute-1 close / original entry - 1 > +8%, sell T1 minute-2 open; otherwise T1 close."
+    },
+    {
+      "lane": "PANIC_3_LIQ_RECLAIM45",
+      "rule": "If T1 minute-5 close / T1 open - 1 > +0.5%, sell T1 minute-6 open; otherwise T1 close."
+    },
+    {
+      "lane": "NORMAL_B4P_LIQUID_M3",
+      "rule": "If T1 minute-3 close / T1 open - 1 > +5%, sell T1 minute-4 open; otherwise T1 close."
+    },
+    {
+      "lane": "POS_4P_VOLUME_RECLAIM35",
+      "rule": "If T1 minute-3 close / original entry - 1 < -2%, sell T1 minute-4 open; otherwise T1 close."
+    },
+    {
+      "lane": "CORE_RED_4P_REPAIR45",
+      "rule": "If T1 minute-3 close / T1 open - 1 < -1.5%, sell T1 minute-4 open; otherwise T1 close."
+    }
+  ],
+  "final_52": {
+    "train_jan_jun": {
+      "n": 33,
+      "win_rate": 0.7878787878787878,
+      "mean": 0.06125072773105492,
+      "median": 0.04399908466819223,
+      "worst": -0.03685033911077619,
+      "bad3": 0.06060606060606061,
+      "sum": 2.0212740151248125
+    },
+    "pseudo_oos_jul_sep": {
+      "n": 19,
+      "win_rate": 0.9473684210526315,
+      "mean": 0.0876149759868504,
+      "median": 0.1028797481636937,
+      "worst": -0.018533333333333197,
+      "bad3": 0.0,
+      "sum": 1.6646845437501576
+    },
+    "all_2026": {
+      "n": 52,
+      "win_rate": 0.8461538461538461,
+      "mean": 0.07088381843990328,
+      "median": 0.061803943260857794,
+      "worst": -0.03685033911077619,
+      "bad3": 0.038461538461538464,
+      "sum": 3.6859585588749706
+    }
+  },
+  "monthly": [
+    {
+      "n": 1,
+      "win_rate": 0.0,
+      "mean": -0.03201660899653981,
+      "median": -0.03201660899653981,
+      "worst": -0.03201660899653981,
+      "bad3": 1.0,
+      "sum": -0.03201660899653981,
+      "month": "2026-01"
+    },
+    {
+      "n": 6,
+      "win_rate": 0.8333333333333334,
+      "mean": 0.09659680322548869,
+      "median": 0.04591252020381385,
+      "worst": -0.023164071856287455,
+      "bad3": 0.0,
+      "sum": 0.5795808193529322,
+      "month": "2026-02"
+    },
+    {
+      "n": 8,
+      "win_rate": 0.875,
+      "mean": 0.09517718124306009,
+      "median": 0.08576109839816946,
+      "worst": -0.007997202797202858,
+      "bad3": 0.0,
+      "sum": 0.7614174499444807,
+      "month": "2026-03"
+    },
+    {
+      "n": 4,
+      "win_rate": 1.0,
+      "mean": 0.05013005007117942,
+      "median": 0.05270622213928809,
+      "worst": 0.025144357313331072,
+      "bad3": 0.0,
+      "sum": 0.20052020028471768,
+      "month": "2026-04"
+    },
+    {
+      "n": 4,
+      "win_rate": 0.75,
+      "mean": 0.031450836299891,
+      "median": 0.04021592732273237,
+      "worst": -0.026351586368977626,
+      "bad3": 0.0,
+      "sum": 0.125803345199564,
+      "month": "2026-05"
+    },
+    {
+      "n": 10,
+      "win_rate": 0.7,
+      "mean": 0.038596880933965814,
+      "median": 0.01704779223346196,
+      "worst": -0.03685033911077619,
+      "bad3": 0.1,
+      "sum": 0.38596880933965816,
+      "month": "2026-06"
+    },
+    {
+      "n": 1,
+      "win_rate": 1.0,
+      "mean": 0.04292834224598928,
+      "median": 0.04292834224598928,
+      "worst": 0.04292834224598928,
+      "bad3": 0.0,
+      "sum": 0.04292834224598928,
+      "month": "2026-07"
+    },
+    {
+      "n": 12,
+      "win_rate": 0.9166666666666666,
+      "mean": 0.0877339666622338,
+      "median": 0.10850946763007317,
+      "worst": -0.018533333333333197,
+      "bad3": 0.0,
+      "sum": 1.0528075999468056,
+      "month": "2026-08"
+    },
+    {
+      "n": 6,
+      "win_rate": 1.0,
+      "mean": 0.0948247669262272,
+      "median": 0.10131585338709446,
+      "worst": 0.009682182720132198,
+      "bad3": 0.0,
+      "sum": 0.5689486015573632,
+      "month": "2026-09"
+    }
+  ],
+  "stress": {
+    "double_cost_all": {
+      "n": 52,
+      "win_rate": 0.8269230769230769,
+      "mean": 0.06568381843990329,
+      "median": 0.0566039432608578,
+      "worst": -0.042050339110776186,
+      "bad3": 0.057692307692307696,
+      "sum": 3.4155585588749706
+    },
+    "drop_top1_all": {
+      "n": 51,
+      "win_rate": 0.8431372549019608,
+      "mean": 0.06591531560336589,
+      "median": 0.057755254942768106,
+      "worst": -0.03685033911077619,
+      "bad3": 0.0392156862745098,
+      "sum": 3.3616810957716603
+    },
+    "drop_top2_all": {
+      "n": 50,
+      "win_rate": 0.84,
+      "mean": 0.06357087644656008,
+      "median": 0.055795591002707354,
+      "worst": -0.03685033911077619,
+      "bad3": 0.04,
+      "sum": 3.178543822328004
+    },
+    "drop_top3_all": {
+      "n": 49,
+      "win_rate": 0.8367346938775511,
+      "mean": 0.06137451529354504,
+      "median": 0.0538359270626466,
+      "worst": -0.03685033911077619,
+      "bad3": 0.04081632653061224,
+      "sum": 3.007351249383707
+    }
+  },
+  "naive_sequential_full_capital_compound": 30.504935847458118,
+  "post52_strict_search": "No further branch candidate passed the frozen no-degradation gates with at least 3 Jan-Jun events across 2 months and at least 2 Jul-Sep observations.",
+  "warning": "Jul-Sep is pseudo-OOS, not true unseen. Simple return sum and naive full-capital compounding are not account returns because signals and holding periods overlap."
+}
