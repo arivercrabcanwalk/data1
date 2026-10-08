@@ -31,6 +31,7 @@ def atomic(path,obj):
     with tmp.open('w',encoding='utf-8') as f:
         json.dump(obj,f,ensure_ascii=False,indent=2,default=str)
         f.write('\n');f.flush();os.fsync(f.fileno())
+    tmp.chmod(0o600)
     os.replace(tmp,path)
 def immutable(path,obj):
     path=Path(path)
@@ -98,6 +99,17 @@ def prev_open(day):
     if not earlier:raise RuntimeError('CALENDAR_MISSING_PREV')
     return earlier[-1]
 
+def next_observation_session(now=None):
+    """Today during session; next listed session once today's Day1 capture is due."""
+    now=now or local_now()
+    today=now.date().isoformat()
+    dates=market_calendar()
+    if today in dates and (now.hour,now.minute)<(15,12):
+        return today
+    future=[day for day in dates if day>today]
+    if not future:raise RuntimeError('TRADE_CALENDAR_EXPIRED')
+    return future[0]
+
 def load_daily():
     seed=pd.read_parquet(SEED/'daily_history_to_20260930.parquet',
                          columns=[x for x in FIELDS if x!='price_reset']+['price_reset'])
@@ -125,7 +137,7 @@ def today_live_quotes(m,day):
         stamp=str(q.server_time)
         if not stamp.startswith(day.replace('-','')) or len(stamp)<14:
             stale+=1;continue
-        if stamp[8:12]<'1455':stale+=1;continue
+        if stamp[8:12]<'1500':stale+=1;continue
         if not MAIN.fullmatch(code):continue
         if re.search(r'ST|退',str(q.name),re.I):continue
         if min(q.open,q.high,q.low,q.price)<=0:continue
@@ -349,10 +361,113 @@ def selftest():
     assert (SEED/'manifest.json').exists()
     print('LONGTOU_YIMAI_SELFTEST_OK causal M3 and frozen-seed checks')
 
+def day1_main_strategy_eligible(e):
+    """Exact branches covered by frozen V22 strict execution code."""
+    if not day1_priority_inputs_complete(e):return False
+    branch=str(e.get('branch'));bucket=str(e.get('bucket'))
+    return ((branch=='PANIC' and bucket in ('B3','B4P'))
+            or (branch=='NORMAL_RED' and bucket=='B4P')
+            or (branch=='POSITIVE_BREAK' and bucket=='B4P'))
+
+
+def format_day1_daily_message(snap):
+    """Human-readable daily report; never describes a Day1 as a confirmed buy."""
+    day=str(snap['day'])
+    events=sorted(snap.get('events',[]),key=lambda x:(not day1_main_strategy_eligible(x),str(x['code'])))
+    main=[e for e in events if day1_main_strategy_eligible(e)]
+    next_dates=[d for d in market_calendar() if d>day]
+    if not next_dates:raise RuntimeError('CALENDAR_NO_NEXT_SESSION')
+    nxt=next_dates[0]
+    nday=day[5:].replace('-','月')+'日'
+    lines=[f'【龙头一买｜{nday} Day1收盘观察】',
+        f'全市场严格Day1事件：{len(events)}只；明日正式V22买点监测：{len(main)}只。',
+        f'下一个交易日：{nxt}｜09:25启动，09:30—09:47实时检查。']
+    if not events:lines.append('今日没有符合冻结生命周期定义的Day1事件；明日无基于今日的新买点。')
+    for i,e in enumerate(events,1):
+        code=str(e['code']);name=str(e['name'])
+        ps=int(e['prior_streak']);ret=float(e['ret'])*100
+        close=float(e['close'])
+        bucket=str(e['bucket']);branch=str(e['branch'])
+        monitor=day1_main_strategy_eligible(e)
+        state='【明日买点监测】' if monitor else '【仅记录观察，不触发主策略买点】'
+        lines.append(f"{i}. {name} {code}｜此前{ps}连板｜{branch}/{bucket}｜收盘{close:.2f}元｜当日{ret:+.2f}%｜{state}")
+    lines += [
+      f"数据验收：实时报价覆盖{float(snap['quote_coverage']):.1%}；有效日线覆盖{float(snap['daily_coverage']):.1%}。",
+      '提示：Day1≠买点。只有明日满足已冻结的Day2条件，并通过分钟量价和腾讯/新浪双源校验，才另发买点提醒。',
+      '独立新盘记录｜仅研究信号｜不自动下单。'
+    ]
+    return '\n'.join(lines)
+
+
+def send_day1_daily(c,day):
+    """One genuine, deduplicated daily report following immutable EOD registration."""
+    ok,reason=fs_preflight()
+    if not ok:raise RuntimeError('DAY1_NOTICE_DATA_DISK_UNHEALTHY:'+reason)
+    path=STATE/'events'/(day+'.json')
+    daily=STATE/'daily'/(day+'.parquet')
+    if not path.is_file() or not daily.is_file():
+        raise RuntimeError('DAY1_NOTICE_SOURCE_PAIR_MISSING')
+    snap=json.loads(path.read_text())
+    if snap.get('day')!=day:raise RuntimeError('DAY1_NOTICE_SOURCE_DATE_WRONG')
+    if not .94<=float(snap['quote_coverage'])<=1.0 or not .94<=float(snap['daily_coverage'])<=1.0:
+        raise RuntimeError('DAY1_NOTICE_SNAPSHOT_COVERAGE_LOW')
+    captured=dt.datetime.fromisoformat(snap['captured_at'])
+    next_dates=[d for d in market_calendar() if d>day]
+    if not next_dates or captured>=dt.datetime.fromisoformat(next_dates[0]+'T09:25:00+08:00'):
+        raise RuntimeError('DAY1_NOTICE_LATE_CAPTURE_NOT_VALID')
+    if not bool(c.get('real_signals_armed',False)):
+        return 'DAY1_NOTICE_DISARMED'
+    channel=os.getenv('OPENCLAW_MESSAGE_CHANNEL','').strip()
+    target=os.getenv('OPENCLAW_MESSAGE_TARGET','').strip()
+    if channel!='feishu' or not target:
+        return 'DAY1_NOTICE_FEISHU_ROUTE_MISSING'
+    message=format_day1_daily_message(snap)
+    # An exclusive claim is made BEFORE calling external Feishu. Uncertain deliveries
+    # are intentionally not retried automatically to avoid duplicate messages.
+    dest=STATE/'day1_delivery'/(day+'.json')
+    dest.parent.mkdir(parents=True,exist_ok=True)
+    claim={
+      'day':day,'source_snapshot_sha256':sha(path),
+      'attempted_at':local_now().isoformat(),'status':'DISPATCH_CLAIMED',
+      'at_most_once':True,'event_count':len(snap.get('events',[])),
+      'watch_count':sum(day1_main_strategy_eligible(e) for e in snap.get('events',[]))
+    }
+    try:
+        fd=os.open(dest,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
+    except FileExistsError:
+        old=json.loads(dest.read_text())
+        if old.get('source_snapshot_sha256')!=sha(path):
+            raise RuntimeError('DAY1_NOTICE_IMMUTABLE_SNAPSHOT_CHANGED')
+        return 'DAY1_NOTICE_ALREADY_'+str(old.get('status'))
+    with os.fdopen(fd,'w',encoding='utf-8') as f:
+        json.dump(claim,f,ensure_ascii=False,indent=2);f.write('\n');f.flush();os.fsync(f.fileno())
+    cmd=['/usr/local/bin/openclaw','message','send',
+         '--channel',channel,'--target',target,'--message',message,'--json']
+    try:
+        sent=subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
+                            timeout=45,check=False)
+        claim['status']='FEISHU_SENT' if sent.returncode==0 else 'FEISHU_SEND_FAILED'
+        claim['command_returncode']=sent.returncode
+    except (OSError,subprocess.TimeoutExpired) as exc:
+        claim['status']='FEISHU_SEND_UNCERTAIN'
+        claim['error_type']=type(exc).__name__
+    claim['completed_at']=local_now().isoformat()
+    atomic(dest,claim)
+    return 'DAY1_NOTICE_'+claim['status']
+
+
 def postclose(c):
     now=local_now();day=now.date().isoformat()
     if not is_open(day):print('SKIP_NON_TRADING_DAY');return
     if (now.hour,now.minute)<(15,8):raise RuntimeError('NOT_AFTER_CLOSE')
+    existing=STATE/'events'/(day+'.json')
+    existing_daily=STATE/'daily'/(day+'.parquet')
+    if existing.exists() and existing_daily.exists():
+        print('DAY1_ALREADY_REGISTERED_IMMUTABLE',day,flush=True)
+        print('DAY1_DAILY_NOTIFICATION',send_day1_daily(c,day),flush=True)
+        return
+    if existing.exists() or existing_daily.exists():
+        raise RuntimeError('DAY1_PARTIAL_REGISTRATION_REQUIRES_REVIEW')
     d=load_daily()
     market=Market(timeout=5)
     try:
@@ -365,7 +480,7 @@ def postclose(c):
         for r in events:
             ref=market2.sina_quote(r['code'])
             stamp=str(ref.server_time)
-            if not stamp.startswith(day.replace('-','')) or len(stamp)<12 or stamp[8:12]<'1455':
+            if not stamp.startswith(day.replace('-','')) or len(stamp)<12 or stamp[8:12]<'1500':
                 raise RuntimeError('DAY1_CROSS_SOURCE_STALE:'+r['code'])
             if (abs(float(ref.price)/float(r['close'])-1)>.008 or
                 abs(float(ref.prev_close)/(float(r['close'])/(1+float(r['ret'])))-1)>.005):
@@ -386,7 +501,8 @@ def postclose(c):
     os.replace(temp,p)
     immutable(path,snapshot)
     print('DAY1_RECORDED',day,'quotes',len(qs),'daily',len(daily),'events',len(events),
-          'coverage',round(valid_coverage,3))
+          'coverage',round(valid_coverage,3),flush=True)
+    print('DAY1_DAILY_NOTIFICATION',send_day1_daily(c,day),flush=True)
 
 def notify_signal(c,evt,plan,quote,when,market):
     """Single real notification is possible only after explicit arming and data-health gates."""
@@ -433,7 +549,7 @@ def notify_signal(c,evt,plan,quote,when,market):
         f"发现时间: {when:%H:%M:%S}｜实时参考价: {float(quote.price):.2f}元\n"
         f"腾讯/新浪双源核验完成｜不保证此价成交｜仅为研究信号，非自动下单"
     )
-    cmd=['openclaw','message','send','--channel',channel,'--target',target,
+    cmd=['/usr/local/bin/openclaw','message','send','--channel',channel,'--target',target,
          '--message',msg,'--json']
     try:
         run=subprocess.run(cmd,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
@@ -560,7 +676,7 @@ def health(c):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('command',choices=['selftest','preflight','postclose','watch'])
+    p.add_argument('command',choices=['selftest','preflight','postclose','watch','send-day1'])
     a=p.parse_args()
     if a.command=='selftest':selftest();return
     c=freeze_integrity()
@@ -570,11 +686,26 @@ def main():
         if not h['storage_ok']:why_not.append(h['storage_reason'])
         if not h['notification_route_present']:why_not.append('NOTIFICATION_ROUTE_MISSING')
         if not h['signal_armed']:why_not.append('SIGNAL_ARMING_DISABLED')
-        previous=prev_open(local_now().date().isoformat())
+        target=next_observation_session()
+        previous=prev_open(target)
+        h['next_observation_session']=target
+        h['required_day1_session']=previous
         if h.get('current_data_day')!=previous:
             why_not.append('DAY1_HISTORY_NOT_TO_PREV_SESSION:'+str(previous))
         day1=STATE/'events'/(previous+'.json')
-        if not day1.exists():why_not.append('DAY1_IMMUTABLE_EOD_SNAPSHOT_MISSING')
+        if not day1.exists():
+            why_not.append('DAY1_IMMUTABLE_EOD_SNAPSHOT_MISSING')
+        else:
+            try:
+                recorded=json.loads(day1.read_text())
+                captured=dt.datetime.fromisoformat(recorded['captured_at'])
+                deadline=dt.datetime.fromisoformat(target+'T09:25:00+08:00')
+                if captured>=deadline:
+                    why_not.append('DAY1_WAS_NOT_REGISTERED_BEFORE_DAY2_AUCTION')
+                if recorded.get('day')!=previous:
+                    why_not.append('DAY1_SNAPSHOT_WRONG_DATE')
+            except (ValueError,KeyError,json.JSONDecodeError):
+                why_not.append('DAY1_SNAPSHOT_CORRUPT')
         h['ready_for_live_signal']=not why_not
         h['readiness_blockers']=why_not
         print(json.dumps(h,ensure_ascii=False,indent=2))
@@ -584,6 +715,10 @@ def main():
     if not okay:raise RuntimeError('FAIL_CLOSED_STORAGE:'+why)
     if a.command=='postclose':postclose(c)
     if a.command=='watch':monitor(c)
+    if a.command=='send-day1':
+        day=local_now().date().isoformat()
+        if not is_open(day):raise RuntimeError('DAY1_NOTICE_NOT_TRADING_DAY')
+        print('DAY1_DAILY_NOTIFICATION',send_day1_daily(c,day),flush=True)
 
 if __name__=='__main__':
     try:main()
