@@ -1,0 +1,18 @@
+{
+  "data_through": "2026-09-30",
+  "origin": "local V17 frozen dataset",
+  "not_a_live_feed": true,
+  "rows": 789669,
+  "codes": 3016,
+  "event_rows": 729,
+  "files": {
+    "seed/daily_history_to_20260930.parquet": {
+      "bytes": 30859379,
+      "sha256": "309c06c02bb674366a6f994144dc614cd3da0229e2aa67878ebd6df1f452afe1"
+    },
+    "seed/event_history_to_20260930.parquet": {
+      "bytes": 17547,
+      "sha256": "05c8a400361f158bbaa6b080cfc4c6d50654b92f7d65f14d56ff573866799207"
+    }
+  }
+}
