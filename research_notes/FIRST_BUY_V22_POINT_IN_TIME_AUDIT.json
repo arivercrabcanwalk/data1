@@ -1,0 +1,58 @@
+{
+  "tests": 191,
+  "not_found": 0,
+  "exante_feature_mismatches": 0,
+  "matches_v21": 52,
+  "full_data_later_rearm_changed": 52,
+  "full_events_have_future_t1": 190,
+  "asof_events_have_future_t1": 0,
+  "mismatch_cases": [],
+  "minute_coverage": {
+    "with_t1_and_no_price_reset": 408,
+    "available": 345,
+    "missing": 63,
+    "segments": [
+      {
+        "group": "minute_available",
+        "n": 345,
+        "daily_open_proxy_mean": 0.0006972694114748603,
+        "daily_open_proxy_win": 0.463768115942029,
+        "daily_open_proxy_worst": -0.2014264150943397,
+        "v21_selected": 52,
+        "median_d1_amount": 1750189504.0,
+        "branch_counts": {
+          "POSITIVE_BREAK": 137,
+          "NORMAL_RED": 107,
+          "PANIC": 69,
+          "FAILED_OPEN": 18,
+          "TOUCH_BREAK": 14
+        }
+      },
+      {
+        "group": "minute_missing",
+        "n": 63,
+        "daily_open_proxy_mean": -0.014881572479068383,
+        "daily_open_proxy_win": 0.3492063492063492,
+        "daily_open_proxy_worst": -0.17013775933609968,
+        "v21_selected": 0,
+        "median_d1_amount": 2510474040.0,
+        "branch_counts": {
+          "POSITIVE_BREAK": 30,
+          "PANIC": 17,
+          "NORMAL_RED": 11,
+          "FAILED_OPEN": 5
+        }
+      }
+    ],
+    "caution": "Daily price proxy comparison is not evidence of executable fills, as halted or 1-price limit bars may be missing from minute panels."
+  },
+  "pseudo_oos_is_seen": true,
+  "metadata_point_in_time_verified": false,
+  "baseline_52": {
+    "wins": 44,
+    "n": 52,
+    "unique_d2_dates": 48,
+    "unique_day1_dates": 48,
+    "distinct_codes": 52
+  }
+}
