@@ -128,3 +128,24 @@ V22严格因果策略本身只是历史检验通过的研究版本，仍有历�
 - 对于`PRIMARY_3PLUS + NORMAL_RED + B4P`，如果Day1下午分钟VWAP上方比例缺失，W5与R4的先后触发无法完整比较，新程序现在统一`DAY1_PM_MISSING_CANNOT_RESOLVE_W5_PRIORITY`，**不发送R4或其他可能错误排序的信号**。
 - 测试已验证该竞争规则、集合竞价差分、重复消息保护和全729条历史生命周期一致性。
 - R50于15:13自行结束本次任务，systemd显示`Result=success`、`ExecMainStatus=0`、`NRestarts=0`，相关计时器仍在，未对其执行任何启动或停止。
+
+## 2026-10-08 16:16 CST 新20GB云盘追加验收（最新）
+
+- 新设备已出现在Ubuntu中：`/dev/vdc` 20GiB。`blkid -p` 未识别文件系统、`wipefs -n` 无签名、`sfdisk -d` 无分区表，当前未挂载。旧`/dev/vdb`仍缺失，`/data`仍为旧设备的故障残留挂载。
+- 已独立备份`/etc/fstab`和磁盘只读探测记录（`backups/new-vdc-init-20261008T160305`），未改动旧挂载；远程执行环境拒绝执行格式化命令，**尚未格式化新磁盘，也未挂载它**。
+- 为避免绕过破坏性操作限制，创建人工确认的一次性脚本：`/home/ubuntu/longtou-yimai/initialize_new_disk.sh`，权限700；**没有执行**。脚本仅允许经核实的空白20GiB`/dev/vdc`，再次检查签名、系统挂载、尺寸、旧盘状态，必须交互输入`FORMAT_NEW_EMPTY_VDC`，备份`fstab`后才创建ext4并永久挂载到`/srv/longtou-yimai-data`。不涉及旧`/data`、SSH密钥或其他服务。
+- 新策略数据路径已独立设置为`/srv/longtou-yimai-data/state`；代码及冻结历史种子仍在`/home/ubuntu/longtou-yimai`。新代码会验证挂载点不是系统盘、ext4可读写、可用空间≥3GiB、文件fsync和读回哈希、状态子目录齐全，否则立刻关闭交易信号。
+- 两个新systemd service已增加`RequiresMountsFor=/srv/longtou-yimai-data`和`ConditionPathIsMountPoint=/srv/longtou-yimai-data`，二者**仍未启用**。
+- Day1下午VWAP数据已改为严格截取13:00～15:00共121条，避免供应商15:01～15:30的填充数据污染。对`000678`，现在只读计算可得到Day1 PM比例0.0，缺失时仍禁止交易。
+- Day1正式登记前要求候选事件通过新浪/腾讯双源收盘价校验，实时发信号前还要求新浪报价时间戳足够新鲜。
+- 飞书OpenClaw `message send --dry-run --json` 验证退出码0，无任何真实测试发送。
+- R50原有交易日历只覆盖到2026-12-31，系统需要在2027年交易前更新外部日历，不能默认长期自动延续。
+- 保持`real_signals_armed=false`，策略定时器均disabled/inactive，正式Day1与买点记录为0。下一步必须人工初始化唯一新空白磁盘，并由助手复核后完成2026-10-08真实日线/Day1登记及生产启用。
+
+**一次性用户手工操作（执行后助手继续做部署验收）：**
+
+```bash
+ssh -t lighthouse /home/ubuntu/longtou-yimai/initialize_new_disk.sh
+```
+
+执行脚本将清空**仅限新`/dev/vdc`上的任何未识别数据**；当前只读验收确认该盘无文件系统与分区表，但用户必须明确输入确认。切勿对`/dev/vda`、旧`/dev/vdb`或已有`/data`运行格式化。脚本完成后向助手提供末尾`NEW_DISK_MOUNT_AND_FSYNC_ROUNDTRIP_OK`输出，助手继续验证并启用，不要自己手动修改其他旧策略。
