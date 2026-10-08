@@ -2,7 +2,13 @@
 Description=龙头一买 15:12 Postclose Day1 snapshot (market-calendar filtered)
 
 [Timer]
+# First scan as soon as EOD is available. Later slots are recovery-only:
+# already frozen snapshots and delivered notifications are immutable/idempotent.
 OnCalendar=Mon..Fri *-*-* 15:12:00
+OnCalendar=Mon..Fri *-*-* 15:25:00
+OnCalendar=Mon..Fri *-*-* 15:45:00
+OnCalendar=Mon..Fri *-*-* 16:15:00
+OnCalendar=Mon..Fri *-*-* 16:35:00
 AccuracySec=10s
 Persistent=false
 Unit=longtou-yimai-day1.service
