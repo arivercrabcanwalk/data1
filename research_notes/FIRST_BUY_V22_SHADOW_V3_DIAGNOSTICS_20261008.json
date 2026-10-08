@@ -1,0 +1,116 @@
+{
+  "not_true_unseen": true,
+  "historical_shadow_events": 48,
+  "freeze_before_diagnostics_claim": true,
+  "stats": [
+    {
+      "lane": "FAILED_B3_RECOVERY_M3",
+      "subset": "JAN_JUN",
+      "n": 2,
+      "positive": 1,
+      "win_rate": 0.5,
+      "mean": 0.060169167372192724,
+      "worst": -0.009248582995951455
+    },
+    {
+      "lane": "FAILED_B3_RECOVERY_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 1,
+      "positive": 0,
+      "win_rate": 0.0,
+      "mean": -0.024856019656019707,
+      "worst": -0.024856019656019707
+    },
+    {
+      "lane": "NORMAL_B3_GAP_IMPULSE_M3",
+      "subset": "JAN_JUN",
+      "n": 5,
+      "positive": 2,
+      "win_rate": 0.4,
+      "mean": 0.023518831265480492,
+      "worst": -0.08067169811320764
+    },
+    {
+      "lane": "NORMAL_B3_GAP_IMPULSE_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 2,
+      "positive": 2,
+      "win_rate": 1.0,
+      "mean": 0.08215024370484202,
+      "worst": 0.07573994778067893
+    },
+    {
+      "lane": "PANIC_B4P_FAST_RECOVERY_M3",
+      "subset": "JAN_JUN",
+      "n": 1,
+      "positive": 1,
+      "win_rate": 1.0,
+      "mean": 0.20774964028776974,
+      "worst": 0.20774964028776974
+    },
+    {
+      "lane": "PANIC_B4P_FAST_RECOVERY_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 1,
+      "positive": 0,
+      "win_rate": 0.0,
+      "mean": -0.04555874439461895,
+      "worst": -0.04555874439461895
+    },
+    {
+      "lane": "POS_B3_LIQ_M3",
+      "subset": "JAN_JUN",
+      "n": 8,
+      "positive": 3,
+      "win_rate": 0.375,
+      "mean": 0.000686549337806576,
+      "worst": -0.14923973509933777
+    },
+    {
+      "lane": "POS_B3_LIQ_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 6,
+      "positive": 2,
+      "win_rate": 0.3333333333333333,
+      "mean": 0.008334610189618586,
+      "worst": -0.039996573875802924
+    },
+    {
+      "lane": "POS_B4P_LEAD_M3",
+      "subset": "JAN_JUN",
+      "n": 9,
+      "positive": 4,
+      "win_rate": 0.4444444444444444,
+      "mean": -0.00725479949653273,
+      "worst": -0.10523022061045641
+    },
+    {
+      "lane": "POS_B4P_LEAD_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 6,
+      "positive": 2,
+      "win_rate": 0.3333333333333333,
+      "mean": 0.016980334874735315,
+      "worst": -0.10520000000000009
+    },
+    {
+      "lane": "TOUCH_B3_REBOUND_M3",
+      "subset": "JUL_SEP_PSEUDO",
+      "n": 3,
+      "positive": 3,
+      "win_rate": 1.0,
+      "mean": 0.1008886603025455,
+      "worst": 0.012107692307692246
+    },
+    {
+      "lane": "TOUCH_B4P_REBOUND_M3",
+      "subset": "JAN_JUN",
+      "n": 4,
+      "positive": 2,
+      "win_rate": 0.5,
+      "mean": 0.023998060380889096,
+      "worst": -0.08322141764405923
+    }
+  ],
+  "caution": "The arm ideas were inspired by hindsight mistakes. These results are exploratory, not confirmatory."
+}
