@@ -1,0 +1,37 @@
+{
+  "n": 52,
+  "wins": 44,
+  "win_rate": 0.8461538461538461,
+  "wilson95": [
+    0.7247565640845234,
+    0.9199241040911735
+  ],
+  "same_sample_dayblock_bootstrap_win95": [
+    0.74,
+    0.9411764705882353
+  ],
+  "same_sample_dayblock_bootstrap_mean95": [
+    0.05102692871034749,
+    0.09471617528456461
+  ],
+  "bootstrap_warning": "Conditional on hand-picked 52 historical trades, ignores all model searching; NOT valid independent predictive confidence.",
+  "pit_entry_pass": 52,
+  "pit_early_exit_pass": 12,
+  "early_exit_n": 12,
+  "n_buy_one_price": 1,
+  "n_sell_one_price": 41,
+  "n_buy_upper_locked": 0,
+  "n_buy_lower_locked": 1,
+  "n_sell_lower_locked": 0,
+  "buy_lower_lock_cases": [
+    {
+      "name": "名雕股份",
+      "d1": "2026-02-05",
+      "entry": 25.07
+    }
+  ],
+  "sell_lower_lock_cases": [],
+  "sell_price_computed_from_actual_minute": 52,
+  "d2_missing_any_bar": 1,
+  "t1_missing_any_bar": 1
+}
