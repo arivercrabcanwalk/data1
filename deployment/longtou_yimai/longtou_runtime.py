@@ -411,6 +411,15 @@ def notify_signal(c,evt,plan,quote,when,market):
     atomic(STATE/'delivery'/(eid+'.json'),audit)
     return outcome
 
+def day1_priority_inputs_complete(event):
+    """Do not allow later R4 to override an unknown earlier W5 lane."""
+    return not (
+        event.get('event_type')=='PRIMARY_3PLUS'
+        and event.get('branch')=='NORMAL_RED'
+        and event.get('bucket')=='B4P'
+        and event.get('d1_pm_above_ratio') is None
+    )
+
 def monitor(c):
     now=local_now();day=now.date().isoformat()
     if not is_open(day):print('NO_TRADING_SESSION');return
@@ -453,6 +462,9 @@ def monitor(c):
             for e in events:
                 eid=e['event_id'];code=e['code']
                 if (STATE/'signals'/(eid+'.json')).exists():continue
+                if not day1_priority_inputs_complete(e):
+                    last_status[eid]='DAY1_PM_MISSING_CANNOT_RESOLVE_W5_PRIORITY'
+                    continue
                 q=quotes.get(code)
                 if q is None or quote_stamp(q,day,at) is None:
                     last_status[eid]='STALE_OR_MISSING_QUOTE';continue
