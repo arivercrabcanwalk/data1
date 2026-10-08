@@ -1,0 +1,308 @@
+{
+  "prior_2026_optimize_exits_lane_specific_tried_or_evaluated": 580,
+  "lane_specific_detail": {
+    "B4P_PANIC_CAPITULATION_OPEN": 120,
+    "CORE_RED_4P_REPAIR45": 116,
+    "NORMAL_B4P_LIQUID_M3": 116,
+    "PANIC_3_LIQ_RECLAIM45": 120,
+    "POS_4P_VOLUME_RECLAIM35": 108
+  },
+  "universal_exit_parameter_combinations_before_na_filter": 393,
+  "two_more_dense_entry_searches_exist": true,
+  "single_and_pair_condition_search_capacity": [
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B3",
+      "entry": "OPEN",
+      "univariate_conditions": 108,
+      "single_condition_capacity": 108,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B3",
+      "entry": "M1",
+      "univariate_conditions": 108,
+      "single_condition_capacity": 108,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B3",
+      "entry": "M3",
+      "univariate_conditions": 108,
+      "single_condition_capacity": 108,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B3",
+      "entry": "M5",
+      "univariate_conditions": 108,
+      "single_condition_capacity": 108,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B4P",
+      "entry": "OPEN",
+      "univariate_conditions": 200,
+      "single_condition_capacity": 200,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B4P",
+      "entry": "M1",
+      "univariate_conditions": 214,
+      "single_condition_capacity": 214,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B4P",
+      "entry": "M3",
+      "univariate_conditions": 232,
+      "single_condition_capacity": 232,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "FAILED_OPEN",
+      "bucket": "B4P",
+      "entry": "M5",
+      "univariate_conditions": 264,
+      "single_condition_capacity": 264,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B3",
+      "entry": "OPEN",
+      "univariate_conditions": 288,
+      "single_condition_capacity": 288,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B3",
+      "entry": "M1",
+      "univariate_conditions": 302,
+      "single_condition_capacity": 302,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B3",
+      "entry": "M3",
+      "univariate_conditions": 328,
+      "single_condition_capacity": 328,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B3",
+      "entry": "M5",
+      "univariate_conditions": 370,
+      "single_condition_capacity": 370,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B4P",
+      "entry": "OPEN",
+      "univariate_conditions": 130,
+      "single_condition_capacity": 130,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B4P",
+      "entry": "M1",
+      "univariate_conditions": 130,
+      "single_condition_capacity": 130,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B4P",
+      "entry": "M3",
+      "univariate_conditions": 130,
+      "single_condition_capacity": 130,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "NORMAL_RED",
+      "bucket": "B4P",
+      "entry": "M5",
+      "univariate_conditions": 130,
+      "single_condition_capacity": 130,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B3",
+      "entry": "OPEN",
+      "univariate_conditions": 256,
+      "single_condition_capacity": 256,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B3",
+      "entry": "M1",
+      "univariate_conditions": 270,
+      "single_condition_capacity": 270,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B3",
+      "entry": "M3",
+      "univariate_conditions": 292,
+      "single_condition_capacity": 292,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B3",
+      "entry": "M5",
+      "univariate_conditions": 324,
+      "single_condition_capacity": 324,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B4P",
+      "entry": "OPEN",
+      "univariate_conditions": 142,
+      "single_condition_capacity": 142,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B4P",
+      "entry": "M1",
+      "univariate_conditions": 154,
+      "single_condition_capacity": 154,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B4P",
+      "entry": "M3",
+      "univariate_conditions": 174,
+      "single_condition_capacity": 174,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "PANIC",
+      "bucket": "B4P",
+      "entry": "M5",
+      "univariate_conditions": 208,
+      "single_condition_capacity": 208,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B3",
+      "entry": "OPEN",
+      "univariate_conditions": 290,
+      "single_condition_capacity": 290,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B3",
+      "entry": "M1",
+      "univariate_conditions": 304,
+      "single_condition_capacity": 304,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B3",
+      "entry": "M3",
+      "univariate_conditions": 328,
+      "single_condition_capacity": 328,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B3",
+      "entry": "M5",
+      "univariate_conditions": 366,
+      "single_condition_capacity": 366,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B4P",
+      "entry": "OPEN",
+      "univariate_conditions": 284,
+      "single_condition_capacity": 284,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B4P",
+      "entry": "M1",
+      "univariate_conditions": 296,
+      "single_condition_capacity": 296,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B4P",
+      "entry": "M3",
+      "univariate_conditions": 314,
+      "single_condition_capacity": 314,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "POSITIVE_BREAK",
+      "bucket": "B4P",
+      "entry": "M5",
+      "univariate_conditions": 348,
+      "single_condition_capacity": 348,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "TOUCH_BREAK",
+      "bucket": "B4P",
+      "entry": "OPEN",
+      "univariate_conditions": 200,
+      "single_condition_capacity": 200,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "TOUCH_BREAK",
+      "bucket": "B4P",
+      "entry": "M1",
+      "univariate_conditions": 214,
+      "single_condition_capacity": 214,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "TOUCH_BREAK",
+      "bucket": "B4P",
+      "entry": "M3",
+      "univariate_conditions": 238,
+      "single_condition_capacity": 238,
+      "pairs_upperbound_before_reward_filter": 1485
+    },
+    {
+      "branch": "TOUCH_BREAK",
+      "bucket": "B4P",
+      "entry": "M5",
+      "univariate_conditions": 268,
+      "single_condition_capacity": 268,
+      "pairs_upperbound_before_reward_filter": 1485
+    }
+  ],
+  "simple_condition_count_sum": 8420,
+  "upperbound_two_condition_candidates": 53460,
+  "v22_Ridge_Logit_explicit_policy_trials": 24,
+  "v22_model_policy_passing": 0,
+  "critical_design_issue": "July-September results were included in pass/fail gates repeatedly in 2026. No untouched holdout remains.",
+  "note": "Lane count and universal candidate loop counts come from code-defined parameter grids; combinatorial capacities are upper bounds before outcome filters, not actual fully scored trial counts. Do not add them as an exact false discovery denominator."
+}
