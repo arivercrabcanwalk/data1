@@ -71,6 +71,17 @@ def day1_legacy_match():
     assert observed==target,('DAY1_IDENTIFICATION_MISMATCH',sorted(observed-target),sorted(target-observed))
     print('DAY1_RECONSTRUCTION_OK',len(e),'matches frozen September30 events; daily rows',len(today))
 
+def day1_priority_data_test():
+    normal={'event_type':'PRIMARY_3PLUS','branch':'NORMAL_RED',
+            'bucket':'B4P','d1_pm_above_ratio':None}
+    assert not a.day1_priority_inputs_complete(normal)
+    normal['d1_pm_above_ratio']=0.25
+    assert a.day1_priority_inputs_complete(normal)
+    normal['d1_pm_above_ratio']=None
+    normal['event_type']='RECYCLE_2PLUS'
+    assert a.day1_priority_inputs_complete(normal)
+    print('PM_PRIORITY_DATA_FAIL_CLOSED_TEST_OK')
+
 def notification_disabled_test():
     import tempfile
     from pathlib import Path
@@ -97,6 +108,7 @@ def notification_disabled_test():
 if __name__=='__main__':
     minute_test()
     notification_disabled_test()
+    day1_priority_data_test()
     day1_legacy_match()
     a.selftest()
     print('LONGTOU_YIMAI_FULL_STAGING_TESTS_OK')
