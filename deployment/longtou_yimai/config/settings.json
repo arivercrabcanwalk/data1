@@ -1,0 +1,14 @@
+{
+  "strategy": "龙头一买",
+  "version": "V22_STRICT",
+  "real_signals_armed": false,
+  "data_status": "BLOCKED_DEPENDENCY_VDB_MISSING",
+  "mode": "STAGED_FAIL_CLOSED",
+  "frozen_entry_sha256": "d9d585d1c3f9538bfa5697bafd0f0ea28d9c38a1a3c88546d5498be18c80844d",
+  "cost_roundtrip": 0.0052,
+  "min_quote_coverage": 0.94,
+  "data_disk_required": "/dev/vdb",
+  "no_auto_trading": true,
+  "notify_when_armed": "openclaw feishu existing R50 route",
+  "candidate_max": 32
+}
