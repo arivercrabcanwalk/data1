@@ -1,0 +1,19 @@
+{
+  "registered_at": "2026-10-08T12:32:10.104848+08:00",
+  "config_hash": "442c813c65bf1b2c69b057d3d4fe1a9d08def1a93689022c71c6ff16d1dcc20d",
+  "monitor_sha": "536832898e34d1a03d1967885016d7ea63f1ff91d511921a69c2d8e1e7de2acc",
+  "core_sha": "d9d585d1c3f9538bfa5697bafd0f0ea28d9c38a1a3c88546d5498be18c80844d",
+  "v21_baseline_sha": "5f09088b4ac83482dac5e3510f454891c7a4f4f945415e3662b37f869bb4a562",
+  "config": {
+    "version": "V22_STRICT_PREFIX_SHADOW",
+    "historical_last_day": "2026-09-30",
+    "first_prospective_day1": "2026-10-08",
+    "rule": "Entry checks only D1-close facts plus completed Day2 bars and the next minute OPEN; no later minute OHLCV, no future outcomes.",
+    "entry_policy_source": "v22_strict_causal_core.py",
+    "exit_policy": "Frozen V21 T1 lane-specific conditions using completed bars and next OPEN or T1 close",
+    "cost_round_trip": 0.0052,
+    "unfilled_upper_open": "Exclude buy entry if entering bar opens at known upper limit; never peek at the same bar low",
+    "no_order_routing": true,
+    "separate_from_v21": true
+  }
+}
