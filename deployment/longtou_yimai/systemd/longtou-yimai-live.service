@@ -2,6 +2,8 @@
 Description=龙头一买 V22 strict causal Day2 intraday buy-signal observer
 After=network-online.target
 Wants=network-online.target
+RequiresMountsFor=/srv/longtou-yimai-data
+ConditionPathIsMountPoint=/srv/longtou-yimai-data
 
 [Service]
 Type=exec
