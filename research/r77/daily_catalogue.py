@@ -87,7 +87,7 @@ e=d[d.leader_eligible].merge(b,left_on="date",right_index=True,how="left")
 e["prior_day_push"]=(e.prior_day_high/e.priorprior_close-1>=.05)
 e["leader_tier"]=np.where(e.leader_strict,"STRICT_3BOARD","SECOND_2BOARD")
 e=e[["date","di","code","prior_close","priorprior_close","prior_ma5","prior20_high",
-  "drawdown_from_peak","since_lu","leader_tier","prior_day_push","prior_breadth","prior_limit_count",
+  "drawdown_from_peak","since_lu","leader_tier","prior_day_push","prior_day_high","prior_breadth","prior_limit_count",
   "price_limit_up_pct"]]
 # Genuine 20-session in-repository warm-up can already finish in late March.
 # These rows are preserved for audit; trade engine separately starts April.
