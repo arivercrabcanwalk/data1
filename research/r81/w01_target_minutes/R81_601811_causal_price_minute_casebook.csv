@@ -1,0 +1,9 @@
+code,branch,reset_day,signal_date,signal_time,signal_px,signal_clv,signal_vwap,signal_amt_available,entry_time,entry_open,entry_cost,entry_volume_shares,entry_min_amount,entry_status,exit_date,exit_signal_time,exit_time,exit_open,exit_net_px,net_return_pct,exit_amount_available,exit_amt,exit_volume_shares,status,observed_MAE_pct,amount_daily_diff,buy_1pct_participation_verified
+601811,AM_REASSERT,2026-09-28,2026-09-29,10:19,19.77,0.78704,,False,10:20,19.77,19.8156687,219000.0,,PRICE_ONLY_UNVERIFIED,2026-09-30,09:32,09:33,21.42,21.3598098,7.792525820741036,False,,2877200.0,PRICE_ONLY_PROXY,-1.1893048050404809,,False
+601811,PM_RECAPTURE,,2026-09-29,,,,,,,,,,,,,,,,,,,,,NO_SIGNAL,,,
+601811,AM_REASSERT,,2026-10-09,,,,,,,,,,,,,,,,,,,,,NO_SIGNAL,,,
+601811,PM_RECAPTURE,2026-10-08,2026-10-09,13:45,20.05,0.68382,19.690518920510716,True,13:46,20.06,20.1063386,683302.0,13694580.0,REAL_AMOUNT_VERIFIED,2026-10-12,09:31,09:32,21.51,21.4495569,6.680571369667465,False,,4456700.0,PRICE_ONLY_PROXY,-1.672798845633694,0.01691358195244752,True
+601811,AM_REASSERT,2026-10-13,2026-10-14,10:13,21.71,0.96512,,False,10:14,21.62,21.6699422,556800.0,,PRICE_ONLY_UNVERIFIED,2026-10-15,09:31,09:32,24.2,24.131998,11.361616829785536,False,,5796600.0,PRICE_ONLY_PROXY,-1.7071674515126367,,False
+601811,PM_RECAPTURE,,2026-10-14,,,,,,,,,,,,,,,,,,,,,NO_SIGNAL,,,
+
+[executed on device: zhanghaodeMacBook-Air-3.local (3d784e4c-30b2-405d-b841-683054ab2ad9)]
