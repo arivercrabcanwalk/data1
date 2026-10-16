@@ -98,6 +98,8 @@ def sell_position(pos,rows,date,session_day):
     q=rows.sort_values("datetime")
     for i,r in enumerate(q.itertuples(index=False)):
         c=float(r.close);tm=pd.Timestamp(r.datetime).strftime("%H:%M")
+        # MAE uses only actually-held completed minutes, not later same-day lows.
+        pos["observed_mae"]=min(pos["observed_mae"],pct(float(r.low),pos["entry_cost"]))
         pnl=pct(c,pos["entry_cost"])
         reason=None
         if pnl>=.05:reason="TP5"
@@ -113,6 +115,7 @@ def sell_position(pos,rows,date,session_day):
         if float(nxt.open)<=float(pos["prior_close"])*.902:
             return False
         net=float(nxt.open)*(1-.002-.00081)
+        pos["observed_mae"]=min(pos["observed_mae"],pct(float(nxt.open),pos["entry_cost"]))
         pos.update(exit_date=date,exit_time=pd.Timestamp(nxt.datetime).strftime("%H:%M"),
           exit_net_px=net,net_return=net/pos["entry_cost"]-1,
           exit_reason=reason,status="CLOSED")
@@ -133,11 +136,10 @@ for dayi,date in enumerate(dates):
     for p in list(active):
         if p["stock"] not in grouped:continue
         q=grouped[p["stock"]]
-        maelow=float(q.low.min()/p["entry_cost"]-1)
-        p["observed_mae"]=min(p["observed_mae"],maelow)
         if sell_position(p,q,date,dayi):
             active.remove(p);trades.append(p)
     if leaders is None:continue
+    day_intents=[]
     for z in leaders.itertuples(index=False):
         if z.code not in grouped:continue
         if not np.isfinite(z.prior_breadth):continue
@@ -147,12 +149,25 @@ for dayi,date in enumerate(dates):
             item.update(name="UNKNOWN_NAME",leader_tier=z.leader_tier,
                 prior_close=float(z.prior_close),entry_day=dayi,
                 observed_mae=0.,status="OPEN")
-            signals.append(item)
-            # Research separate branch: portfolio-like no duplicates and
-            # max 5/cap15 but deliberate no R50 A overlay.
-            if any(p["stock"]==z.code and p["branch"]==item["branch"] for p in active):continue
-            if len(active)>=5:continue
-            active.append(item)
+            signals.append(dict(item))
+            day_intents.append(dict(item))
+    # Causal order: sort by completed signal time, rather than by code.
+    # One live position per ticker, even if multiple routes fire.
+    for item in sorted(day_intents,key=lambda z:(z["signal_time"],z["entry_time"],z["stock"],z["branch"])):
+        if any(p["stock"]==item["stock"] for p in active):continue
+        if len(active)>=5:continue
+        q=grouped[item["stock"]]
+        after_entry=q[pd.to_datetime(q.datetime).dt.strftime("%H:%M").ge(item["entry_time"])]
+        if after_entry.empty:continue
+        px=item["entry_cost"]
+        n_shares=int(math.floor(25000./px/100.))*100
+        if n_shares<100:continue
+        item["shares"]=n_shares
+        item["entry_notional_weight"]=n_shares*px/1_000_000.
+        # First entry-minute open is genuine purchase; subsequent minute lows
+        # are adverse only while still holding and before a sell signal.
+        item["observed_mae"]=min(0.,float(after_entry.low.min()/px-1.))
+        active.append(item)
     if dayi%12==0:print("EXECUTED",date,"intents",len(signals),"closed",len(trades),flush=True)
 for p in active:
     p["status"]="RIGHT_CENSORED"
@@ -175,6 +190,10 @@ summary.to_csv(OUT/"R77_monthly_quality.csv",index=False)
 qa={"status":"R77_NEW_SECOND_BUY_EXPLORATORY_COMPLETED","intents":len(si),"executed":len(tr),
     "closed":int(tr.status.eq("CLOSED").sum()),
     "right_censored":int(tr.status.eq("RIGHT_CENSORED").sum()),
+    "single_active_ticker_guard":True,
+    "chronological_signal_priority":True,
+    "100_share_buy_lots":True,
+    "MAE_t1_only_observed_before_exit":True,
     "valid_asof_1minute_signals":True,
     "full_account_A_B_overlay_executed":False,
     "historically_viewed_months_not_blind":True,
