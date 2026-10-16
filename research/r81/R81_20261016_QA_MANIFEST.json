@@ -1,0 +1,195 @@
+{
+  "name": "R81 Recurrent Leader Reset Historical Experiment",
+  "research_date": "2026-10-16",
+  "research_only": true,
+  "not_deployed": true,
+  "R50_unchanged": true,
+  "baseline_R79_88_trades_verified": true,
+  "source_R21_authenticated_core_asof": true,
+  "case_three_backtests_all_actual_fills_verified": false,
+  "all_R21_108_scenarios_exhaustive": true,
+  "files": {
+    "PHASE2_PRIOR_REARM_MEMORY_FROZEN.md": {
+      "bytes": 2343,
+      "sha256": "1e32c57cfddd5481ae0be2aa3333371481fc7b7979489132698d0f19e30fa71f"
+    },
+    "PHASE3_R21_PURE_CORE_MEMORY_FROZEN.md": {
+      "bytes": 1780,
+      "sha256": "a79cb33855d9e4506031b6b00a288e0f044da4ec51d05d701a612e43a6bca42f"
+    },
+    "R81_新华文轩三次反包_全市场历史反证与R82循环夺权方案_20261016.md": {
+      "bytes": 10390,
+      "sha256": "ee2665632a32e4b2eea98052e672d12ce2645dd9660c4f21fb041ab1da420746"
+    },
+    "RESEARCH_CONTRACT.md": {
+      "bytes": 3963,
+      "sha256": "c83adcc4a9df403894f1079c548b834216e78eda87f4ca3b7dda9605ba1be41e"
+    },
+    "w01_target_minutes/R81_601811_causal_price_minute_casebook.csv": {
+      "bytes": 1344,
+      "sha256": "6aa7154a3e3287505af354d398bad98a1be31ad62dc8768f3246d9d221ab1f38"
+    },
+    "w01_target_minutes/qa.json": {
+      "bytes": 1717,
+      "sha256": "9923af0d663851eac58530d12a99f4bf97e33d3c605795c2d0726d7f30a66c72"
+    },
+    "w01_target_minutes/run.py": {
+      "bytes": 7312,
+      "sha256": "e1d1e11539331ad964472c4aff1d66df3dbbe8ba72cceb512411657db6adca2a"
+    },
+    "w02_population/R81_episodes_by_month.csv": {
+      "bytes": 572,
+      "sha256": "12cf78716fe55eb7d4948b3d39d0b07593f85be1f88433e34caa16a3d093a899"
+    },
+    "w02_population/R81_fullmarket_reset_episodes.csv": {
+      "bytes": 371623,
+      "sha256": "fddfafb812e24af8791f5bb639579338d60c6629147bd6a42ce7b42fcb45ef93"
+    },
+    "w02_population/R81_repeated_reset_leaders.csv": {
+      "bytes": 17130,
+      "sha256": "1715ded03426b7dfe319da6c07004e55cc923977cf5cdf51fdefb5ce579f615c"
+    },
+    "w02_population/qa.json": {
+      "bytes": 1177,
+      "sha256": "ea84f8a1601c27bc539c43e8f81f7db7d3f969b31bca7637d096a46686e80ebd"
+    },
+    "w02_population/run.py": {
+      "bytes": 5710,
+      "sha256": "8d8200626dab0810e54c7fb41c808adeb1fe43c6748cced36ccc9222e70e169a"
+    },
+    "w03_causal_signal/qa.json": {
+      "bytes": 485,
+      "sha256": "13a4457b932f82e99e57128a57dbcd67925059f13e9cb89b309f27423f2a70a3"
+    },
+    "w03_causal_signal/raw_r81_2clock_signals.csv": {
+      "bytes": 132241,
+      "sha256": "8eff0287df0c55829469b5af99cc8dbfbf32f992cd8c36e03654945845f99973"
+    },
+    "w03_causal_signal/raw_r81_branch_comparison.csv": {
+      "bytes": 262,
+      "sha256": "898dccbc31e8ec7bdc6888065b99a031e30c490a3c7896170810693ab83a738c"
+    },
+    "w03_causal_signal/raw_r81_independent_exits.csv": {
+      "bytes": 282381,
+      "sha256": "6bf6005c5524504b0528fd3febb1dfc21c37755694d1c9d78fecccfe8ddd0cd1"
+    },
+    "w03_causal_signal/scan.py": {
+      "bytes": 9269,
+      "sha256": "f7390dcec979fb95fda7e5778ec08653e8e2a66582f097e9233f5734f45b1a72"
+    },
+    "w03_causal_signal/source_verification.csv": {
+      "bytes": 155003,
+      "sha256": "cb7b7f1c0b6ce43b46cdc7f93c9b06bea416b2588bcaf10e02f03572e9bd0ab1"
+    },
+    "w04_portfolio/PIT_QA.json": {
+      "bytes": 438,
+      "sha256": "926a56cdb35502b60750cb5387fb0eb918742691c5d9287e45f694655062960e"
+    },
+    "w04_portfolio/R81_24_ACCOUNT_OVERLAY_SCENARIOS.csv": {
+      "bytes": 6331,
+      "sha256": "0284dadb7b5aa473972c8a6d9058f0e01ef4a209c2241a5b0d0b56eefeb89b5b"
+    },
+    "w04_portfolio/R81_PIT_gate_unportfolioed_results.csv": {
+      "bytes": 3853,
+      "sha256": "e7d43aa36f16bb23a1ee4b5073aed61469599b91b452de1ec3d7a323789bf635"
+    },
+    "w04_portfolio/R81_PIT_trade_forensics.csv": {
+      "bytes": 308667,
+      "sha256": "d191a8b20567eea7419184d4e677312aeebdda0d0410f20dc7b52ec9c1d7ac59"
+    },
+    "w04_portfolio/R81_accepted_new_trade_details.csv": {
+      "bytes": 167545,
+      "sha256": "357bea59ef000afcabe0b3e018f901bb8d1ddbffc5403886ae8171ba22b151ec"
+    },
+    "w04_portfolio/R81_frozen_old_baseline_replayed.csv": {
+      "bytes": 16854,
+      "sha256": "de76bb5344e58843dd7fcd06ba625023821ec137369dd89d0fe4da0c96521016"
+    },
+    "w04_portfolio/R81_rejected_new_opportunities.csv": {
+      "bytes": 90622,
+      "sha256": "763b863a7951f7abd32ce2e62778e1a0d5d70e78cc9ee674058c2d075fe79f81"
+    },
+    "w04_portfolio/R81_signals_with_prior_PIT.csv": {
+      "bytes": 178771,
+      "sha256": "f57ee49368717cb05e741b6343a1abf5b1a0bf9531830bd5cdf7381beb021b8c"
+    },
+    "w04_portfolio/R81_trades_with_frozen_PIT.csv": {
+      "bytes": 605565,
+      "sha256": "e37adf645e59825201ba02a211313e14fd62196ec9dc340a0d5a0d707d05b214"
+    },
+    "w04_portfolio/account_qa.json": {
+      "bytes": 786,
+      "sha256": "5d2283bb0441bb3f726212f7532e73c6072669e5415593cab2c954d4a2e1de25"
+    },
+    "w04_portfolio/prepare_pit.py": {
+      "bytes": 3812,
+      "sha256": "5fbe3e4dba64bbfc81ca86d937f0b4322d72a64e385efef049581ada86081f30"
+    },
+    "w04_portfolio/replay_account.py": {
+      "bytes": 10137,
+      "sha256": "6865e7511c028ecbfa1081c1900c03e0c8fdce6ab07d5d39c84e03af4d748984"
+    },
+    "w05_independent_audit/R81_R21_LOOP1_15_signal_independent_per_slip.csv": {
+      "bytes": 17022,
+      "sha256": "2f1889197fd4f430f09c22297d0069eddb21f81dc2d590fcbb164c76604870d2"
+    },
+    "w05_independent_audit/R81_R21_LOOP1_cost_and_delay_stress.csv": {
+      "bytes": 671,
+      "sha256": "ee5d4fecf5e8ccb017b24cf67310e0188c652cb31294b943c8d72cbac46915ca"
+    },
+    "w05_independent_audit/qa.json": {
+      "bytes": 516,
+      "sha256": "4496987d6596af3d1f61f21677a2f0e6f98c4dabb0de4e1e2f59f46a64ee22c2"
+    },
+    "w05_independent_audit/verify_and_stress.py": {
+      "bytes": 8707,
+      "sha256": "7a2757283730ea0dc8f6ac44f6e56578b22e8c8c4612860316bdd7f00292570a"
+    },
+    "w06_rearm_memory/R81_LOOP1_LOOP2_36_FROZEN_PIT_ACCOUNT_SCENARIOS.csv": {
+      "bytes": 5464,
+      "sha256": "d35c98ad4c24b3328101c94a25aa5211a4d27d763b1c02e9ca3d90b34fa339ec"
+    },
+    "w06_rearm_memory/R81_LOOP_ACCOUNT_ACCEPTED_DETAILS.csv": {
+      "bytes": 104852,
+      "sha256": "f68bb377e915e8da865e7d757404f1cf4f47b3df076418250d294388e95e58ff"
+    },
+    "w06_rearm_memory/R81_LOOP_ACCOUNT_REJECTED.csv": {
+      "bytes": 27810,
+      "sha256": "7dc90655e417d44fccc4f1484e117e8b286d037d114e32a67eb371baa5c43f21"
+    },
+    "w06_rearm_memory/R81_PRIOR_SUCCESS_MEMORY_EACH_RESET.csv": {
+      "bytes": 122586,
+      "sha256": "f580648228b2adcc24341fba7072f2d83dcdd785485adf7b39ed3c96bdd7a300"
+    },
+    "w06_rearm_memory/qa.json": {
+      "bytes": 575,
+      "sha256": "222e1d7ba0f9ad5a66dd0599617fd4838b92dbdcda9712f93ad0d3c9626ff126"
+    },
+    "w06_rearm_memory/run.py": {
+      "bytes": 7552,
+      "sha256": "f6edc0cebf4454a9943b530c31af1221c301086488145c39979b57ebe0311a2e"
+    },
+    "w07_R21_core_memory/R81_R21_AUTHENTIC_CORE_108_SCENARIO_MATRIX.csv": {
+      "bytes": 18923,
+      "sha256": "8d071a4243bc66b894b6ba2df44b39b911c9e5cc513f4190cbbe4387c25da7ba"
+    },
+    "w07_R21_core_memory/R81_R21_AUTHENTIC_CORE_ACCEPTED_ALL.csv": {
+      "bytes": 188752,
+      "sha256": "7f3a94ee8e052c78c7f9edfa6972ab6e50801c55dcd192dd0b3565f2e68f087e"
+    },
+    "w07_R21_core_memory/R81_asof_R21_lifecycle_membership_each_signal.csv": {
+      "bytes": 180389,
+      "sha256": "98c0ab32641d469c7678dd9ff24b9038efad5c994f66687f41be6c32bf52a925"
+    },
+    "w07_R21_core_memory/qa.json": {
+      "bytes": 544,
+      "sha256": "845544154eff1535cd8232291bd6007c91a462c6afd43a0b8ef9f8f3849c2c52"
+    },
+    "w07_R21_core_memory/run.py": {
+      "bytes": 5922,
+      "sha256": "a8a1066a60c3627173b956f259cff55c909ed00c137a2d0a4bbbb4279b54ff6a"
+    }
+  }
+}
+
+[executed on device: zhanghaodeMacBook-Air-3.local (3d784e4c-30b2-405d-b841-683054ab2ad9)]
