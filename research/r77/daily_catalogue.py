@@ -89,7 +89,9 @@ e["leader_tier"]=np.where(e.leader_strict,"STRICT_3BOARD","SECOND_2BOARD")
 e=e[["date","di","code","prior_close","priorprior_close","prior_ma5","prior20_high",
   "drawdown_from_peak","since_lu","leader_tier","prior_day_push","prior_breadth","prior_limit_count",
   "price_limit_up_pct"]]
-assert e.date.ge("2026-04-01").all() if len(e) else True
+# Genuine 20-session in-repository warm-up can already finish in late March.
+# These rows are preserved for audit; trade engine separately starts April.
+assert e.date.ge("2026-03-23").all() if len(e) else True
 assert e[["date","code"]].duplicated().sum()==0
 d[["code","date","di","close","hi","lo","vol","amt","bars","eligible_board","lu",
     "prior_close","prior20_count","prior20_maxrun"]].to_csv(WORK/"R77_asof_daily_master.csv",index=False)
