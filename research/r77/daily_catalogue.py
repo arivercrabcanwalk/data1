@@ -49,12 +49,13 @@ g=d.groupby("code",sort=False,observed=True)
 d["prior_close"]=g.close.shift(1)
 d["priorprior_close"]=g.close.shift(2)
 d["daily_ret"]=d.close/d.prior_close-1
-lim=d.price_limit_up_pct
-# Limit ratios may be stored as 0.10 or 10; use actual 10% boards only.
-lim_norm=np.where(lim>1,lim/100,lim)
+lim=pd.to_numeric(d.price_limit_up_pct,errors="coerce").astype(float)
+# Unknown historical price-limit rule MUST NOT be guessed as normal 10%.
+# Price limits expressed as 0.10 or 10 are normalized; unknown stays NaN.
+lim_norm=np.where(lim.gt(1),lim/100.,lim)
+limit_known=pd.Series(lim_norm,index=d.index).between(.095,.105)
 d["lu"]=(d.daily_ret.ge(.095)&d.daily_ret.le(.115)&
-         ((~np.isfinite(lim_norm))|((lim_norm>=.095)&(lim_norm<=.105)))&
-         d.eligible_board).fillna(False)
+         limit_known&d.eligible_board).fillna(False)
 breaks=(~d.lu).groupby(d.code).cumsum()
 d["streak"]=d.lu.astype("int16").groupby([d.code,breaks]).cumsum()
 g=d.groupby("code",sort=False,observed=True)
