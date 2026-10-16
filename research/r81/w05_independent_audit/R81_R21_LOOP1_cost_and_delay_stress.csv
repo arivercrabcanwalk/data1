@@ -1,0 +1,7 @@
+scenario,slip_each_side,extra_minute_delay,pre_capacity_ok,accepted_new,closed,winners,average_net_pct,observed_MAE10,closed_loss10,lost_orig_A,lost_orig_B,old_R78_R79_displacement,combined_proxy_pp,delta_to_frozen_R79_proxy_pp,unknown_market_order_queue
+BASE_0P2,0.002,0,15,13,13,7,1.2939386585652635,1,1,0,0,0,57.44300999650304,0.4289320359999991,True
+SLIP_0P4,0.004,0,15,13,13,6,0.37217933126719127,1,1,0,0,0,57.148252162503034,0.13417420199999697,True
+SLIP_0P6,0.006,0,15,13,13,5,-0.38740151922669674,1,1,0,0,0,56.91076717250303,-0.10331078800000881,True
+DELAY_ONE_EXTRA_MIN,0.002,1,14,12,12,5,0.0715372037608325,1,1,0,0,0,57.05457926150304,0.040501300999999046,True
+
+[executed on device: zhanghaodeMacBook-Air-3.local (3d784e4c-30b2-405d-b841-683054ab2ad9)]
