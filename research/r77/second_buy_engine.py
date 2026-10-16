@@ -17,6 +17,12 @@ byday={day:g for day,g in idx.groupby("date")}
 files=sorted(ROOT.glob("2026-*/part-*/date=*/minute1.parquet"))
 files={p.parent.name[5:]:p for p in files}
 dates=sorted(files)
+master=pd.read_csv(OUT/"R77_asof_daily_master.csv",usecols=["code","date","close"],dtype={"code":str})
+master=master.sort_values(["code","date"])
+master["day_prior_close"]=master.groupby("code",sort=False).close.shift(1)
+prev_close_map={(z.code,z.date):float(z.day_prior_close)
+                for z in master.itertuples(index=False) if np.isfinite(z.day_prior_close)}
+del master
 expected=["09:31","11:30","13:01","15:00"]
 # Strict universe already identified exclusively from T-1. Observe today's
 # minute coverage only to decide whether live signal was legitimately observable.
@@ -92,7 +98,7 @@ def signal_frame(q,ev):
                     "regime_breadth":float(ev.prior_breadth)}
     return list(candidate.values()),None
 
-def sell_position(pos,rows,date,session_day):
+def sell_position(pos,rows,date,session_day,day_prior_close):
     # T+1: absolutely no same-day exit. TP5, SL12, time max3 days.
     if session_day<=pos["entry_day"]:return False
     q=rows.sort_values("datetime")
@@ -112,7 +118,11 @@ def sell_position(pos,rows,date,session_day):
         if float(nxt.volume)<=0 or float(nxt.amount)<=0:
             return False
         # Limit down cannot guarantee liquidation.
-        if float(nxt.open)<=float(pos["prior_close"])*.902:
+        if not np.isfinite(day_prior_close) or float(day_prior_close)<=0:
+            return False
+        # The price-limit reference is the PRIOR CLOSE OF THIS EXIT DAY,
+        # never the frozen prior close of the original entry day.
+        if float(nxt.open)<=float(day_prior_close)*.902:
             return False
         net=float(nxt.open)*(1-.002-.00081)
         pos["observed_mae"]=min(pos["observed_mae"],pct(float(nxt.open),pos["entry_cost"]))
@@ -136,7 +146,7 @@ for dayi,date in enumerate(dates):
     for p in list(active):
         if p["stock"] not in grouped:continue
         q=grouped[p["stock"]]
-        if sell_position(p,q,date,dayi):
+        if sell_position(p,q,date,dayi,prev_close_map.get((p["stock"],date),float("nan"))):
             active.remove(p);trades.append(p)
     if leaders is None:continue
     day_intents=[]
@@ -194,6 +204,7 @@ qa={"status":"R77_NEW_SECOND_BUY_EXPLORATORY_COMPLETED","intents":len(si),"execu
     "chronological_signal_priority":True,
     "100_share_buy_lots":True,
     "MAE_t1_only_observed_before_exit":True,
+    "limit_down_reference_updated_each_exit_date":True,
     "valid_asof_1minute_signals":True,
     "full_account_A_B_overlay_executed":False,
     "historically_viewed_months_not_blind":True,
